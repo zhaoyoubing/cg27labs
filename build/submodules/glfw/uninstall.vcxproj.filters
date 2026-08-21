@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\_course\_graphics\_labs\2027\cg27labs\build\CMakeFiles\4312120fdbf8bf4485270bff94a11710\uninstall.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\_course\_graphics\_labs\2027\cg27labs\submodules\glfw\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\_course\_graphics\_labs\2027\cg27labs\build\submodules\glfw\CMakeFiles\uninstall" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{E565F381-4ABE-3E03-8C9D-F89BC9B97897}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,3 @@
+# CMake generation dependency list for this directory.
+D:/_course/_graphics/_labs/2027/cg27labs/submodules/glfw/CMake/glfw3.pc.in
+D:/_course/_graphics/_labs/2027/cg27labs/submodules/glfw/src/CMakeLists.txt

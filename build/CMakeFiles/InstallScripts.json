@@ -1,0 +1,14 @@
+{
+	"InstallScripts" : 
+	[
+		"D:/_course/_graphics/_labs/2027/cg27labs/build/cmake_install.cmake",
+		"D:/_course/_graphics/_labs/2027/cg27labs/build/submodules/glfw/cmake_install.cmake",
+		"D:/_course/_graphics/_labs/2027/cg27labs/build/submodules/glfw/src/cmake_install.cmake",
+		"D:/_course/_graphics/_labs/2027/cg27labs/build/submodules/glm/cmake_install.cmake",
+		"D:/_course/_graphics/_labs/2027/cg27labs/build/submodules/glm/glm/cmake_install.cmake",
+		"D:/_course/_graphics/_labs/2027/cg27labs/build/submodules/glad/cmake_install.cmake",
+		"D:/_course/_graphics/_labs/2027/cg27labs/build/apps/cmake_install.cmake",
+		"D:/_course/_graphics/_labs/2027/cg27labs/build/apps/TA01/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
