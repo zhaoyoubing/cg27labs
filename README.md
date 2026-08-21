@@ -1,1 +1,1 @@
-Computer Graphics Labs for 5CM507 Graphics University of Derby
+5CM507 Graphics Labs University of Derby
