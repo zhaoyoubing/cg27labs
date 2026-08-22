@@ -329,6 +329,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D:\_course\_graphics\_labs\2027\cg27labs\apps\TA01\main.cpp" />
+    <ClCompile Include="D:\_course\_graphics\_labs\2027\cg27labs\apps\TA01\drawQuad.cpp" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

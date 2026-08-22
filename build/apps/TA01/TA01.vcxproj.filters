@@ -4,6 +4,9 @@
     <ClCompile Include="D:\_course\_graphics\_labs\2027\cg27labs\apps\TA01\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\_course\_graphics\_labs\2027\cg27labs\apps\TA01\drawQuad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="D:\_course\_graphics\_labs\2027\cg27labs\apps\TA01\CMakeLists.txt" />

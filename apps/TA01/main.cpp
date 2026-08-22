@@ -2,6 +2,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "drawQuad.h"
+
 int main() {
  
     std::cout << "Hello, Graphics!" << std::endl; 
@@ -13,7 +15,7 @@ int main() {
     }
 
     // create a GLFW window
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Hello OpenGL A01", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 800, "Hello OpenGL A01", NULL, NULL);
     glfwMakeContextCurrent(window);
 
     // glad init
@@ -23,10 +25,24 @@ int main() {
         return -1;
     }
 
-    // setting the main rendering and event loop
+
+
+    // set up data and vertex buffers
+    // initQuadRawTriangles();
+    initQuadIndexedTriangles();
+
+    // drawing mode and colour
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glColor3f(1.0f, 0.0f, 0.0f);
+
+    // setting the main render and event loop
     while (!glfwWindowShouldClose(window)) {
-        // render
+        // clear the background colour
         glClear(GL_COLOR_BUFFER_BIT);
+
+        // real drawing of the quad
+        // drawQuadRawTriangles();
+        drawQuadIndexedTriangles();
 
         // swap buffers
         glfwSwapBuffers(window);
