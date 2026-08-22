@@ -1,8 +1,0 @@
-================================================================================
-Linker Errors
-Generated: 2026-08-21T14:35:23.032Z
-Total Errors: 1
-================================================================================
-
-[LNK1168] (MSVC)
-无法打开 D:\_course\_graphics\_labs\2027\cg27labs\build\apps\TA01\Debug\TA01.exe 进行写入 [D:\_course\_graphics\_labs\2027\cg27labs\build\apps\TA01\TA01.vcxproj]
