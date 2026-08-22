@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include "drawQuad.h"
+#include "drawColourVertex.h"
 
 int main() {
  
@@ -29,7 +30,8 @@ int main() {
 
     // set up data and vertex buffers
     // initQuadRawTriangles();
-    initQuadIndexedTriangles();
+    // initQuadIndexedTriangles();
+    initColourVertex();
 
     // drawing mode and colour
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -42,7 +44,8 @@ int main() {
 
         // real drawing of the quad
         // drawQuadRawTriangles();
-        drawQuadIndexedTriangles();
+        // drawQuadIndexedTriangles();
+        drawColourVertex();
 
         // swap buffers
         glfwSwapBuffers(window);

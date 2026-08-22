@@ -5,6 +5,7 @@ project(TA01 LANGUAGES CXX)
 add_executable(TA01
     main.cpp
     drawQuad.cpp
+    drawColourVertex.cpp
 )
 
 # 2. Link the global third-party libraries defined in the root CMakeLists.txt
