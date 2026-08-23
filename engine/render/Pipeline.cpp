@@ -1,6 +1,7 @@
 #include "render/pipeline.h"
 
 #include <iostream>
+#include <glm/gtc/type_ptr.hpp>  // for glm::value_ptr
 
 Pipeline::Pipeline(const std::vector<Shader*>& shaders) {
     m_ProgramID = glCreateProgram();
@@ -38,11 +39,31 @@ GLint Pipeline::getUniformLocation(const std::string& name) const {
     return location;
 }
 
-void Pipeline::setMat4(const std::string& name, const glm::mat4& mat) const {
-    glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, &mat[0][0]);
+void Pipeline::setInt(const std::string& name, int value) const {
+    glUniform1i(getUniformLocation(name), value);
 }
 
-// Other uniform setter implementations...
+void Pipeline::setFloat(const std::string& name, float value) const {
+    glUniform1f(getUniformLocation(name), value);
+}
+
+void Pipeline::setVec3(const std::string& name, const glm::vec3& value) const {
+    glUniform3f(getUniformLocation(name), value.x, value.y, value.z);
+}
+
+void Pipeline::setVec4(const std::string& name, const glm::vec4& value) const {
+    glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
+}
+
+void Pipeline::setMat3(const std::string& name, const glm::mat3& mat) const {
+    glUniformMatrix3fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(mat));
+}
+
+void Pipeline::setMat4(const std::string& name, const glm::mat4& mat) const {
+    glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(mat));
+}
+
+
 
 void Pipeline::checkLinkErrors() {
     GLint success;

@@ -13,7 +13,8 @@ out vec3 vcolour;
 void main()
 {
     // convert to homogeneous coordinate
-    gl_Position = matProj * matView * vec4(aPos, 1.0); 
+    //gl_Position = matProj * matView * matModel * vec4(aPos, 1.0); 
+    gl_Position = matModel * vec4(aPos, 1.0); 
 
     vcolour = in_colour;
 }

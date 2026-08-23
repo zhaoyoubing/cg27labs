@@ -10,6 +10,10 @@
 #include "render/Pipeline.h"
 #include "drawColourVertex.h"
 
+#include "entity/Entity.h"
+
+ECSWorldPool ecsWorld;
+
 int main() {
  
     std::cout << "Hello, Graphics!" << std::endl; 
@@ -40,33 +44,50 @@ int main() {
     std::vector<Shader*> shaderStages = { &vertShader, &fragShader };
     Pipeline basicPipeline(shaderStages);
     
+    // manually set up the position, orientation and scale of the object 
+    glm::mat4 mat_scale = glm::scale(glm::vec3(1.0f, 1.0f, 1.0f));
+    glm::mat4 mat_rot_y = glm::rotate(glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 mat_trans = glm::translate(glm::vec3(0.2f, 0.3f, 0.0f));
+    
+
+    
     // set up the view matrix for the camera
     glm::mat4 view = glm::lookAt(
-        glm::vec3(0.25f, 0.25f, -0.25f), // Camera position in world space
+        glm::vec3(0.f, 0.f, 5.f), // Camera position in world space
         glm::vec3(0.0f, 0.0f, 0.0f), // Look at the origin
         glm::vec3(0.0f, 1.0f, 0.0f)  // Up vector
     );
 
-    glm::mat4 proj = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 100.0f);
+    //glm::mat4 proj = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
+    glm::mat4 proj = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+
 
     // set up data and vertex buffers
     initColourVertex();
 
     // drawing mode and colour
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glPolygonMode(GL_FRONT, GL_FILL);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK); 
     glEnable(GL_DEPTH_TEST);
 
     // setting the main render and event loop
     while (!glfwWindowShouldClose(window)) {
         // clear the background colour
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+ 
         // bind the pipeline (shader program) for rendering
         basicPipeline.bind();
 
+        // update the model matrix uniform in the shader
+        // the order is always TRS (translate, rotate, scale) for the modelview matrix
+        glm::mat4 mat_model = mat_trans * mat_rot_y * mat_scale;
+        basicPipeline.setMat4("matModel", mat_model);
+
+
         // update the view matrix uniform in the shader
-        basicPipeline.setMat4("matView", view);
-        basicPipeline.setMat4("matProj", view);
+        // basicPipeline.setMat4("matView", view);
+        // basicPipeline.setMat4("matProj", proj);
 
         drawColourVertex();
 
