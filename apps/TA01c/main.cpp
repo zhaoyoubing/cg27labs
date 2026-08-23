@@ -12,7 +12,7 @@
 
 #include "entity/Entity.h"
 
-ECSWorldPool ecsWorld;
+ECSWorldPool gEcsWorld;
 
 int main() {
  
@@ -25,7 +25,7 @@ int main() {
     }
 
     // create a GLFW window
-    GLFWwindow* window = glfwCreateWindow(800, 800, "Hello OpenGL A01b", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 800, "Hello OpenGL A01c", NULL, NULL);
     glfwMakeContextCurrent(window);
 
     // glad init
@@ -45,9 +45,10 @@ int main() {
     Pipeline basicPipeline(shaderStages);
     
     // manually set up the position, orientation and scale of the object 
-    glm::mat4 mat_scale = glm::scale(glm::vec3(1.0f, 1.0f, 1.0f));
-    glm::mat4 mat_rot_y = glm::rotate(glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 mat_trans = glm::translate(glm::vec3(0.2f, 0.3f, 0.0f));
+    glm::mat4 mat_scale = glm::scale(glm::vec3(1.2f, 1.2f, 1.2f));
+    glm::mat4 mat_rot_x = glm::rotate(glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    glm::mat4 mat_rot_y = glm::rotate(glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 mat_trans = glm::translate(glm::vec3(0.2f, -0.3f, 0.0f));
     
 
     
@@ -65,7 +66,7 @@ int main() {
     // set up data and vertex buffers
     initColourVertex();
 
-    // drawing mode and colour
+    // drawing mode and culling settings
     glPolygonMode(GL_FRONT, GL_FILL);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK); 
@@ -81,7 +82,7 @@ int main() {
 
         // update the model matrix uniform in the shader
         // the order is always TRS (translate, rotate, scale) for the modelview matrix
-        glm::mat4 mat_model = mat_trans * mat_rot_y * mat_scale;
+        glm::mat4 mat_model = mat_trans * mat_rot_y * mat_rot_x * mat_scale;
         basicPipeline.setMat4("matModel", mat_model);
 
 
