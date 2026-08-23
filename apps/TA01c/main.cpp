@@ -12,6 +12,9 @@
 
 #include "entity/Entity.h"
 
+#include "ui/Input.h"
+#include "InputCallbacks.h"
+
 ECSWorldPool gEcsWorld;
 
 int main() {
@@ -35,6 +38,9 @@ int main() {
         return -1;
     }
 
+    Input::Init(window);
+    Input::BindKeyCallback(key_callback);
+
 
     // Load individual shader stages from disk
     Shader vertShader(ShaderStage::Vertex, "shaders/vcolour_c.vert");
@@ -44,13 +50,12 @@ int main() {
     std::vector<Shader*> shaderStages = { &vertShader, &fragShader };
     Pipeline basicPipeline(shaderStages);
     
+    /*
     // manually set up the position, orientation and scale of the object 
     glm::mat4 mat_scale = glm::scale(glm::vec3(1.2f, 1.2f, 1.2f));
     glm::mat4 mat_rot_x = glm::rotate(glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     glm::mat4 mat_rot_y = glm::rotate(glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 mat_trans = glm::translate(glm::vec3(0.2f, -0.3f, 0.0f));
-    
-
     
     // set up the view matrix for the camera
     glm::mat4 view = glm::lookAt(
@@ -61,7 +66,7 @@ int main() {
 
     //glm::mat4 proj = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
     glm::mat4 proj = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
-
+    */
 
     // set up data and vertex buffers
     initColourVertex();
@@ -82,7 +87,13 @@ int main() {
 
         // update the model matrix uniform in the shader
         // the order is always TRS (translate, rotate, scale) for the modelview matrix
-        glm::mat4 mat_model = mat_trans * mat_rot_y * mat_rot_x * mat_scale;
+        // for rotation we choose to rotate around the local x-axis first, then the y-axis
+        TransformComp& trans = gEcsWorld.transformPool[1];
+        glm::mat4 mat_model = glm::translate(trans.pos)  
+            * glm::rotate(glm::radians(trans.rot.x), glm::vec3(1.0f, 0.0f, 0.0f))
+            * glm::rotate(glm::radians(trans.rot.y), glm::vec3(0.0f, 1.0f, 0.0f)) 
+            * glm::scale(glm::vec3(1.0f));
+        
         basicPipeline.setMat4("matModel", mat_model);
 
 

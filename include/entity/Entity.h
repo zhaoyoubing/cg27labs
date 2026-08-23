@@ -19,20 +19,4 @@ public:
     std::unordered_map<EntityID, TransformComp> transformPool;
     std::unordered_map<EntityID, TransformGPUComp> transformGPUPool;
 
-
-    void setTransform(EntityID e, const TransformComp & t)  {
-        transformPool[e] = t;
-    }
-
-    void setTransformGPU(EntityID e, const TransformGPUComp & t) {
-        transformGPUPool[e] = t;
-    }
-
-    const TransformComp& getTransformStrict(EntityID e) const {
-        return transformPool.at(e); // Throws exception if missing, returns read-only ref
-    }
-
-    const TransformGPUComp& getTransformGPUStrict(EntityID e) const {
-        return transformGPUPool.at(e); // Throws exception if missing, returns read-only ref
-    }
 };
