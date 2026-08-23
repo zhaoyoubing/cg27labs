@@ -2,7 +2,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "drawQuad.h"
+#include "render/Pipeline.h"
+#include "drawColourVertex.h"
 
 int main() {
  
@@ -15,7 +16,7 @@ int main() {
     }
 
     // create a GLFW window
-    GLFWwindow* window = glfwCreateWindow(800, 800, "Hello OpenGL A01", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 800, "Hello OpenGL A01b", NULL, NULL);
     glfwMakeContextCurrent(window);
 
     // glad init
@@ -25,22 +26,33 @@ int main() {
         return -1;
     }
 
+
+    // Load individual shader stages from disk
+    Shader vertShader(ShaderStage::Vertex, "shaders/vcolour.vert");
+    Shader fragShader(ShaderStage::Fragment, "shaders/vcolour.frag");
+    
+    // Group the compiled stages into a Pipeline (Vertex-Fragment pair)
+    std::vector<Shader*> shaderStages = { &vertShader, &fragShader };
+    Pipeline basicPipeline(shaderStages);
+    
+    
     // set up data and vertex buffers
-    // initQuadRawTriangles();
-    initQuadIndexedTriangles();
+    initColourVertex();
 
     // drawing mode and colour
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glColor3f(1.0f, 0.0f, 0.0f);
+    glEnable(GL_DEPTH_TEST);
+    glColor3f(0.0f, 1.0f, 0.0f);
 
     // setting the main render and event loop
     while (!glfwWindowShouldClose(window)) {
         // clear the background colour
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // real drawing of the quad
-        // drawQuadRawTriangles();
-        drawQuadIndexedTriangles();
+        // bind the pipeline (shader program) for rendering
+        basicPipeline.bind();
+
+        drawColourVertex();
 
         // swap buffers
         glfwSwapBuffers(window);

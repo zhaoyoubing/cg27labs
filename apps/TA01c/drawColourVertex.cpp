@@ -10,10 +10,20 @@ void initColourVertex() {
         0.f, 0.f, 1.f,      // Blue
         0.5f, 0.5f, 0.f,    // v3
         1.f, 1.f, 0.f,      // Yellow
+        0.0f, 0.0f, -0.5f,    // v4
+        0.f, 1.f, 1.f,      // Cyan
     };
 
-        // indices of two triangles
-    GLuint indices[] = { 0, 1, 2, 2, 3, 0};
+    // indices of six triangles
+    GLuint indices[] = { 
+        // the original two triangles form the base
+        0, 1, 2, 2, 3, 0,
+        // four new triangles
+        4, 0, 1,
+        4, 1, 2,
+        4, 2, 3,
+        4, 3, 0
+    };
 
     // create vertex buffer
     GLuint vertBufID;
@@ -27,7 +37,7 @@ void initColourVertex() {
 
     // adding a second attribute
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(sizeof(GLfloat) * 3 * 4));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(sizeof(GLfloat) * 3));
 
     // create index buffer
     GLuint idxBufID;
@@ -40,5 +50,6 @@ void initColourVertex() {
 
 void drawColourVertex() {
     // draw triangle using indices
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
 }
