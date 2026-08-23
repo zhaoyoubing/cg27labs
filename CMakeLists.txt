@@ -22,7 +22,15 @@ add_subdirectory(submodules/glm)
 # 3. GLAD (Static library)
 add_subdirectory(submodules/glad)
 
-# 4. tinygltf (Header-only)
+
+# 4. stb_image (Header-only) as an interface target
+# add_library(stb_image INTERFACE)
+
+# target_include_directories(stb_image INTERFACE 
+#    ${CMAKE_SOURCE_DIR}/submodules/stb  # Point to the folder containing stb_image.h
+#)
+
+# 4. tinygltf (Header-only) as an interface target
 add_library(tinygltf INTERFACE)
 
 target_include_directories(tinygltf INTERFACE 
@@ -30,7 +38,9 @@ target_include_directories(tinygltf INTERFACE
 )
 
 # 5. imgui (Static library), need to add CMakeLists.txt in the imgui folder
-add_subdirectory(submodules/imgui)
+# uncomment the following add_subdirectory line in the future when you need GUI
+# you need to manually put a CMakeLists.txt in ROOT/submodules/imgui folder
+# add_subdirectory(submodules/imgui)
 
 add_subdirectory(engine)
 
