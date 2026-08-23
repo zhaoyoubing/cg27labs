@@ -10,3 +10,6 @@
 [submodule "submodules/tinygltf"]
 	path = submodules/tinygltf
 	url = https://github.com/syoyo/tinygltf.git
+[submodule "submodules/stb"]
+	path = submodules/stb
+	url = https://github.com/nothings/stb.git
