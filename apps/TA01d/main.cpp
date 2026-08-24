@@ -10,12 +10,14 @@
 #include "render/Pipeline.h"
 #include "drawColourVertex.h"
 
+#include "entity/Entity.h"
 #include "entity/TransformComp.h"
 
+#include "ui/InputState.h"
+#include "ui/InputCallbacks.h"
 #include "InputCallbacks.h"
 
 ECSWorldPool gEcsWorld;
-TransformComp gTrans;
 
 int main() {
  
@@ -39,8 +41,14 @@ int main() {
         return -1;
     }
 
-    // ================ Keyboard Setup ================
-    glfwSetKeyCallback(window, key_callback);
+    // ================ Init Transform Component ================
+    EntityID objId = gEcsWorld.CreateEntityID();
+    TransformComp trans;
+    gEcsWorld.AddComp<TransformComp>(objId, trans);
+
+    // ================ Keyboard and Mouse Setup ================
+    InputCallbacks::Init(window);
+    InputCallbacks::BindKeyCallback(key_callback);
 
     // ================ Shaders and Pipeline Setup ================
     // Load individual shader stages from disk
@@ -90,9 +98,10 @@ int main() {
         // update the model matrix uniform in the shader
         // the order is always TRS (translate, rotate, scale) for the modelview matrix
         // for rotation we choose to rotate around the local x-axis first, then the y-axis
-        glm::mat4 mat_model = glm::translate(gTrans.pos)  
-            * glm::rotate(glm::radians(gTrans.rot.x), glm::vec3(1.0f, 0.0f, 0.0f))
-            * glm::rotate(glm::radians(gTrans.rot.y), glm::vec3(0.0f, 1.0f, 0.0f)) 
+        TransformComp& trans = gEcsWorld.GetComp<TransformComp>(objId);
+        glm::mat4 mat_model = glm::translate(trans.pos)  
+            * glm::rotate(glm::radians(trans.rot.x), glm::vec3(1.0f, 0.0f, 0.0f))
+            * glm::rotate(glm::radians(trans.rot.y), glm::vec3(0.0f, 1.0f, 0.0f)) 
             * glm::scale(glm::vec3(1.0f));
         
         basicPipeline.setMat4("matModel", mat_model);

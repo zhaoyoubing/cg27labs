@@ -5,7 +5,7 @@
 #include <vector>
 #include <functional>
 
-class Input {
+class InputCallbacks {
 public:
     // --- Callback Signatures for Client Projects ---
     using KeyCallbackFn   = std::function<void(int key, int action)>;
