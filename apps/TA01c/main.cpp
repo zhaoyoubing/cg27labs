@@ -21,6 +21,7 @@ int main() {
  
     std::cout << "Hello, Graphics!" << std::endl; 
 
+    // ================ GLFW and Glad Setup ================
     // GLFW init
     if (!glfwInit()) {
         std::cerr << "Failed to initialize GLFW" << std::endl;
@@ -38,10 +39,12 @@ int main() {
         return -1;
     }
 
+    // ================ Keyboard and Mouse Setup ================
     Input::Init(window);
     Input::BindKeyCallback(key_callback);
 
 
+    // ================ Shaders and Pipeline Setup ================
     // Load individual shader stages from disk
     Shader vertShader(ShaderStage::Vertex, "shaders/vcolour_c.vert");
     Shader fragShader(ShaderStage::Fragment, "shaders/vcolour.frag");
@@ -68,16 +71,17 @@ int main() {
     glm::mat4 proj = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
     */
 
+    // ================ Model Setup ================
     // set up data and vertex buffers
     initColourVertex();
 
-    // drawing mode and culling settings
+    // ================ Rendering Mode Setup ================
     glPolygonMode(GL_FRONT, GL_FILL);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK); 
     glEnable(GL_DEPTH_TEST);
 
-    // setting the main render and event loop
+    // ================ Main Render and Event Loop ================
     while (!glfwWindowShouldClose(window)) {
         // clear the background colour
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
