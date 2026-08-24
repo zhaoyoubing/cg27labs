@@ -5,6 +5,9 @@
 #include <vector>
 #include <functional>
 
+// NOT in USE
+// A GLFW key and mouse callback wrapper
+// supports registration of multiple callbacks 
 class InputCallbacks {
 public:
     // --- Callback Signatures for Client Projects ---

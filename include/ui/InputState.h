@@ -27,12 +27,25 @@ public:
         return it != inst.m_KeyStates.end() ? it->second : false;
     }
 
+    // ============ Mouse Event Handling ============
+    // Call this at the end of your main loop frame to reset deltas & scroll
+    static void NewFrame() {
+        auto& inst = GetInstance();
+        inst.m_MouseOffsetX = 0.0;
+        inst.m_MouseOffsetY = 0.0;
+        inst.m_ScrollX = 0.0;
+        inst.m_ScrollY = 0.0;
+    }
+
     static double GetMouseX() { return GetInstance().m_MouseX; }
     static double GetMouseY() { return GetInstance().m_MouseY; }
+    static double GetMouseOffsetX() { return GetInstance().m_MouseOffsetX; }
+    static double GetMouseOffsetY() { return GetInstance().m_MouseOffsetY; }
 
 private:
     InputState() = default;
     
+    // Meyer's Singleton pattern
     static InputState & GetInstance() {
         static InputState instance;
         return instance;
@@ -71,6 +84,10 @@ private:
 
     std::unordered_map<int, bool> m_KeyStates;
     std::unordered_map<int, bool> m_MouseButtonStates;
+    
     double m_MouseX = 0.0, m_MouseY = 0.0;
+    double m_LastMouseX = 0.0, m_LastMouseY = 0.0;
+    double m_MouseOffsetX = 0.0, m_MouseOffsetY = 0.0;
     double m_ScrollX = 0.0, m_ScrollY = 0.0;
+    bool bFirstMouse = true;
 };
