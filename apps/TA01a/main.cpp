@@ -15,7 +15,7 @@ int main() {
     }
 
     // create a GLFW window
-    GLFWwindow* window = glfwCreateWindow(800, 800, "Hello OpenGL A01", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 800, "Hello OpenGL A01a", NULL, NULL);
     glfwMakeContextCurrent(window);
 
     // glad init
@@ -30,7 +30,11 @@ int main() {
     initQuadIndexedTriangles();
 
     // drawing mode and colour
+    // wireframe
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // filled polygon
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    // red colour
     glColor3f(1.0f, 0.0f, 0.0f);
 
     // setting the main render and event loop

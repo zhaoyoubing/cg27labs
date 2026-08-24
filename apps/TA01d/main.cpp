@@ -13,42 +13,29 @@
 #include "entity/Entity.h"
 #include "entity/TransformComp.h"
 
+#include "ui/Window.h"
 #include "ui/InputState.h"
-#include "ui/InputCallbacks.h"
-#include "InputCallbacks.h"
+#include "PlayerMoveSystem.h"
 
-ECSWorldPool gEcsWorld;
 
 int main() {
  
     std::cout << "Hello, Graphics!" << std::endl; 
 
     // ================ GLFW and Glad Setup ================
-    // GLFW init
-    if (!glfwInit()) {
-        std::cerr << "Failed to initialize GLFW" << std::endl;
-        return -1;
-    }
-
-    // create a GLFW window
-    GLFWwindow* window = glfwCreateWindow(800, 800, "Hello OpenGL A01c", NULL, NULL);
-    glfwMakeContextCurrent(window);
-
-    // glad init
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cerr << "Failed to initialize GLAD" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
+    // 1. Initialize GLFW Window and Input Context
+    Window window(800, 800, "TA01d");
+    
+    InputState::Init(window.GetNativeWindow());
+    
+    // 2. Initialize ECS World Pool
+    ECSWorldPool ecsWorld;
+    PlayerMoveSystem moveSys;
 
     // ================ Init Transform Component ================
-    EntityID objId = gEcsWorld.CreateEntityID();
+    EntityID objId = ecsWorld.CreateEntityID();
     TransformComp trans;
-    gEcsWorld.AddComp<TransformComp>(objId, trans);
-
-    // ================ Keyboard and Mouse Setup ================
-    InputCallbacks::Init(window);
-    InputCallbacks::BindKeyCallback(key_callback);
+    ecsWorld.AddComp<TransformComp>(objId, trans);
 
     // ================ Shaders and Pipeline Setup ================
     // Load individual shader stages from disk
@@ -59,23 +46,6 @@ int main() {
     std::vector<Shader*> shaderStages = { &vertShader, &fragShader };
     Pipeline basicPipeline(shaderStages);
     
-    /*
-    // manually set up the position, orientation and scale of the object 
-    glm::mat4 mat_scale = glm::scale(glm::vec3(1.2f, 1.2f, 1.2f));
-    glm::mat4 mat_rot_x = glm::rotate(glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    glm::mat4 mat_rot_y = glm::rotate(glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 mat_trans = glm::translate(glm::vec3(0.2f, -0.3f, 0.0f));
-    
-    // set up the view matrix for the camera
-    glm::mat4 view = glm::lookAt(
-        glm::vec3(0.f, 0.f, 5.f), // Camera position in world space
-        glm::vec3(0.0f, 0.0f, 0.0f), // Look at the origin
-        glm::vec3(0.0f, 1.0f, 0.0f)  // Up vector
-    );
-
-    //glm::mat4 proj = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
-    glm::mat4 proj = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
-    */
 
     // ================ Model Setup ================
     // set up data and vertex buffers
@@ -88,22 +58,32 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
     // ================ Main Render and Event Loop ================
-    while (!glfwWindowShouldClose(window)) {
-        // clear the background colour
+    while (! window.ShouldClose()) {
+        // 1. Poll events from the OS
+        window.PollEvents();
+
+        // 2. Update the frame clock/delta time
+        window.UpdateDeltaTime();
+
+        // 3. Run systems using window's delta time directly
+        moveSys.Update(ecsWorld, objId, window.GetDeltaTime());
+
+        // 4. Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
- 
+
         // bind the pipeline (shader program) for rendering
         basicPipeline.bind();
 
         // update the model matrix uniform in the shader
         // the order is always TRS (translate, rotate, scale) for the modelview matrix
         // for rotation we choose to rotate around the local x-axis first, then the y-axis
-        TransformComp& trans = gEcsWorld.GetComp<TransformComp>(objId);
+        TransformComp& trans = ecsWorld.GetComp<TransformComp>(objId);
         glm::mat4 mat_model = glm::translate(trans.pos)  
             * glm::rotate(glm::radians(trans.rot.x), glm::vec3(1.0f, 0.0f, 0.0f))
             * glm::rotate(glm::radians(trans.rot.y), glm::vec3(0.0f, 1.0f, 0.0f)) 
             * glm::scale(glm::vec3(1.0f));
         
+        //mat_model = glm::mat4(1.0);
         basicPipeline.setMat4("matModel", mat_model);
 
 
@@ -113,13 +93,10 @@ int main() {
 
         drawColourVertex();
 
-        // swap buffers
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+
+        window.SwapBuffers();
     }
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
 
     return 0;
 }

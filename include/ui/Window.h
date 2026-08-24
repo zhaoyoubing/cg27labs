@@ -13,6 +13,7 @@ private:
     std::string m_Title;
 
     float m_LastFrameTime = 0.0f;
+    float m_DeltaTime = 0.0f; // Tracked internally
 
 public:
     Window(int width, int height, const std::string& title)
@@ -24,10 +25,6 @@ public:
             exit(EXIT_FAILURE);
         }
 
-        // Configure OpenGL context version (e.g., OpenGL 3.3 Core)
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #ifdef __APPLE__
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE; // Required for macOS
@@ -87,6 +84,17 @@ public:
     // Returns current time in seconds since GLFW started
     float GetTime() const {
         return static_cast<float>(glfwGetTime());
+    }
+
+    // Call this once per frame, right after polling events
+    void UpdateDeltaTime() {
+        float currentFrameTime = static_cast<float>(glfwGetTime());
+        m_DeltaTime = currentFrameTime - m_LastFrameTime;
+        m_LastFrameTime = currentFrameTime;
+    }
+
+    float GetDeltaTime() const {
+        return m_DeltaTime;
     }
 
     // Getters for window dimensions

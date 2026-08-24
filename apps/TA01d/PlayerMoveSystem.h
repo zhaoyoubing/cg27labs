@@ -13,16 +13,16 @@ public:
 
         auto& trans = world.GetComp<TransformComp>(id);
 
-        float deltaPos = 0.05f * deltaTime;
-        float deltaAngle = 5 * deltaTime;
+        float deltaPos = 0.1f * deltaTime;
+        float deltaAngle = 50.0f * deltaTime;
 
         if (InputState::IsKeyHeld(GLFW_KEY_LEFT)) {
             trans.rot.y -= deltaAngle;
-        } else (InputState::IsKeyHeld(GLFW_KEY_RIGHT)) {
+        } else if (InputState::IsKeyHeld(GLFW_KEY_RIGHT)) {
             trans.rot.y += deltaAngle;
-        } if (InputState::IsKeyHeld(GLFW_KEY_DOWN)) {
+        } else if (InputState::IsKeyHeld(GLFW_KEY_DOWN)) {
             trans.rot.x += deltaAngle;
-        } else (InputState::IsKeyHeld(GLFW_KEY_UP)) {
+        } else if (InputState::IsKeyHeld(GLFW_KEY_UP)) {
             trans.rot.x -= deltaAngle;
         }
 

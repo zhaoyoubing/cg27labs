@@ -84,29 +84,34 @@ public:
     }
 
 
-    template<typename T> 
-    void AddComp(EntityID e, const T& component) {
+    template<typename T, typename... Args> 
+    void AddComp(EntityID id, const T& component) {
         std::size_t typeId = ComponentIdCounter::GetId<T>();
-        auto* pool = GetPool<T>();
 
-        pool->Insert(entity, T{std::forward<Args>(args)...});
+        // Directly emplace into the inner unordered_map for this component type
+        auto& typeMap = compMaps[typeId];
+        typeMap[id] = std::make_shared<T>(std::forward<Args>(args)...);
         
         // Flip the bit on for this component type in the entity's signature
-        m_Signatures[entity].set(typeId, true);
+        signatures[id].set(typeId, true);
     }
 
     template<typename T>
-    void RemoveComp(EntityID entity) {
+    void RemoveComp(EntityID id) {
         std::size_t typeId = ComponentIdCounter::GetId<T>();
-        auto* pool = GetPool<T>();
+        
+        if (compMaps.find(typeId) != compMaps.end()) {
+            compMaps[typeId].erase(e);
+        }
 
-        pool->RemoveEntity(entity);
-        m_Signatures[entity].set(typeId, false);
+        m_Signatures[id].set(typeId, false);
     }
 
     template<typename T>
-    T& GetComp(EntityID entity) {
-        return GetPool<T>()->Get(entity);
+    T& GetComp(EntityID id) {
+        std::size_t typeId = ComponentIdCounter::GetId<T>();
+        auto& ptr = compMaps[typeId][id];
+        return *static_cast<T*>(ptr.get());
     }
 
     template <typename T>
@@ -117,8 +122,8 @@ public:
         // 2. Look up the entity's signature and check if that bit is true
         // Assuming entitySignatures is something like: std::unordered_map<Entity, std::bitset<MAX_COMPONENTS>>
         
-        auto it = entitySignatures.find(id);
-        if (it != entitySignatures.end()) {
+        auto it = signatures.find(id);
+        if (it != signatures.end()) {
             return it->second.test(compId);
         }
 
