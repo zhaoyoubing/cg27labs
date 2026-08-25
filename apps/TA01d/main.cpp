@@ -12,6 +12,7 @@
 
 #include "entity/Entity.h"
 #include "entity/TransformComp.h"
+#include "systems/CameraSystem.h"
 
 #include "ui/Window.h"
 #include "ui/InputState.h"
@@ -27,10 +28,11 @@ int main() {
     Window window(800, 800, "TA01d");
     
     InputState::Init(window.GetNativeWindow());
-    
+
     // 2. Initialize ECS World Pool
     ECSWorldPool ecsWorld;
     PlayerMoveSystem moveSys;
+    CameraSystem camSys;
 
     // ================ Init Transform Component ================
     EntityID objId = ecsWorld.CreateEntityID();
@@ -65,8 +67,10 @@ int main() {
         // 2. Update the frame clock/delta time
         window.UpdateDeltaTime();
 
+        float dt = window.GetDeltaTime();
         // 3. Run systems using window's delta time directly
-        moveSys.Update(ecsWorld, objId, window.GetDeltaTime());
+        moveSys.Update(ecsWorld, objId, dt);
+        camSys.Update(ecsWorld, dt);
 
         // 4. Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -140,8 +140,8 @@ public:
         Signature targetSignature;
         ((targetSignature.set(ComponentIdCounter::GetId<ComponentTypes>(), true)), ...);
 
-        std::vector<Entity> matchingEntities;
-        for (const auto& [entity, signature] : m_Signatures) {
+        std::vector<EntityID> matchingEntities;
+        for (const auto& [entity, signature] : signatures) {
             // Check if entity has ALL requested components using bitwise AND
             if ((signature & targetSignature) == targetSignature) {
                 matchingEntities.push_back(entity);
