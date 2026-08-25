@@ -1,6 +1,8 @@
 // include/systems/CameraSystem.h
 #pragma once
 
+#include <iostream>
+
 #include <glm/glm.hpp>
 
 #include "ui/InputState.h"
@@ -12,16 +14,28 @@
 
 class CameraSystem {
 public:
-    void Update(ECSWorldPool& world, float deltaTime) {
+    void Update(ECSWorldPool& world, InputState&  input, float deltaTime) {
         auto entities = world.View<TransformComp, CameraComp>();
 
         for (EntityID id : entities) {
+            // std::cout << id << std::endl;
+
             auto& transform = world.GetComp<TransformComp>(id);
             auto& camera = world.GetComp<CameraComp>(id);
 
+            
+            // left button pressed
+            if (! input.isLeftButtonPressed()) {
+                continue; 
+            }
+
             // 1. Process Mouse Look
-            double xOffset = InputState::GetMouseOffsetX() * camera.sensitivity;
-            double yOffset = InputState::GetMouseOffsetY() * camera.sensitivity;
+            double xOffset = input.getMouseOffsetX() * camera.sensitivity;
+            double yOffset = input.getMouseOffsetY() * camera.sensitivity;
+
+
+            //std::cout << xOffset << ", " << yOffset << std::endl;
+            
 
             camera.yaw += static_cast<float>(xOffset);
             camera.pitch += static_cast<float>(yOffset);
@@ -38,10 +52,10 @@ public:
             float velocity = 5.0f * deltaTime;
             glm::vec3 right = glm::normalize(glm::cross(camera.front, camera.up));
 
-            if (InputState::IsKeyHeld(GLFW_KEY_W)) transform.pos += camera.front * velocity;
-            if (InputState::IsKeyHeld(GLFW_KEY_S)) transform.pos -= camera.front * velocity;
-            if (InputState::IsKeyHeld(GLFW_KEY_A)) transform.pos -= right * velocity;
-            if (InputState::IsKeyHeld(GLFW_KEY_D)) transform.pos += right * velocity;
+            if (input.isKeyHeld(GLFW_KEY_W)) transform.pos += camera.front * velocity;
+            if (input.isKeyHeld(GLFW_KEY_S)) transform.pos -= camera.front * velocity;
+            if (input.isKeyHeld(GLFW_KEY_A)) transform.pos -= right * velocity;
+            if (input.isKeyHeld(GLFW_KEY_D)) transform.pos += right * velocity;
         }
     }
 };

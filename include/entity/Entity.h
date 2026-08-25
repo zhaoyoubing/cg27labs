@@ -85,7 +85,7 @@ public:
 
 
     template<typename T, typename... Args> 
-    void AddComp(EntityID id, const T& component) {
+    void AddComp(EntityID id, Args&&... args) {
         std::size_t typeId = ComponentIdCounter::GetId<T>();
 
         // Directly emplace into the inner unordered_map for this component type
@@ -101,10 +101,10 @@ public:
         std::size_t typeId = ComponentIdCounter::GetId<T>();
         
         if (compMaps.find(typeId) != compMaps.end()) {
-            compMaps[typeId].erase(e);
+            compMaps[typeId].erase(id);
         }
 
-        m_Signatures[id].set(typeId, false);
+        signatures[id].set(typeId, false);
     }
 
     template<typename T>

@@ -21,9 +21,4 @@ struct CameraComp {
     float pitch = 0.0f;
     float sensitivity = 0.1f;
 
-    // Viewport dimensions
-    float viewportWidth = 800.0f;
-    float viewportHeight = 600.0f;
-    float aspectRatio = 800.0f / 600.0f;
-
 };

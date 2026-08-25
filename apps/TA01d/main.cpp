@@ -12,6 +12,7 @@
 
 #include "entity/Entity.h"
 #include "entity/TransformComp.h"
+#include "entity/CameraComp.h"
 #include "systems/CameraSystem.h"
 
 #include "ui/Window.h"
@@ -26,22 +27,36 @@ int main() {
     // ================ GLFW and Glad Setup ================
     // 1. Initialize GLFW Window and Input Context
     Window window(800, 800, "TA01d");
-    
-    InputState::Init(window.GetNativeWindow());
 
     // 2. Initialize ECS World Pool
     ECSWorldPool ecsWorld;
     PlayerMoveSystem moveSys;
     CameraSystem camSys;
 
-    // ================ Init Transform Component ================
+    // ================ Create object entity ================
     EntityID objId = ecsWorld.CreateEntityID();
-    TransformComp trans;
-    ecsWorld.AddComp<TransformComp>(objId, trans);
+    ecsWorld.AddComp<TransformComp>(objId, TransformComp{});
+
+    // ================ Create player entity ================
+    // 1. Create the player entity id
+    EntityID player = ecsWorld.CreateEntityID();
+
+    // 2. Attach a single TransformCompto it
+    ecsWorld.AddComp<TransformComp>(player, TransformComp{
+        .pos = glm::vec3(0.0f, 0.0f, 2.0f) // also eye position
+    });
+
+    // 3. Attach a single CameraComp to the player (First Person View)
+    ecsWorld.AddComp<CameraComp>(player, CameraComp{
+        .fov = 45.0f,
+        .front = glm::vec3(0, 0, -1),
+        .yaw = -90.0f,
+        .pitch = 0.0f
+    });
 
     // ================ Shaders and Pipeline Setup ================
     // Load individual shader stages from disk
-    Shader vertShader(ShaderStage::Vertex, "shaders/vcolour_c.vert");
+    Shader vertShader(ShaderStage::Vertex, "shaders/vcolour_d.vert");
     Shader fragShader(ShaderStage::Fragment, "shaders/vcolour.frag");
     
     // Group the compiled stages into a Pipeline (Vertex-Fragment pair)
@@ -55,8 +70,8 @@ int main() {
 
     // ================ Rendering Mode Setup ================
     glPolygonMode(GL_FRONT, GL_FILL);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK); 
+    //glEnable(GL_CULL_FACE);
+    //glCullFace(GL_BACK); 
     glEnable(GL_DEPTH_TEST);
 
     // ================ Main Render and Event Loop ================
@@ -68,9 +83,10 @@ int main() {
         window.UpdateDeltaTime();
 
         float dt = window.GetDeltaTime();
+
         // 3. Run systems using window's delta time directly
-        moveSys.Update(ecsWorld, objId, dt);
-        camSys.Update(ecsWorld, dt);
+        moveSys.Update(ecsWorld, objId, window.getInputState(), dt);
+        camSys.Update(ecsWorld, window.getInputState(), dt);
 
         // 4. Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -87,18 +103,32 @@ int main() {
             * glm::rotate(glm::radians(trans.rot.y), glm::vec3(0.0f, 1.0f, 0.0f)) 
             * glm::scale(glm::vec3(1.0f));
         
-        //mat_model = glm::mat4(1.0);
         basicPipeline.setMat4("matModel", mat_model);
 
 
+        TransformComp & transPlayer = ecsWorld.GetComp<TransformComp>(player);
+        CameraComp & camera = ecsWorld.GetComp<CameraComp>(player);
+
+        // set up the view matrix for the camera
+        glm::mat4 view = glm::lookAt(
+            transPlayer.pos, // Camera position in world space
+            transPlayer.pos + camera.front, // Look at target
+            camera.up  // Up vector
+        );
+
+        glm::mat4 proj = glm::perspective(camera.fov, camera.aspect, camera.near, camera.far);
+
         // update the view matrix uniform in the shader
-        // basicPipeline.setMat4("matView", view);
-        // basicPipeline.setMat4("matProj", proj);
+        basicPipeline.setMat4("matView", view);
+        basicPipeline.setMat4("matProj", proj);
 
         drawColourVertex();
 
 
         window.SwapBuffers();
+
+        // set mouse x and y offsets to 0
+        window.clearInputState();
     }
 
 

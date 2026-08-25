@@ -5,12 +5,17 @@
 #include <string>
 #include <iostream>
 
+#include "InputState.h"
+#include "InputCallbackRegister.h"
+
 class Window {
 private:
     GLFWwindow* m_Window = nullptr;
     int m_Width;
     int m_Height;
     std::string m_Title;
+
+    InputState inputState;
 
     float m_LastFrameTime = 0.0f;
     float m_DeltaTime = 0.0f; // Tracked internally
@@ -47,11 +52,13 @@ public:
             exit(EXIT_FAILURE);
         }
 
+        InputCallbackRegister::init(m_Window, &inputState);
+
         // Set viewport size
         glViewport(0, 0, m_Width, m_Height);
 
         // Optional: Set user pointer so you can access the Window instance inside callbacks later
-        glfwSetWindowUserPointer(m_Window, this);
+        // glfwSetWindowUserPointer(m_Window, this);
 
         // Setup resize callback
         glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
@@ -64,6 +71,7 @@ public:
             glfwDestroyWindow(m_Window);
         }
         glfwTerminate();
+        
     }
 
     // Check if the window should close (ESC pressed or close button clicked)
@@ -97,10 +105,16 @@ public:
         return m_DeltaTime;
     }
 
+    InputState & getInputState() { return inputState; }
+
     // Getters for window dimensions
     int GetWidth() const { return m_Width; }
     int GetHeight() const { return m_Height; }
 
     // Expose the raw GLFWwindow pointer if needed by input callbacks or external APIs
     GLFWwindow* GetNativeWindow() const { return m_Window; }
+
+    void clearInputState() { inputState.clearOffset(); }
+
+
 };

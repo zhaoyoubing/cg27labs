@@ -1,0 +1,34 @@
+// include/entity/EntityFactory.hpp
+#pragma once
+#include "entity/Entity.h"
+#include "entity/TransformComp.h"
+#include "entity/CameraComp.hpp"
+#include <glm/glm.hpp>
+
+class EntityFactory {
+public:
+    static EntityID CreateCamera(ECSWorldPool& world, 
+        glm::vec3 pos = glm::vec3(0.0f, 0.0f, 3.0f)) {
+        // 1. Create a raw entity handle from your ECS world pool
+        EntityID cam = world.CreateEntity();
+
+        // 2. Add the TransformComponent to define WHERE the camera is in the world
+        world.AddComponent<TransformComponent>(cam, TransformComp{
+            .position = pos,
+            .rotation = glm::vec3(0.0f),
+            .scale = glm::vec3(1.0f)
+        });
+
+        // 3. Add the CameraComponent to define HOW it views the world (FOV, planes, angles)
+        world.AddComponent<CameraComponent>(cam, CameraComp{
+            .fov = 45.0f,
+            .nearPlane = 0.1f,
+            .farPlane = 100.0f,
+            .yaw = -90.0f, // Looking down the negative Z-axis by default
+            .pitch = 0.0f,
+            //.sensitivity = 0.1f
+        });
+
+        return cameraEntity;
+    }
+};

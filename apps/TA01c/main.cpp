@@ -107,6 +107,7 @@ int main() {
         // swap buffers
         glfwSwapBuffers(window);
         glfwPollEvents();
+
     }
 
     glfwDestroyWindow(window);
