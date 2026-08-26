@@ -1,8 +1,9 @@
+// include/ecs/components/MeshComp.h
 #pragma once
 
 #include <memory>
 #include "model/MeshGeometry.h"
-// #include "render/Material.hpp" // Optional: for textures, shaders, colors
+// #include "render/Material.hpp" // [TODO]: for textures, shaders, colors
 
 struct MeshComp {
     std::shared_ptr<MeshGeometry> geometry;
