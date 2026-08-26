@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.15)
+project(GLApps NONE)
+
+# Add each lab folder you create under apps/
+add_subdirectory(TA00)
+#add_subdirectory(TA01)
+
