@@ -1,4 +1,6 @@
 #include <iostream>
+#include <spdlog/spdlog.h>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -23,6 +25,8 @@
 int main() {
  
     std::cout << "Hello, Graphics!" << std::endl; 
+
+    spdlog::set_level(spdlog::level::debug);
 
     // ================ GLFW and Glad Setup ================
     // 1. Initialize GLFW Window and Input Context

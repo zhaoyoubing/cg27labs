@@ -12,7 +12,7 @@ target_link_libraries(TA01d PRIVATE
     glfw
     glad
     engine
-    spdlog:spdlog
+    spdlog::spdlog
 )
 
 # copy shaders

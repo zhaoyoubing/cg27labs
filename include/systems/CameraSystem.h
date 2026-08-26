@@ -20,7 +20,6 @@ public:
         auto entities = world.View<TransformComp, CameraComp>();
 
         for (EntityID id : entities) {
-            // std::cout << id << std::endl;
 
             auto& transform = world.GetComp<TransformComp>(id);
             auto& camera = world.GetComp<CameraComp>(id);
@@ -35,10 +34,10 @@ public:
             double xOffset = input.getMouseOffsetX() * camera.sensitivity;
             double yOffset = input.getMouseOffsetY() * camera.sensitivity;
 
-            spdlog::debug("Mouse offsets: {} = {}, {} ={}", #xOffset, xOffset, #yOffset, yOffset);            )
+            spdlog::trace("Mouse offsets: x = {}, y ={}", xOffset, yOffset);
             
 
-            camera.yaw += static_cast<float>(xOffset);
+            camera.yaw += static_cast<float>(xOffset);g
             camera.pitch += static_cast<float>(yOffset);
 
             if (camera.pitch > 89.0f)  camera.pitch = 89.0f;
