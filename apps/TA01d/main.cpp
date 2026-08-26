@@ -79,18 +79,18 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
     // ================ Main Render and Event Loop ================
-    while (! window.ShouldClose()) {
+    while (! window.shouldClose()) {
         // 1. Poll events from the OS
-        window.PollEvents();
+        window.pollEvents();
 
         // 2. Update the frame clock/delta time
-        window.UpdateDeltaTime();
+        window.updateDeltaTime();
 
-        float dt = window.GetDeltaTime();
+        float dt = window.getDeltaTime();
 
         // 3. Run systems using window's delta time directly
-        moveSys.Update(ecsWorld, objId, window.getInputState(), dt);
-        camSys.Update(ecsWorld, window.getInputState(), dt);
+        moveSys.update(ecsWorld, objId, window.getInputState(), dt);
+        camSys.update(ecsWorld, window.getInputState(), dt);
 
         // 4. Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -129,7 +129,7 @@ int main() {
         drawColourVertex();
 
 
-        window.SwapBuffers();
+        window.swapBuffers();
 
         // set mouse x and y offsets to 0
         window.clearInputState();

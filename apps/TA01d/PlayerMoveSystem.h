@@ -7,7 +7,7 @@
 
 class PlayerMoveSystem {
 public:
-    void Update(ECSWorldPool& world,  EntityID id, InputState & input, float deltaTime) {
+    void update(ECSWorldPool& world,  EntityID id, InputState & input, float deltaTime) {
 
         if (!world.HasComp<TransformComp>(id)) return;
 
