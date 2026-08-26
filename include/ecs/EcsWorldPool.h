@@ -1,16 +1,16 @@
+// include/ecs/EcsWorldPool.h
 #pragma once
 
 #include "ecs/EcsTypes.h"
-
-// The entity component system pool/world
-// More entities can be added to the pool as needed
-// Example entity types: transform, camera, mesh, light; player, enemy, npc, etc.
-#pragma once
-
 #include "ecs/entity/EntityIdRegistry.h"
 #include <memory>
 #include <unordered_map>
 #include <vector>
+
+
+// The entity component system pool/world
+// More entities can be added to the pool as needed
+// Example entity types: transform, camera, mesh, light; player, enemy, npc, etc.
 
 class ECSWorldPool {
 private:

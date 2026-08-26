@@ -1,8 +1,8 @@
-// include/entity/EntityFactory.hpp
+// include/ecs/entity/EntityFactory.h
 #pragma once
 #include "ecs/EcsTypes.h"
 #include "ecs/components/TransformComp.h"
-#include "ecs/components/CameraComp.hpp"
+#include "ecs/components/CameraComp.h"
 
 
 #include <glm/glm.hpp>
