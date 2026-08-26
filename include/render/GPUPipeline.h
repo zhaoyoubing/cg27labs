@@ -7,11 +7,11 @@
 
 #include "shader.h"
 
-class Pipeline {
+class GPUPipeline {
 public:
     // Pass a collection of compiled shaders (e.g., Vertex + Fragment)
-    Pipeline(const std::vector<Shader*>& shaders);
-    ~Pipeline();
+    GPUPipeline(const std::vector<Shader*>& shaders);
+    ~GPUPipeline();
 
     void bind() const;
     void unbind() const;
