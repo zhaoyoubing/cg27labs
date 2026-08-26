@@ -1,7 +1,9 @@
 // include/systems/CameraSystem.h
 #pragma once
 
-#include <iostream>
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_color_sinks.h> // For colored console output
+
 
 #include <glm/glm.hpp>
 
@@ -33,8 +35,7 @@ public:
             double xOffset = input.getMouseOffsetX() * camera.sensitivity;
             double yOffset = input.getMouseOffsetY() * camera.sensitivity;
 
-
-            //std::cout << xOffset << ", " << yOffset << std::endl;
+            spdlog::debug("Mouse offsets: {} = {}, {} ={}", #xOffset, xOffset, #yOffset, yOffset);            )
             
 
             camera.yaw += static_cast<float>(xOffset);
