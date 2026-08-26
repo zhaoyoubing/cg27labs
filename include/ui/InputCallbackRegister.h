@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_color_sinks.h> // For colored console output
+
 #include "InputState.h"
 
 class InputCallbackRegister {
@@ -43,7 +46,7 @@ private:
     static void MouseCallback(GLFWwindow* window, double xpos, double ypos) {
         auto* input = static_cast<InputState*>(glfwGetWindowUserPointer(window));
 
-        // std::cout << "mouse move" << std::endl;
+        spdlog::trace("Mouse move event: x = {}, y ={}", xpos, ypos);
 
         // first time mouse data
         if (input->bFirstMouse) {
@@ -64,7 +67,8 @@ private:
     }
 
     static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-        //std::cout << "mouse button" << std::endl;
+        
+        spdlog::trace("Mouse button event : {}", button);
 
         auto* input = static_cast<InputState*>(glfwGetWindowUserPointer(window));
 

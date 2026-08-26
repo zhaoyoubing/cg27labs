@@ -37,7 +37,7 @@ public:
             spdlog::trace("Mouse offsets: x = {}, y ={}", xOffset, yOffset);
             
 
-            camera.yaw += static_cast<float>(xOffset);g
+            camera.yaw += static_cast<float>(xOffset);
             camera.pitch += static_cast<float>(yOffset);
 
             if (camera.pitch > 89.0f)  camera.pitch = 89.0f;
