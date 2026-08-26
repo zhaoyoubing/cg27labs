@@ -23,8 +23,8 @@ public:
     void setMat4(const std::string& name, const glm::mat4& mat) const;
 
 private:
-    GLuint m_ProgramID = 0;
-    mutable std::unordered_map<std::string, GLint> m_UniformLocationCache;
+    GLuint programID_ = 0;
+    mutable std::unordered_map<std::string, GLint> uniformLocCache_;
 
     GLint getUniformLocation(const std::string& name) const;
     void checkLinkErrors();

@@ -6,20 +6,20 @@
 #include <vector>
 
 Shader::Shader(ShaderStage stage, const std::string& filepath) 
-    : m_Stage(stage) {
+    : stage_(stage) {
     std::string code = readFile(filepath);
     const char* src = code.c_str();
 
     GLenum glStage = getGLStage(stage);
-    m_RendererID = glCreateShader(glStage);
-    glShaderSource(m_RendererID, 1, &src, nullptr);
-    glCompileShader(m_RendererID);
-    checkCompileErrors(m_RendererID);
+    rendererID_ = glCreateShader(glStage);
+    glShaderSource(rendererID_, 1, &src, nullptr);
+    glCompileShader(rendererID_);
+    checkCompileErrors(rendererID_);
 }
 
 Shader::~Shader() {
-    if (m_RendererID) {
-        glDeleteShader(m_RendererID);
+    if (rendererID_) {
+        glDeleteShader(rendererID_);
     }
 }
 

@@ -16,12 +16,12 @@ public:
     Shader(ShaderStage stage, const std::string& filepath);
     ~Shader();
 
-    GLuint getID() const { return m_RendererID; }
-    ShaderStage getStage() const { return m_Stage; }
+    GLuint getID() const { return rendererID_; }
+    ShaderStage getStage() const { return stage_; }
 
 private:
-    GLuint m_RendererID = 0;
-    ShaderStage m_Stage;
+    GLuint rendererID_ = 0;
+    ShaderStage stage_;
     
     GLenum getGLStage(ShaderStage stage) const;
     std::string readFile(const std::string& filepath);

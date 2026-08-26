@@ -3,23 +3,23 @@
 #include <iostream>
 
 Pipeline::Pipeline(const std::vector<Shader*>& shaders) {
-    m_ProgramID = glCreateProgram();
+    programID_ = glCreateProgram();
 
     // Attach all provided shader stages
     for (Shader* shader : shaders) {
-        glAttachShader(m_ProgramID, shader->getID());
+        glAttachShader(programID_, shader->getID());
     }
 
-    glLinkProgram(m_ProgramID);
+    glLinkProgram(programID_);
     checkLinkErrors();
 }
 
 Pipeline::~Pipeline() {
-    glDeleteProgram(m_ProgramID);
+    glDeleteProgram(programID_);
 }
 
 void Pipeline::bind() const {
-    glUseProgram(m_ProgramID);
+    glUseProgram(programID_);
 }
 
 void Pipeline::unbind() const {
@@ -27,14 +27,14 @@ void Pipeline::unbind() const {
 }
 
 GLint Pipeline::getUniformLocation(const std::string& name) const {
-    if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end())
-        return m_UniformLocationCache[name];
+    if (uniformLocCache_.find(name) != uniformLocCache_.end())
+        return uniformLocCache_[name];
 
-    GLint location = glGetUniformLocation(m_ProgramID, name.c_str());
+    GLint location = glGetUniformLocation(programID_, name.c_str());
     if (location == -1) {
         std::cout << "WARNING::PIPELINE::UNIFORM_NOT_FOUND: " << name << std::endl;
     }
-    m_UniformLocationCache[name] = location;
+    uniformLocCache_[name] = location;
     return location;
 }
 
@@ -46,10 +46,10 @@ void Pipeline::setMat4(const std::string& name, const glm::mat4& mat) const {
 
 void Pipeline::checkLinkErrors() {
     GLint success;
-    glGetProgramiv(m_ProgramID, GL_LINK_STATUS, &success);
+    glGetProgramiv(programID_, GL_LINK_STATUS, &success);
     if (!success) {
         GLchar infoLog[1024];
-        glGetProgramInfoLog(m_ProgramID, 1024, nullptr, infoLog);
+        glGetProgramInfoLog(programID_, 1024, nullptr, infoLog);
         std::cout << "ERROR::PIPELINE::LINKING_FAILED\n" << infoLog << std::endl;
     }
 }
