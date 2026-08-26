@@ -1,9 +1,9 @@
-#include "render/pipeline.h"
+#include "render/GPUPipeline.h"
 
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>  // for glm::value_ptr
 
-Pipeline::Pipeline(const std::vector<Shader*>& shaders) {
+GPUPipeline::GPUPipeline(const std::vector<Shader*>& shaders) {
     programID_ = glCreateProgram();
 
     // Attach all provided shader stages
@@ -15,19 +15,19 @@ Pipeline::Pipeline(const std::vector<Shader*>& shaders) {
     checkLinkErrors();
 }
 
-Pipeline::~Pipeline() {
+GPUPipeline::~GPUPipeline() {
     glDeleteProgram(programID_);
 }
 
-void Pipeline::bind() const {
+void GPUPipeline::bind() const {
     glUseProgram(programID_);
 }
 
-void Pipeline::unbind() const {
+void GPUPipeline::unbind() const {
     glUseProgram(0);
 }
 
-GLint Pipeline::getUniformLocation(const std::string& name) const {
+GLint GPUPipeline::getUniformLocation(const std::string& name) const {
     if (uniformLocCache_.find(name) != uniformLocCache_.end())
         return uniformLocCache_[name];
 
@@ -39,33 +39,33 @@ GLint Pipeline::getUniformLocation(const std::string& name) const {
     return location;
 }
 
-void Pipeline::setInt(const std::string& name, int value) const {
+void GPUPipeline::setInt(const std::string& name, int value) const {
     glUniform1i(getUniformLocation(name), value);
 }
 
-void Pipeline::setFloat(const std::string& name, float value) const {
+void GPUPipeline::setFloat(const std::string& name, float value) const {
     glUniform1f(getUniformLocation(name), value);
 }
 
-void Pipeline::setVec3(const std::string& name, const glm::vec3& value) const {
+void GPUPipeline::setVec3(const std::string& name, const glm::vec3& value) const {
     glUniform3f(getUniformLocation(name), value.x, value.y, value.z);
 }
 
-void Pipeline::setVec4(const std::string& name, const glm::vec4& value) const {
+void GPUPipeline::setVec4(const std::string& name, const glm::vec4& value) const {
     glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
 }
 
-void Pipeline::setMat3(const std::string& name, const glm::mat3& mat) const {
+void GPUPipeline::setMat3(const std::string& name, const glm::mat3& mat) const {
     glUniformMatrix3fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(mat));
 }
 
-void Pipeline::setMat4(const std::string& name, const glm::mat4& mat) const {
+void GPUPipeline::setMat4(const std::string& name, const glm::mat4& mat) const {
     glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(mat));
 }
 
 
 
-void Pipeline::checkLinkErrors() {
+void GPUPipeline::checkLinkErrors() {
     GLint success;
     glGetProgramiv(programID_, GL_LINK_STATUS, &success);
     if (!success) {

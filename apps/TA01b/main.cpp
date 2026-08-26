@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "render/Pipeline.h"
+#include "render/GPUPipeline.h"
 #include "drawColourVertex.h"
 
 int main() {
@@ -33,7 +33,7 @@ int main() {
     
     // Group the compiled stages into a Pipeline (Vertex-Fragment pair)
     std::vector<Shader*> shaderStages = { &vertShader, &fragShader };
-    Pipeline basicPipeline(shaderStages);
+    GPUPipeline basicPipeline(shaderStages);
     
     
     // set up data and vertex buffers
