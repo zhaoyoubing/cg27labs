@@ -12,10 +12,10 @@
 #include "render/Pipeline.h"
 #include "drawColourVertex.h"
 
-#include "entity/Entity.h"
-#include "entity/TransformComp.h"
-#include "entity/CameraComp.h"
-#include "systems/CameraSystem.h"
+#include "ecs/EcsTypes.h"
+#include "ecs/components/TransformComp.h"
+#include "ecs/components/CameraComp.h"
+#include "ecs/systems/CameraSystem.h"
 
 #include "ui/Window.h"
 #include "ui/InputState.h"
