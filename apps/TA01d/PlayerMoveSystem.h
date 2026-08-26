@@ -9,9 +9,9 @@ class PlayerMoveSystem {
 public:
     void update(ECSWorldPool& world,  EntityID id, InputState & input, float deltaTime) {
 
-        if (!world.HasComp<TransformComp>(id)) return;
+        if (!world.hasComp<TransformComp>(id)) return;
 
-        auto& trans = world.GetComp<TransformComp>(id);
+        auto& trans = world.getComp<TransformComp>(id);
 
         float deltaPos = 0.1f * deltaTime;
         float deltaAngle = 50.0f * deltaTime;

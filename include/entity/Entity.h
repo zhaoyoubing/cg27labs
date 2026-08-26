@@ -23,11 +23,11 @@ class ComponentIdCounter {
 public:
     template<typename T>
     static std::size_t GetId() {
-        static std::size_t typeId = s_Counter++;
+        static std::size_t typeId = counter++;
         return typeId;
     }
 private:
-    inline static std::size_t s_Counter = 0;
+    inline static std::size_t counter = 0;
 };
 
 
@@ -50,7 +50,7 @@ private:
 
 public:
 
-    EntityID CreateEntityID() {
+    EntityID createEntityID() {
         EntityID newId;
         
         // If we have recycled IDs from deleted entities, reuse them first
@@ -66,7 +66,7 @@ public:
         return newId;
     }
 
-    void DestroyEntityID(EntityID eid) {
+    void destroyEntityID(EntityID eid) {
         // 1. Check if the entity actually exists (has a signature)
         if (signatures.find(eid) == signatures.end()) {
             return; 
@@ -85,7 +85,7 @@ public:
 
 
     template<typename T, typename... Args> 
-    void AddComp(EntityID id, Args&&... args) {
+    void addComp(EntityID id, Args&&... args) {
         std::size_t typeId = ComponentIdCounter::GetId<T>();
 
         // Directly emplace into the inner unordered_map for this component type
@@ -97,7 +97,7 @@ public:
     }
 
     template<typename T>
-    void RemoveComp(EntityID id) {
+    void removeComp(EntityID id) {
         std::size_t typeId = ComponentIdCounter::GetId<T>();
         
         if (compMaps.find(typeId) != compMaps.end()) {
@@ -108,14 +108,14 @@ public:
     }
 
     template<typename T>
-    T& GetComp(EntityID id) {
+    T& getComp(EntityID id) {
         std::size_t typeId = ComponentIdCounter::GetId<T>();
         auto& ptr = compMaps[typeId][id];
         return *static_cast<T*>(ptr.get());
     }
 
     template <typename T>
-    bool HasComp(EntityID id) const {
+    bool hasComp(EntityID id) const {
         // 1. Get the unique ID for this specific component type
         size_t compId = ComponentIdCounter::GetId<T>();
 
@@ -135,7 +135,7 @@ public:
     // retrieve all entity IDs that have all the specified components
     // returning them as a vector
     template<typename... ComponentTypes> 
-    std::vector<EntityID> View() {
+    std::vector<EntityID> view() {
         // Build a target bitset mask for the requested components
         Signature targetSignature;
         ((targetSignature.set(ComponentIdCounter::GetId<ComponentTypes>(), true)), ...);
