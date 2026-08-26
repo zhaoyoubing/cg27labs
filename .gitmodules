@@ -10,7 +10,6 @@
 [submodule "submodules/tinygltf"]
 	path = submodules/tinygltf
 	url = https://github.com/syoyo/tinygltf.git
-
 [submodule "submodules/spdlog"]
 	path = submodules/spdlog
 	url = https://github.com/gabime/spdlog.git
