@@ -27,23 +27,23 @@ public:
     CameraView(CameraComp cam, Viewport vp)
         : camera(cam), viewport(vp) {}
 
-    void SetViewport(float w, float h) {
+    void setViewport(float w, float h) {
         viewport.w = w;
         viewport.h = h;
     }
 
     // It can query the world directly when needed
-    glm::mat4 GetProjMatrix(const CameraComp& camera) const {
+    glm::mat4 getProjMatrix(const CameraComp& camera) const {
         return glm::perspective(glm::radians(camera.fov), viewport.GetAspectRatio(), camera.near, camera.far);
     }
 
     // Calculates the view matrix using the entity's world position and camera front vector
-    glm::mat4 GetViewMatrix(const glm::vec3& e) const {
+    glm::mat4 getViewMatrix(const glm::vec3& e) const {
         return glm::lookAt(e, e + camera.front, camera.up);
     }
 
     // You can even wrap OpenGL's viewport command here!
-    void ApplyToRenderer() const {
+    void applyToRenderer() const {
         glViewport(static_cast<GLint>(viewport.x), 
                    static_cast<GLint>(viewport.y), 
                    static_cast<GLsizei>(viewport.w), 

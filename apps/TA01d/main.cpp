@@ -38,20 +38,20 @@ int main() {
     CameraSystem camSys;
 
     // ================ Create object entity ================
-    EntityID objId = ecsWorld.CreateEntityID();
-    ecsWorld.AddComp<TransformComp>(objId, TransformComp{});
+    EntityID objId = ecsWorld.createEntityID();
+    ecsWorld.addComp<TransformComp>(objId, TransformComp{});
 
     // ================ Create player entity ================
     // 1. Create the player entity id
-    EntityID player = ecsWorld.CreateEntityID();
+    EntityID player = ecsWorld.createEntityID();
 
     // 2. Attach a single TransformCompto it
-    ecsWorld.AddComp<TransformComp>(player, TransformComp{
+    ecsWorld.addComp<TransformComp>(player, TransformComp{
         .pos = glm::vec3(0.0f, 0.0f, 2.0f) // also eye position
     });
 
     // 3. Attach a single CameraComp to the player (First Person View)
-    ecsWorld.AddComp<CameraComp>(player, CameraComp{
+    ecsWorld.addComp<CameraComp>(player, CameraComp{
         .fov = 45.0f,
         .front = glm::vec3(0, 0, -1),
         .yaw = -90.0f,
@@ -101,7 +101,7 @@ int main() {
         // update the model matrix uniform in the shader
         // the order is always TRS (translate, rotate, scale) for the modelview matrix
         // for rotation we choose to rotate around the local x-axis first, then the y-axis
-        TransformComp& trans = ecsWorld.GetComp<TransformComp>(objId);
+        TransformComp& trans = ecsWorld.getComp<TransformComp>(objId);
         glm::mat4 mat_model = glm::translate(trans.pos)  
             * glm::rotate(glm::radians(trans.rot.x), glm::vec3(1.0f, 0.0f, 0.0f))
             * glm::rotate(glm::radians(trans.rot.y), glm::vec3(0.0f, 1.0f, 0.0f)) 
@@ -110,8 +110,8 @@ int main() {
         basicPipeline.setMat4("matModel", mat_model);
 
 
-        TransformComp & transPlayer = ecsWorld.GetComp<TransformComp>(player);
-        CameraComp & camera = ecsWorld.GetComp<CameraComp>(player);
+        TransformComp & transPlayer = ecsWorld.getComp<TransformComp>(player);
+        CameraComp & camera = ecsWorld.getComp<CameraComp>(player);
 
         // set up the view matrix for the camera
         glm::mat4 view = glm::lookAt(

@@ -17,12 +17,12 @@
 class CameraSystem {
 public:
     void update(ECSWorldPool& world, InputState&  input, float deltaTime) {
-        auto entities = world.View<TransformComp, CameraComp>();
+        auto entities = world.view<TransformComp, CameraComp>();
 
         for (EntityID id : entities) {
 
-            auto& transform = world.GetComp<TransformComp>(id);
-            auto& camera = world.GetComp<CameraComp>(id);
+            auto& transform = world.getComp<TransformComp>(id);
+            auto& camera = world.getComp<CameraComp>(id);
 
             
             // left button pressed
