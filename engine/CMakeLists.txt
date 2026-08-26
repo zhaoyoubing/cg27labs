@@ -1,7 +1,7 @@
 add_library(engine STATIC
     GameApp.cpp
     render/Shader.cpp
-    render/Pipeline.cpp
+    render/GPUPipeline.cpp
 )
 
 # Point to the root-level include directory (one level up from engine/)

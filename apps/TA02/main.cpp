@@ -9,7 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "render/Pipeline.h"
+#include "render/GPUPipeline.h"
 // #include "drawColourVertex.h"
 
 #include "ecs/EcsTypes.h"
@@ -65,7 +65,7 @@ int main() {
     
     // Group the compiled stages into a Pipeline (Vertex-Fragment pair)
     std::vector<Shader*> shaderStages = { &vertShader, &fragShader };
-    Pipeline basicPipeline(shaderStages);
+    GPUPipeline basicPipeline(shaderStages);
     
 
     // ================ Model Setup ================
