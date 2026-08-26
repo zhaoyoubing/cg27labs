@@ -2,7 +2,7 @@
 
 #include <glfw/glfw3.h>
 
-#include "entity/Entity.h"
+#include "ecs/EcsWorldPool.h"
 
 extern ECSWorldPool gEcsWorld;
 extern TransformComp gTrans;

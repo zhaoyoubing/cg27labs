@@ -10,7 +10,7 @@
 #include "render/Pipeline.h"
 #include "drawColourVertex.h"
 
-#include "entity/TransformComp.h"
+#include "ecs/components/TransformComp.h"
 
 #include "InputCallbacks.h"
 

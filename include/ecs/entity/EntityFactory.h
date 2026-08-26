@@ -1,8 +1,10 @@
 // include/entity/EntityFactory.hpp
 #pragma once
-#include "entity/Entity.h"
-#include "entity/TransformComp.h"
-#include "entity/CameraComp.hpp"
+#include "ecs/EcsTypes.h"
+#include "ecs/components/TransformComp.h"
+#include "ecs/components/CameraComp.hpp"
+
+
 #include <glm/glm.hpp>
 
 class EntityFactory {
