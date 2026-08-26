@@ -3,7 +3,7 @@
 #include <spdlog/spdlog.h>
 
 
-GameApp::GameApp(std::string name) {
+GameApp::GameApp(std::string name):appName_(name) {
     init(name);
 }
 

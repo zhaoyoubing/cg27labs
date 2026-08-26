@@ -5,7 +5,7 @@
 #include <memory>
 #include <chrono>
 #include "ui/Window.h"
-#include "entity/Entity.h" // Assuming your ECS world manager
+#include "ecs/EcsWorldPool.h" 
 
 class GameApp {
 public:
@@ -32,7 +32,7 @@ private:
     std::unique_ptr<Window> mainWin_;
     ECSWorldPool ecsWorld_;
 
-    std::string appName;
+    std::string appName_;
 
     // Timing tracking
     std::chrono::high_resolution_clock::time_point lastFrameTime_;
