@@ -5,24 +5,24 @@
 #include <string>
 #include <iostream>
 
-#include "InputState.h"
+#include "inputState.h"
 #include "InputCallbackRegister.h"
 
 class Window {
 private:
-    GLFWwindow* m_Window = nullptr;
-    int m_Width;
-    int m_Height;
-    std::string m_Title;
+    GLFWwindow* window_ = nullptr;
+    int width_;
+    int height_;
+    std::string title_;
 
-    InputState inputState;
+    InputState inputState_;
 
-    float m_LastFrameTime = 0.0f;
-    float m_DeltaTime = 0.0f; // Tracked internally
+    float lastFrameTime_ = 0.0f;
+    float deltaTime_ = 0.0f; // Tracked internally
 
 public:
     Window(int width, int height, const std::string& title)
-        : m_Width(width), m_Height(height), m_Title(title) {
+        : width_(width), height_(height), title_(title) {
         
         // 1. Initialize GLFW
         if (!glfwInit()) {
@@ -36,15 +36,15 @@ public:
 #endif
 
         // 2. Create the window object
-        m_Window = glfwCreateWindow(m_Width, m_Height, m_Title.c_str(), nullptr, nullptr);
-        if (!m_Window) {
+        window_ = glfwCreateWindow(width_, height_, title_.c_str(), nullptr, nullptr);
+        if (!window_) {
             std::cerr << "Failed to create GLFW window!" << std::endl;
             glfwTerminate();
             exit(EXIT_FAILURE);
         }
 
         // 3. Make the OpenGL context current
-        glfwMakeContextCurrent(m_Window);
+        glfwMakeContextCurrent(window_);
 
         // 4. Initialize GLAD (or your loader)
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -52,69 +52,77 @@ public:
             exit(EXIT_FAILURE);
         }
 
-        InputCallbackRegister::init(m_Window, &inputState);
+        InputCallbackRegister::init(window_, &inputState_);
 
         // Set viewport size
-        glViewport(0, 0, m_Width, m_Height);
+        glViewport(0, 0, width_, height_);
 
         // Optional: Set user pointer so you can access the Window instance inside callbacks later
-        // glfwSetWindowUserPointer(m_Window, this);
+        // glfwSetWindowUserPointer(window_, this);
 
         // Setup resize callback
-        glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
+        glfwSetFramebufferSizeCallback(window_, [](GLFWwindow* window, int width, int height) {
             glViewport(0, 0, width, height);
         });
     }
 
     ~Window() {
-        if (m_Window) {
-            glfwDestroyWindow(m_Window);
+        if (window_) {
+            glfwDestroyWindow(window_);
         }
         glfwTerminate();
         
     }
 
     // Check if the window should close (ESC pressed or close button clicked)
-    bool ShouldClose() const {
-        return glfwWindowShouldClose(m_Window);
+    bool shouldClose() const {
+        return glfwWindowShouldClose(window_);
     }
 
     // Poll OS window & input events (Must be called at the start of the frame)
-    void PollEvents() const {
+    void pollEvents() const {
         glfwPollEvents();
     }
 
     // Swap the front and back rendering buffers
-    void SwapBuffers() const {
-        glfwSwapBuffers(m_Window);
+    void swapBuffers() const {
+        glfwSwapBuffers(window_);
     }
 
     // Returns current time in seconds since GLFW started
-    float GetTime() const {
+    float getTime() const {
         return static_cast<float>(glfwGetTime());
     }
 
     // Call this once per frame, right after polling events
-    void UpdateDeltaTime() {
+    void updateDeltaTime() {
         float currentFrameTime = static_cast<float>(glfwGetTime());
-        m_DeltaTime = currentFrameTime - m_LastFrameTime;
-        m_LastFrameTime = currentFrameTime;
+        deltaTime_ = currentFrameTime - lastFrameTime_;
+        lastFrameTime_ = currentFrameTime;
     }
 
-    float GetDeltaTime() const {
-        return m_DeltaTime;
+    float getDeltaTime() const {
+        return deltaTime_;
     }
 
-    InputState & getInputState() { return inputState; }
+    InputState & getInputState() { return inputState_; }
 
     // Getters for window dimensions
-    int GetWidth() const { return m_Width; }
-    int GetHeight() const { return m_Height; }
+    int getWidth() const { return width_; }
+    int getHeight() const { return height_; }
 
     // Expose the raw GLFWwindow pointer if needed by input callbacks or external APIs
-    GLFWwindow* GetNativeWindow() const { return m_Window; }
+    GLFWwindow* getNativeWindow() const { return window_; }
 
-    void clearInputState() { inputState.clearOffset(); }
+    void clearInputState() { inputState_.clearOffset(); }
+
+    void clearScreen() { 
+        // 1. Specify the RGBA color to use when clearing (e.g., a dark slate gray background)
+        glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
+
+        // 2. Clear both the Color Buffer (what you see) and the Depth Buffer (for 3D mesh rendering)
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
 
 
 };

@@ -16,7 +16,7 @@
 
 class CameraSystem {
 public:
-    void Update(ECSWorldPool& world, InputState&  input, float deltaTime) {
+    void update(ECSWorldPool& world, InputState&  input, float deltaTime) {
         auto entities = world.View<TransformComp, CameraComp>();
 
         for (EntityID id : entities) {
