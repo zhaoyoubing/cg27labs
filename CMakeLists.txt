@@ -37,6 +37,13 @@ target_include_directories(tinygltf INTERFACE
     ${CMAKE_SOURCE_DIR}/submodules/tinygltf
 )
 
+# spdlog provides its own CMake target when added as a subdirectory
+add_subdirectory(external/spdlog)
+
+# Optional: Configure Tracy options before pulling it in
+set(TRACY_ENABLE ON CACHE BOOL "Enable Tracy Profiler" FORCE)
+add_subdirectory(external/tracy)
+
 # 5. imgui (Static library), need to add CMakeLists.txt in the imgui folder
 # uncomment the following add_subdirectory line in the future when you need GUI
 # you need to manually put a CMakeLists.txt in ROOT/submodules/imgui folder
