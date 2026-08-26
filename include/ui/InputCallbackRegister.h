@@ -15,10 +15,10 @@ public:
         glfwSetWindowUserPointer(window, input);
 
         // Register GLFW callbacks
-        glfwSetKeyCallback(window, KeyCallback);
-        glfwSetCursorPosCallback(window, MouseCallback);
-        glfwSetMouseButtonCallback(window, MouseButtonCallback);
-        glfwSetScrollCallback(window, ScrollCallback);
+        glfwSetKeyCallback(window, keyCallback);
+        glfwSetCursorPosCallback(window, mouseCallback);
+        glfwSetMouseButtonCallback(window, mouseButtonCallback);
+        glfwSetScrollCallback(window, scrollCallback);
     }
 
 private:
@@ -34,7 +34,7 @@ private:
 
     // --- GLFW Callback Trampolines ---
     // GLFW callbacks must be static
-    static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
         auto* input = static_cast<InputState*>(glfwGetWindowUserPointer(window));
         if (action == GLFW_PRESS) {
             input->keyStates[key] = true;
@@ -43,7 +43,7 @@ private:
         }
     }
 
-    static void MouseCallback(GLFWwindow* window, double xpos, double ypos) {
+    static void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
         auto* input = static_cast<InputState*>(glfwGetWindowUserPointer(window));
 
         spdlog::trace("Mouse move event: x = {}, y ={}", xpos, ypos);
@@ -66,7 +66,7 @@ private:
 
     }
 
-    static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
         
         spdlog::trace("Mouse button event : {}", button);
 
@@ -79,7 +79,7 @@ private:
         }
     }
 
-    static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+    static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
         auto* input = static_cast<InputState*>(glfwGetWindowUserPointer(window));
         input->scrollX = xoffset;
         input->scrollY = yoffset;
