@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(GraphicsLabs LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # --- Global Include Directories ---
@@ -38,11 +38,11 @@ target_include_directories(tinygltf INTERFACE
 )
 
 # spdlog provides its own CMake target when added as a subdirectory
-add_subdirectory(external/spdlog)
+add_subdirectory(submodules/spdlog)
 
 # Optional: Configure Tracy options before pulling it in
 set(TRACY_ENABLE ON CACHE BOOL "Enable Tracy Profiler" FORCE)
-add_subdirectory(external/tracy)
+add_subdirectory(submodules/tracy)
 
 # 5. imgui (Static library), need to add CMakeLists.txt in the imgui folder
 # uncomment the following add_subdirectory line in the future when you need GUI
