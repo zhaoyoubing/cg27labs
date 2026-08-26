@@ -4,7 +4,7 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-#include "entity/CameraComp.h"
+#include "ecs/components/CameraComp.h"
 
 struct Viewport {
     float x = 0.0f;
