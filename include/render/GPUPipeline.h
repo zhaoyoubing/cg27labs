@@ -7,11 +7,11 @@
 
 #include "shader.h"
 
-class Pipeline {
+class GPUPipeline {
 public:
     // Pass a collection of compiled shaders (e.g., Vertex + Fragment)
-    Pipeline(const std::vector<Shader*>& shaders);
-    ~Pipeline();
+    GPUPipeline(const std::vector<Shader*>& shaders);
+    ~GPUPipeline();
 
     void bind() const;
     void unbind() const;
@@ -20,6 +20,8 @@ public:
     void setInt(const std::string& name, int value) const;
     void setFloat(const std::string& name, float value) const;
     void setVec3(const std::string& name, const glm::vec3& value) const;
+    void setVec4(const std::string& name, const glm::vec4& value) const;
+    void setMat3(const std::string& name, const glm::mat3& mat) const;
     void setMat4(const std::string& name, const glm::mat4& mat) const;
 
 private:
