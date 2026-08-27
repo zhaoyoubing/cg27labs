@@ -8,7 +8,7 @@
 #include <tiny_gltf.h>
 
 #include "scene/GltfMeshLoader.h"
-#include "scene/MeshGPU.h"
+#include "scene/MeshGeoGPU.h"
 
 #include "render/Texture.h"
 
@@ -133,7 +133,7 @@ std::shared_ptr<MeshModel> GltfMeshLoader::loadModel(const std::string& filepath
             }
 
             // 3. Build low-level MeshGeometry
-            auto geometry = std::make_shared<MeshGPU>();
+            auto geometry = std::make_shared<MeshGeoGPU>();
             //geometry->setupMesh(vertices, indices);
 
             // 4. Track material index mapping
