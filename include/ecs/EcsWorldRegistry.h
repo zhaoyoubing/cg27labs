@@ -2,7 +2,7 @@
 #pragma once
 
 #include "ecs/EcsTypes.h"
-#include "ecs/entity/EntityIdRegistry.h"
+#include "ecs/entity/EntityIdAllocator.h"
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -12,9 +12,9 @@
 // More entities can be added to the pool as needed
 // Example entity types: transform, camera, mesh, light; player, enemy, npc, etc.
 
-class ECSWorldPool {
+class ECSWorldRegistry {
 private:
-    EntityIdRegistry entityRegistry;
+    EntityIdAllocator entityAlloc;
 
     // Component Type ID -> (Entity ID -> Component Data)
     std::unordered_map<std::size_t, std::unordered_map<EntityID, std::shared_ptr<void>>> compMaps;
@@ -22,11 +22,11 @@ private:
 public:
 
     EntityID createEntityID() {
-        return entityRegistry.createEntity();
+        return entityAlloc.createEntity();
     }
 
     void destroyEntityID(EntityID eid) {
-        if (!entityRegistry.isValid(eid)) {
+        if (!entityAlloc.isValid(eid)) {
             return;
         }
 
@@ -36,7 +36,7 @@ public:
         }
 
         // 2. Let the EntityIdRegistry wipe signature and recycle the ID
-        entityRegistry.destroyEntity(eid);
+        entityAlloc.destroyEntity(eid);
     }
 
     template<typename T, typename... Args> 
@@ -47,7 +47,7 @@ public:
         typeMap[id] = std::make_shared<T>(std::forward<Args>(args)...);
         
         // Update signature via EntityIdRegistry
-        entityRegistry.getSignature(id).set(typeId, true);
+        entityAlloc.getSignature(id).set(typeId, true);
     }
 
     template<typename T>
@@ -58,7 +58,7 @@ public:
             compMaps[typeId].erase(id);
         }
 
-        entityRegistry.getSignature(id).set(typeId, false);
+        entityAlloc.getSignature(id).set(typeId, false);
     }
 
     template<typename T>
@@ -71,8 +71,8 @@ public:
     template <typename T>
     bool hasComp(EntityID id) const {
         size_t compId = ComponentIdCounter::GetId<T>();
-        if (entityRegistry.isValid(id)) {
-            return entityRegistry.getSignature(id).test(compId);
+        if (entityAlloc.isValid(id)) {
+            return entityAlloc.getSignature(id).test(compId);
         }
         return false; 
     }
@@ -83,7 +83,7 @@ public:
         ((targetSignature.set(ComponentIdCounter::GetId<ComponentTypes>(), true)), ...);
 
         std::vector<EntityID> matchingEntities;
-        for (const auto& [entity, signature] : entityRegistry.getAllSignatures()) {
+        for (const auto& [entity, signature] : entityAlloc.getAllSignatures()) {
             if ((signature & targetSignature) == targetSignature) {
                 matchingEntities.push_back(entity);
             }

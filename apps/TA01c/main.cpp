@@ -14,7 +14,7 @@
 
 #include "InputCallbacks.h"
 
-ECSWorldPool gEcsWorld;
+ECSWorldRegistry gEcsWorld;
 TransformComp gTrans;
 
 int main() {

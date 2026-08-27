@@ -33,7 +33,7 @@ int main() {
     Window window(800, 800, "TA01d");
 
     // 2. Initialize ECS World Pool
-    ECSWorldPool ecsWorld;
+    ECSWorldRegistry ecsWorld;
     PlayerMoveSystem moveSys;
     CameraSystem camSys;
 

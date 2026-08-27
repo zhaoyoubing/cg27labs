@@ -12,7 +12,7 @@
 // using EntityID = std::uint32_t;
 // using Signature = std::bitset<32>;
 
-class EntityIdRegistry {
+class EntityIdAllocator {
 private:
     EntityID nextId = 0;
     std::vector<EntityID> freeIdList;
