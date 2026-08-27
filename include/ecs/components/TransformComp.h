@@ -9,6 +9,15 @@ struct TransformComp {
     glm::vec3 pos = {0.f, 0.f, 0.f};;
     glm::vec3 rot = {0.f, 0.f, 0.f};;
     glm::vec3 scale = {1.f, 1.f, 1.f};
+
+    // using intrinsic rotation in an order of X-Y-Z, or Pitch-Yaw-Roll
+    glm::mat4 getLocalMatrix() const {
+         return glm::translate(pos)  
+            * glm::rotate(glm::radians(rot.x), glm::vec3(1.0f, 0.0f, 0.0f))
+            * glm::rotate(glm::radians(rot.y), glm::vec3(0.0f, 1.0f, 0.0f)) 
+            * glm::rotate(glm::radians(rot.y), glm::vec3(0.0f, 0.0f, 1.0f)) 
+            * glm::scale(scale);
+    }
 };
 
 // Transform Matrix Component for GPU
