@@ -1,6 +1,7 @@
-#include "render/GPUPipeline.h"
-
 #include <iostream>
+
+#include "device/GPUPipeline.h"
+
 #include <glm/gtc/type_ptr.hpp>  // for glm::value_ptr
 
 GPUPipeline::GPUPipeline(const std::vector<Shader*>& shaders) {
