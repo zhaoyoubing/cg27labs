@@ -7,7 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "render/GPUPipeline.h"
+#include "device/GPUPipeline.h"
 #include "drawColourVertex.h"
 
 #include "ecs/components/TransformComp.h"

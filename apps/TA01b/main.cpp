@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "render/GPUPipeline.h"
+#include "device/GPUPipeline.h"
 #include "drawColourVertex.h"
 
 int main() {
