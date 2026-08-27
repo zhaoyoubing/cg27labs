@@ -1,7 +1,7 @@
 add_library(engine STATIC
     GameApp.cpp
-    render/Shader.cpp
-    render/GPUPipeline.cpp
+    device/Shader.cpp
+    device/GPUPipeline.cpp
     scene/GltfMeshLoader.cpp
 )
 
