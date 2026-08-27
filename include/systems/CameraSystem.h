@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 
 #include "ui/InputState.h"
-#include "ecs/EcsWorldPool.h"
+#include "ecs/EcsWorldRegistry.h"
 #include "ecs/components/TransformComp.h"
 #include "ecs/components/CameraComp.h"
 
@@ -16,7 +16,7 @@
 
 class CameraSystem {
 public:
-    void update(ECSWorldPool& world, InputState&  input, float deltaTime) {
+    void update(ECSWorldRegistry & world, InputState&  input, float deltaTime) {
         auto entities = world.view<TransformComp, CameraComp>();
 
         for (EntityID id : entities) {

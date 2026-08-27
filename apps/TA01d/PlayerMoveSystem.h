@@ -2,12 +2,13 @@
 
 #include <GLFW/glfw3.h>
 #include "ecs/EcsTypes.h"
+#include "ecs/EcsWorldRegistry.h"
 #include "ecs/components/TransformComp.h"
 #include "ui/InputState.h"
 
 class PlayerMoveSystem {
 public:
-    void update(ECSWorldPool& world,  EntityID id, InputState & input, float deltaTime) {
+    void update(ECSWorldRegistry & world,  EntityID id, InputState & input, float deltaTime) {
 
         if (!world.hasComp<TransformComp>(id)) return;
 

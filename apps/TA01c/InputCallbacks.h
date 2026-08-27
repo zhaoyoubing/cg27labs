@@ -2,9 +2,9 @@
 
 #include <glfw/glfw3.h>
 
-#include "ecs/EcsWorldPool.h"
+#include "ecs/EcsWorldRegistry.h"
 
-extern ECSWorldPool gEcsWorld;
+extern ECSWorldRegistry gEcsWorld;
 extern TransformComp gTrans;
 
 // the GLFW keyboard callback 
