@@ -13,6 +13,7 @@
 // #include "drawColourVertex.h"
 
 #include "ecs/EcsTypes.h"
+#include "ecs/EcsWorldRegistry.h"
 #include "ecs/components/TransformComp.h"
 #include "ecs/components/CameraComp.h"
 #include "systems/CameraSystem.h"
@@ -32,8 +33,8 @@ int main() {
     // 1. Initialize GLFW Window and Input Context
     Window window(800, 800, "TA01d");
 
-    // 2. Initialize ECS World Pool
-    ECSWorldPool ecsWorld;
+    // 2. Initialize ECS World Registry
+    ECSWorldRegistry ecsWorld;
     PlayerMoveSystem moveSys;
     CameraSystem camSys;
 

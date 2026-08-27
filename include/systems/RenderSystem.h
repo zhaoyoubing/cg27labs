@@ -1,12 +1,12 @@
 #pragma once
 
-#include "ecs/EcsWorldPool.h"
+#include "ecs/EcsWorldRegistry.h"
 #include "render/Shader.h"
 
 class RenderSystem {
 
 public:
-    void render(ECSWorldPool& wcscat_s, GPUPipeline & pipe) {
+    void render(ECSWorldRegistry & world, GPUPipeline & pipe) {
         auto view = world.view<TransformComponent, MeshComponent>();
         
         for (auto entity : view) {

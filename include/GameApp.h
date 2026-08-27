@@ -5,7 +5,7 @@
 #include <memory>
 #include <chrono>
 #include "ui/Window.h"
-#include "ecs/EcsWorldPool.h" 
+#include "ecs/EcsWorldRegistry.h" 
 
 class GameApp {
 public:
@@ -30,7 +30,7 @@ private:
     
     // Core engine modules (supporting your multi-window architecture)
     std::unique_ptr<Window> mainWin_;
-    ECSWorldPool ecsWorld_;
+    ECSWorldRegistry ecsWorld_;
 
     std::string appName_;
 
