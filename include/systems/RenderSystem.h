@@ -6,11 +6,11 @@
 class RenderSystem {
 
 public:
-    void render(ECSWorldPool& ecsWorld, GPUPipeline & pipe) {
-        auto view = ecsWorld.registry.view<TransformComponent, MeshComponent>();
+    void render(ECSWorldPool& wcscat_s, GPUPipeline & pipe) {
+        auto view = world.view<TransformComponent, MeshComponent>();
         
         for (auto entity : view) {
-            auto& [transform, meshComp] = view.get<TransformComponent, MeshComponent>(entity);
+            auto& [transform, meshComp] = view.get<TransformComp, MeshComp>(entity);
 
             if (!meshComp.geometry) continue;
 
