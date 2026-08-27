@@ -1,6 +1,6 @@
 add_library(engine STATIC
-    render/Shader.cpp
-    render/GPUPipeline.cpp
+    device/Shader.cpp
+    device/GPUPipeline.cpp
 )
 
 # Point to the root-level include directory (one level up from engine/)
