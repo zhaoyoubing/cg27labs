@@ -102,10 +102,13 @@ int main() {
         // the order is always TRS (translate, rotate, scale) for the modelview matrix
         // for rotation we choose to rotate around the local x-axis first, then the y-axis
         TransformComp& trans = ecsWorld.getComp<TransformComp>(objId);
-        glm::mat4 mat_model = glm::translate(trans.pos)  
-            * glm::rotate(glm::radians(trans.rot.x), glm::vec3(1.0f, 0.0f, 0.0f))
-            * glm::rotate(glm::radians(trans.rot.y), glm::vec3(0.0f, 1.0f, 0.0f)) 
-            * glm::scale(glm::vec3(1.0f));
+
+        glm::mat4 mat_model = trans.getLocalMatrix();
+        
+        //= glm::translate(trans.pos)  
+        //    * glm::rotate(glm::radians(trans.rot.x), glm::vec3(1.0f, 0.0f, 0.0f))
+        //    * glm::rotate(glm::radians(trans.rot.y), glm::vec3(0.0f, 1.0f, 0.0f)) 
+        //    * glm::scale(glm::vec3(1.0f));
         
         basicPipeline.setMat4("matModel", mat_model);
 
