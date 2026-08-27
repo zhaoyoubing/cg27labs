@@ -2,6 +2,7 @@ add_library(engine STATIC
     GameApp.cpp
     render/Shader.cpp
     render/GPUPipeline.cpp
+    scene/GltfMeshLoader.cpp
 )
 
 # Point to the root-level include directory (one level up from engine/)

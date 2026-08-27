@@ -2,7 +2,7 @@
 #pragma once
 
 #include <memory>
-#include "model/MeshGeometry.h"
+#include "scene/MeshGeometry.h"
 // #include "render/Material.hpp" // [TODO]: for textures, shaders, colors
 
 struct MeshComp {
