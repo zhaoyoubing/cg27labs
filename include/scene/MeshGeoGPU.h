@@ -8,7 +8,6 @@
 // vao vbo and ebo of mesh geometry
 class MeshGeoGPU {
     public:
-    MeshGeoGPU() = default;
     MeshGeoGPU(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) {
         setupGeometry(vertices, indices);
     }

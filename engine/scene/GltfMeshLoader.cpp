@@ -133,7 +133,7 @@ std::shared_ptr<MeshModel> GltfMeshLoader::loadModel(const std::string& filepath
             }
 
             // 3. Build low-level MeshGeometry
-            auto geometry = std::make_shared<MeshGeoGPU>();
+            //auto geometry = std::make_shared<MeshGeometry>(vertices, indices);
             //geometry->setupMesh(vertices, indices);
 
             // 4. Track material index mapping
