@@ -1,24 +1,25 @@
-// scene/MeshGPU.h
+// scene/MeshGeoGPU.h
 #pragma once
 #include <glm/glm.hpp>
 #include <vector>
 
 #include "Primitives.h"
 
-class MeshGPU {
+// vao vbo and ebo of mesh geometry
+class MeshGeoGPU {
     public:
-    MeshGPU() = default;
-    MeshGPU(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) {
+    MeshGeoGPU() = default;
+    MeshGeoGPU(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) {
         setupGeometry(vertices, indices);
     }
-    
-    ~MeshGPU();
+
+    ~MeshGeoGPU();
 
     // Non-copyable, movable (RAII)
-    MeshGPU(const MeshGPU&) = delete;
-    MeshGPU& operator=(const MeshGPU&) = delete;
-    MeshGPU(MeshGPU&&) noexcept;
-    MeshGPU& operator=(MeshGPU&&) noexcept;
+    MeshGeoGPU(const MeshGeoGPU&) = delete;
+    MeshGeoGPU& operator=(const MeshGeoGPU&) = delete;
+    MeshGeoGPU(MeshGeoGPU&&) noexcept;
+    MeshGeoGPU& operator=(MeshGeoGPU&&) noexcept;
 
     void bindAndDraw() const;
 

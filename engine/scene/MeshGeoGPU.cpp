@@ -4,10 +4,10 @@
 #include <cstddef>
 #include <utility>
 
-#include "scene/MeshGPU.h"
+#include "scene/MeshGeoGPU.h"
 
 
-MeshGPU::~MeshGPU()
+MeshGeoGPU::~MeshGeoGPU()
 {
     if (ebo_ != 0)
         glDeleteBuffers(1, &ebo_);
@@ -19,7 +19,7 @@ MeshGPU::~MeshGPU()
         glDeleteVertexArrays(1, &vao_);
 }
 
-MeshGPU::MeshGPU(MeshGPU&& other) noexcept
+MeshGeoGPU::MeshGeoGPU(MeshGeoGPU&& other) noexcept
     : vao_(other.vao_),
       vbo_(other.vbo_),
       ebo_(other.ebo_),
@@ -31,7 +31,7 @@ MeshGPU::MeshGPU(MeshGPU&& other) noexcept
     other.indexCount_ = 0;
 }
 
-MeshGPU& MeshGPU::operator=(MeshGPU&& other) noexcept
+MeshGeoGPU& MeshGeoGPU::operator=(MeshGeoGPU&& other) noexcept
 {
     if (this == &other)
         return *this;
@@ -61,7 +61,7 @@ MeshGPU& MeshGPU::operator=(MeshGPU&& other) noexcept
     return *this;
 }
 
-void MeshGPU::setupGeometry(
+void MeshGeoGPU::setupGeometry(
     const std::vector<Vertex>& vertices,
     const std::vector<unsigned int>& indices)
 {
@@ -172,7 +172,7 @@ void MeshGPU::setupGeometry(
     glVertexArrayElementBuffer(vao_, ebo_);
 }
 
-void MeshGPU::bindAndDraw() const
+void MeshGeoGPU::bindAndDraw() const
 {
     if (vao_ == 0 || indexCount_ == 0)
         return;

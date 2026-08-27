@@ -6,7 +6,11 @@
 class MeshGeoFactory {
 public:
     // Generate an axis-aligned box (width, height, depth)
-    static std::shared_ptr<MeshGeometry> CreateBox(float width, float height, float depth);
+    static std::shared_ptr<MeshGeometry> CreateBox(float width, float height, float depth) {
+        auto model = std::make_shared<MeshGeometry>();
+        
+
+    }
 
     // Convenience wrapper: a Box where width == height == depth
     static std::shared_ptr<MeshGeometry> CreateCube(float size) {
@@ -20,6 +24,6 @@ public:
 
     // Generate a flat 2D plane (useful for floors/walls)
     static std::shared_ptr<MeshGeometry> CreatePlane(float width = 1.0f, float height = 1.0f) {
-        
+
     }
 };
