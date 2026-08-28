@@ -6,33 +6,48 @@
 #include <chrono>
 #include "ui/Window.h"
 #include "entity/EcsWorldRegistry.h" 
+#include "scene/Scene.h"
 
 class GameApp {
 public:
     GameApp(std::string name = "My Game App");
-    ~GameApp();
+    virtual ~GameApp() = default;
 
     // Prevent copying
     GameApp(const GameApp&) = delete;
     GameApp& operator=(const GameApp&) = delete;
 
+
+    bool init();   // initialisation
+
     // Main evemt/rendering loop
     void run();
 
+protected:
+    virtual bool initResources();
+    virtual bool initScene();
+    virtual void update(float dt);
+    virtual void render();
+
 private:
-    void init(std::string title = "My Game App");   // init window and OpenGL setup
-    void processEvents();           // poll events
-    void update(float dt);          // update data of various system
-    void render();            // core rendering implementation
+    bool initWindow();   // init window and OpenGL setup
+    bool initECS();   // init window and OpenGL setup
+
+    void processEvents();     // poll events
     void shutdown();          // terminate
 
     bool bRunning_{true};
     
+    std::string appName_;
     // Core engine modules (supporting your multi-window architecture)
     std::unique_ptr<Window> mainWin_;
-    ECSWorldRegistry ecsWorld_;
+    ECSWorldRegistry ecsWorld_; // ECS is scene
+    
+    Renderer renderer_;
+    
 
-    std::string appName_;
+    // The currently active scene instance
+    std::shared_ptr<Scene> activeScene;
 
     // Timing tracking
     std::chrono::high_resolution_clock::time_point lastFrameTime_;

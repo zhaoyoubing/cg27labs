@@ -14,13 +14,33 @@ GameApp::~GameApp() {
 void GameApp::init(std::string title) {
     spdlog::info("Initializing GameApp and core subsystems...");
 
+    if (!initWindow(title))
+        return false;
+
+    if (!initRenderer())
+        return false;
+
+    if (!initResources())
+        return false;
+
+    if (!initScene())
+        return false;
+
+    bIsRunning_ = true;
+
+    spdlog::info("GameApp initialization complete.");
+
+    return true;
+}
+
+void GameApp::initWindow(std::string title) {
+    
     // 1. Initialize primary window (GLFW context, user pointers, callbacks)
     mainWin_ = std::make_unique<Window>(800, 600, title);
 
     // 2. Initialize timing baseline
     lastFrameTime_ = std::chrono::high_resolution_clock::now();
     
-    spdlog::info("GameApp initialization complete.");
 }
 
 void GameApp::run() {

@@ -22,9 +22,20 @@
 #include "ui/InputState.h"
 #include "PlayerMoveSystem.h"
 
+#include "scene/GltfMeshModelLoader.h"
+
 
 int main() {
- 
+
+    // Instantiate the game-specific application derived from GameApp
+    MyGameApp app;
+    
+    // Starts the engine loop, initializes the window/context, 
+    // runs onInit(), and enters the main frame loop
+    app.run();
+    
+    return 0;
+
     std::cout << "Hello, Graphics!" << std::endl; 
 
     spdlog::set_level(spdlog::level::debug);
@@ -71,7 +82,7 @@ int main() {
 
     // ================ Model Setup ================
     // set up data and vertex buffers
-    // initColourVertex();
+    std::shared_ptr<MeshModel> = GltfMeshModelLoader::loadModel();
 
     // ================ Rendering Mode Setup ================
     glPolygonMode(GL_FRONT, GL_FILL);
