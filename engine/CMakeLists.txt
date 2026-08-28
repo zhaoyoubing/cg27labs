@@ -4,6 +4,10 @@ file(GLOB_RECURSE ENGINE_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
 )
 
+list(REMOVE_ITEM ENGINE_SOURCES
+    "${CMAKE_CURRENT_SOURCE_DIR}/render/SceneRenderer.cpp"
+)
+
 # source file
 target_sources(engine
     PRIVATE

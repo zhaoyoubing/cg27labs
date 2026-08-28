@@ -25,4 +25,41 @@ public:
             //meshComp.geometry->bindAndDraw();
         }
     }
+
+    // 1. Simple mode: Zero passes exposed to the user, draws straight to screen
+    void DrawDirect(entt::registry& registry, Shader& shader) {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glViewport(0, 0, m_WindowWidth, m_WindowHeight);
+        shader.Bind();
+
+        auto view = registry.view<TransformComponent, MeshRendererComponent>();
+        view.each([&shader](auto& transform, auto& meshRenderer) {
+            shader.SetMat4("u_ModelMatrix", transform.GetMatrix());
+            meshRenderer.vertexArray->Bind();
+            glDrawElements(GL_TRIANGLES, meshRenderer.indexCount, GL_UNSIGNED_INT, 0);
+        });
+    }
+
+    // 2. Advanced mode: Full multi-pass orchestration driven by the ECS
+    void ExecutePass(entt::registry& registry, RenderPass& pass, PipelineState& pipeline, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
+        pass.begin();
+        pipeline.Bind();
+
+        auto view = registry.view<TransformComponent, MeshRendererComponent>();
+        view.each([&pipeline, &viewMatrix, &projectionMatrix](auto& transform, auto& meshRenderer) {
+            // Optional: Skip meshes that don't match certain pass criteria if needed
+            pipeline.shader->SetMat4("u_ModelMatrix", transform.GetMatrix());
+            pipeline.shader->SetMat4("u_ViewMatrix", viewMatrix);
+            pipeline.shader->SetMat4("u_ProjectionMatrix", projectionMatrix);
+
+            meshRenderer.vertexArray->Bind();
+            glDrawElements(GL_TRIANGLES, meshRenderer.indexCount, GL_UNSIGNED_INT, 0);
+        });
+
+        pass.end();
+    }
+
+private:
+    int m_WindowWidth = 1280;
+    int m_WindowHeight = 720;
 };
