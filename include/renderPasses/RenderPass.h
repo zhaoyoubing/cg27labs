@@ -2,6 +2,15 @@
 
 class RenderPass {
 public:
+    virtual ~RenderPass() = default;
+
+    virtual void init() = 0;
+    virtual void execute(RenderContext& context) = 0;
+};
+
+/*
+class RenderPass {
+public:
     struct Spec {
         std::shared_ptr<Framebuffer> targetFramebuffer;
         bool clearColor = true;
@@ -16,3 +25,4 @@ public:
 private:
     Spec m_Spec;
 };
+*/
