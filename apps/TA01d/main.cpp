@@ -16,7 +16,21 @@
 
 #include <spdlog/spdlog.h>
 
+<<<<<<< HEAD
 #include <iostream>
+=======
+#include "device/GPUPipeline.h"
+#include "drawColourVertex.h"
+
+#include "entity/EcsTypes.h"
+#include "entity/TransformComp.h"
+#include "entity/CameraComp.h"
+#include "systems/CameraSystem.h"
+
+#include "ui/Window.h"
+#include "ui/InputState.h"
+#include "PlayerMoveSystem.h"
+>>>>>>> cab3626 (rename ecs to entity for TA01)
 
 
 int main() {
