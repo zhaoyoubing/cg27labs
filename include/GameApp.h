@@ -7,6 +7,7 @@
 #include "ui/Window.h"
 #include "entity/EcsWorldRegistry.h" 
 #include "scene/Scene.h"
+#include "renderpasses/RenderPipeline.h"
 
 class GameApp {
 public:
@@ -17,22 +18,23 @@ public:
     GameApp(const GameApp&) = delete;
     GameApp& operator=(const GameApp&) = delete;
 
-
     bool init();   // initialisation
 
     // Main evemt/rendering loop
     void run();
 
 protected:
+
     virtual bool initResources();
+    virtual bool initRenderPipeline();
     virtual bool initScene();
+
     virtual void update(float dt);
     virtual void render();
 
 private:
     bool initWindow();   // init window and OpenGL setup
-    bool initECS();   // init window and OpenGL setup
-
+    
     void processEvents();     // poll events
     void shutdown();          // terminate
 
@@ -43,7 +45,7 @@ private:
     std::unique_ptr<Window> mainWin_;
     ECSWorldRegistry ecsWorld_; // ECS is scene
     
-    Renderer renderer_;
+    RenderPipeline renderpipe_;
     
 
     // The currently active scene instance

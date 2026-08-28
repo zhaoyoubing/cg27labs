@@ -17,7 +17,7 @@ void GameApp::init(std::string title) {
     if (!initWindow(title))
         return false;
 
-    if (!initRenderer())
+    if (!initRenderPipeline())
         return false;
 
     if (!initResources())

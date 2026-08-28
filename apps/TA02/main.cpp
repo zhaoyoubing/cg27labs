@@ -27,18 +27,22 @@
 
 int main() {
 
+    td::cout << "Hello, Graphics!" << std::endl; 
+
+    spdlog::set_level(spdlog::level::debug);
+
+
     // Instantiate the game-specific application derived from GameApp
     MyGameApp app;
     
+    app.init();
     // Starts the engine loop, initializes the window/context, 
     // runs onInit(), and enters the main frame loop
     app.run();
     
     return 0;
 
-    std::cout << "Hello, Graphics!" << std::endl; 
 
-    spdlog::set_level(spdlog::level::debug);
 
     // ================ GLFW and Glad Setup ================
     // 1. Initialize GLFW Window and Input Context
