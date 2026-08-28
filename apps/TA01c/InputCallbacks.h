@@ -2,7 +2,7 @@
 
 #include <glfw/glfw3.h>
 
-#include "ecs/EcsWorldRegistry.h"
+#include "entity/EcsWorldRegistry.h"
 
 extern ECSWorldRegistry gEcsWorld;
 extern TransformComp gTrans;

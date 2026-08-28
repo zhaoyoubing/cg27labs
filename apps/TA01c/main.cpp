@@ -10,7 +10,7 @@
 #include "device/GPUPipeline.h"
 #include "drawColourVertex.h"
 
-#include "ecs/components/TransformComp.h"
+#include "entity/TransformComp.h"
 
 #include "InputCallbacks.h"
 

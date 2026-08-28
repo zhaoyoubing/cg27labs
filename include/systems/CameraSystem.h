@@ -8,9 +8,9 @@
 #include <glm/glm.hpp>
 
 #include "ui/InputState.h"
-#include "ecs/EcsWorldRegistry.h"
-#include "ecs/components/TransformComp.h"
-#include "ecs/components/CameraComp.h"
+#include "entity/EcsWorldRegistry.h"
+#include "entity/TransformComp.h"
+#include "entity/CameraComp.h"
 
 
 

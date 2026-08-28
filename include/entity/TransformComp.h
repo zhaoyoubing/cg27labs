@@ -1,4 +1,4 @@
-// include/ecs/components/TransformComp.h
+// include/entity/TransformComp.h
 #pragma once
 
 #include <glm/glm.hpp>
