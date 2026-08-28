@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glad/glad.h> // Include if you use GLAD for OpenGL loading (or your preferred loader)
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <string>
 #include <iostream>
@@ -95,10 +95,12 @@ public:
     }
 
     // Call this once per frame, right after polling events
-    void updateDeltaTime() {
+    float updateDeltaTime() {
         float currentFrameTime = static_cast<float>(glfwGetTime());
         deltaTime_ = currentFrameTime - lastFrameTime_;
         lastFrameTime_ = currentFrameTime;
+
+        return deltaTime_;
     }
 
     float getDeltaTime() const {

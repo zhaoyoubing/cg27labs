@@ -4,33 +4,27 @@
 
 
 GameApp::GameApp(std::string name):appName_(name) {
-    init(name);
+    init();
 }
 
 GameApp::~GameApp() {
     shutdown();
 }
 
-void GameApp::init(std::string title) {
+void GameApp::init() {
     spdlog::info("Initializing GameApp and core subsystems...");
 
-    if (!initWindow(title))
-        return false;
+    initWindow(appName_);
 
-    if (!initRenderPipeline())
-        return false;
+    initRenderPipeline();
 
-    if (!initResources())
-        return false;
+    //initResources();
 
-    if (!initScene())
-        return false;
+    initScene();
 
-    bIsRunning_ = true;
+    bRunning_ = true;
 
-    spdlog::info("GameApp initialization complete.");
-
-    return true;
+    spdlog::info("GameApp initialisation complete.");
 }
 
 void GameApp::initWindow(std::string title) {
@@ -48,16 +42,18 @@ void GameApp::run() {
 
     while (bRunning_ && ! mainWin_->shouldClose()) {
         
-        auto currentTime = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<float> elapsed = currentTime - lastFrameTime_;
-        lastFrameTime_ = currentTime;
-        float deltaTime = elapsed.count();
+        // auto currentTime = std::chrono::high_resolution_clock::now();
+        // std::chrono::duration<float> elapsed = currentTime - lastFrameTime_;
+        // lastFrameTime_ = currentTime;
+        // float deltaTime = elapsed.count();
+
+        float dt = mainWin_->updateDeltaTime();
 
         // --- Event Handling ---
         processEvents();
 
         // --- Engine Systems Update (ECS Logic) ---
-        update(deltaTime);
+        update(dt);
 
         // --- 4. Mesh Rendering Pass ---
         render();
@@ -70,12 +66,14 @@ void GameApp::processEvents() {
     mainWin_->pollEvents();
 }
 
+/*
 void GameApp::update(float deltaTime) {
     
     // Example: Update your ECS systems sequentially
     // CameraSystem::Update(m_ecsWorld, deltaTime);
     // PhysicsSystem::Update(m_ecsWorld, deltaTime);
 }
+
 
 void GameApp::render() {
     // Clear frame buffers
@@ -93,6 +91,7 @@ void GameApp::render() {
     // Swap front and back buffers
     mainWin_->swapBuffers();
 }
+*/
 
 void GameApp::shutdown() {
     spdlog::info("Shutting down GameApp...");

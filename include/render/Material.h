@@ -7,17 +7,30 @@
 #include "Shader.hpp"   // Your custom Shader class
 #include "Texture.hpp"  // Your custom Texture class
 
+enum class ShadingModel
+{
+    Phong,
+    PBR
+};
+
 class Material {
-private:
-    std::shared_ptr<GPUPipeline> gpuPipe;
+public:
+
+    ShadingModel shadingModel = ShadingModel::Phong;
     
     // Key = Uniform name in shader (e.g., "material.diffuseMap")
     std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
     
-    // Common material properties
-    glm::vec3 diffuseColor = glm::vec3(1.0f);
+    // Phong/Blinn-Phong material properties
+    glm::vec3 baseColor = glm::vec3(1.0f);
     glm::vec3 specularColor = glm::vec3(1.0f);
     float shininess = 32.0f;
+
+    // PBR models
+    float metallic = 0.0f;
+    float roughness = 1.0f;
+
+    std::shared_ptr<GPUPipeline> gpuPipe;
 
 public:
     Material(std::shared_ptr<Shader> shaderProgram);
