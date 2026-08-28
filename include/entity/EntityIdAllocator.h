@@ -6,7 +6,7 @@
 #include <cstdint>
 
 
-#include "ecs/EcsTypes.h"
+#include "entity/EcsTypes.h"
 
 // Assuming types are defined globally:
 // using EntityID = std::uint32_t;

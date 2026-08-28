@@ -1,4 +1,4 @@
-// include/ecs/components/ComponentIdCounter.h
+// include/entity/ComponentIdCounter.h
 
 #pragma once
 #include <cstddef>

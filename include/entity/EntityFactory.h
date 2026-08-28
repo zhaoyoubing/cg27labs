@@ -1,4 +1,4 @@
-// include/ecs/entity/EntityFactory.h
+// include/entity/EntityFactory.h
 #pragma once
 #include "ecs/EcsTypes.h"
 #include "ecs/EcsWorldRegistry.h"

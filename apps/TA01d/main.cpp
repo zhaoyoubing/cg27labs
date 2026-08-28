@@ -12,9 +12,9 @@
 #include "device/GPUPipeline.h"
 #include "drawColourVertex.h"
 
-#include "ecs/EcsTypes.h"
-#include "ecs/components/TransformComp.h"
-#include "ecs/components/CameraComp.h"
+#include "entity/EcsTypes.h"
+#include "entity/TransformComp.h"
+#include "entity/CameraComp.h"
 #include "systems/CameraSystem.h"
 
 #include "ui/Window.h"
