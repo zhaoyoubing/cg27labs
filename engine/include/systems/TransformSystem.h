@@ -1,11 +1,12 @@
 // Pseudo-code representation of your ECS registry/world
+#include "entity/EcsWorldRegistry.h"
 #include "entity/TransformComp.h"
 class TransformSystem {
 public:
-    void updateTransforms(Registry& registry) {
+    void updateTransforms(EcsWorldRegistry& registry) {
         // Step 1: Find all "Root" entities (entities that have a Transform, but NO Parent)
         auto roots = registry.view<TransformComp, GlobalTransformComp>()
-                            .exclude<ParentComponent>();
+                            .exclude<ParentComp>();
 
         // Step 2: Recursively calculate matrices down the hierarchy tree
         for (auto entity : roots) {
@@ -14,7 +15,7 @@ public:
     }
 
 private:
-    void calculateGlobalMatrixRecursive(uint32_t entityID, const glm::mat4& parentMatrix, Registry& registry) {
+    void calculateGlobalMatrixRecursive(uint32_t entityID, const glm::mat4& parentMatrix, EcsWorldRegistry& registry) {
         // Get components for this entity
         auto& transform = registry.get<TransformComp>(entityID);
         auto& globalTransform = registry.get<GlobalTransformComp>(entityID);
