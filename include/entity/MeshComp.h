@@ -1,4 +1,4 @@
-// include/ecs/components/MeshComp.h
+// include/entity/MeshComp.h
 #pragma once
 
 #include <memory>

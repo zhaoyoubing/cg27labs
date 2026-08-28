@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ecs/EcsWorldRegistry.h"
+#include "entity/EcsWorldRegistry.h"
 #include "render/Shader.h"
 
 class RenderSystem {

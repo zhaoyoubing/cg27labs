@@ -1,9 +1,9 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
-#include "ecs/EcsTypes.h"
-#include "ecs/EcsWorldRegistry.h"
-#include "ecs/components/TransformComp.h"
+#include "entity/EcsTypes.h"
+#include "entity/EcsWorldRegistry.h"
+#include "entity/TransformComp.h"
 #include "ui/InputState.h"
 
 class PlayerMoveSystem {

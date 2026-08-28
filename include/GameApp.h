@@ -5,7 +5,7 @@
 #include <memory>
 #include <chrono>
 #include "ui/Window.h"
-#include "ecs/EcsWorldRegistry.h" 
+#include "entity/EcsWorldRegistry.h" 
 
 class GameApp {
 public:
