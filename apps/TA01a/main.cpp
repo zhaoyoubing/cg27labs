@@ -1,8 +1,9 @@
-#include <iostream>
+#include "drawQuad.h"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "drawQuad.h"
+#include <iostream>
 
 int main() {
  

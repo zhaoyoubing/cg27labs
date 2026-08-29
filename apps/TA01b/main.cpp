@@ -1,9 +1,11 @@
-#include <iostream>
+#include "drawColourVertex.h"
+
+#include "device/GPUPipeline.h"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "device/GPUPipeline.h"
-#include "drawColourVertex.h"
+#include <iostream>
 
 int main() {
  
