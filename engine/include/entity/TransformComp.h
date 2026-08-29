@@ -1,7 +1,9 @@
-// include/entity/TransformComp.h
+// engine/include/entity/TransformComp.h
 #pragma once
 
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 
 // Transform Component, contains ONLY DATA
 // A simple component to hold the position, rotation, and scale of a Transform in 3D space. This component can be used to represent the transformation of an entity in a scene graph or a game engine.

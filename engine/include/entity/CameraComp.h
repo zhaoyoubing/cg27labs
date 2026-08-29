@@ -1,4 +1,4 @@
-// include/entity/CameraComp.h
+// engine/include/entity/CameraComp.h
 #pragma once
 
 #include <glm/glm.hpp>

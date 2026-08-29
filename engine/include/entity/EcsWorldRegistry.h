@@ -1,4 +1,4 @@
-// include/entity/EcsWorldRegistry.h
+// engine/include/entity/EcsWorldRegistry.h
 #pragma once
 
 #include "entity/EcsTypes.h"
