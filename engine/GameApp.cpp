@@ -1,9 +1,10 @@
 
 #include "GameApp.h"
+
 #include <spdlog/spdlog.h>
 
 
-GameApp::GameApp(std::string name):appName_(name) {
+GameApp::GameApp(std::string name):name_(name) {
     init();
 }
 
@@ -14,7 +15,7 @@ GameApp::~GameApp() {
 void GameApp::init() {
     spdlog::info("Initializing GameApp and core subsystems...");
 
-    initWindow(appName_);
+    initWindow(name_);
 
     initRenderPipeline();
 

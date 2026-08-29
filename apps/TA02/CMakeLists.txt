@@ -2,12 +2,16 @@ cmake_minimum_required(VERSION 3.15)
 project(TA02 LANGUAGES CXX)
 
 # 1. Define the executable target and its source files
-add_executable(TA02
-    main.cpp
-    #MyGameApp.cpp
-)
+add_executable(TA02)
 
-# 2. Link the global third-party libraries defined in the root CMakeLists.txt
+# 2. source
+target_sources(TA02
+    PRIVATE
+        main.cpp
+        #MyGameApp.cpp
+    )
+
+# 3. third-party libraries
 target_link_libraries(TA02 PRIVATE
     glfw
     glad
@@ -15,7 +19,7 @@ target_link_libraries(TA02 PRIVATE
     spdlog::spdlog
 )
 
-# copy shaders
+# copy shaders and models to the target directory
 add_custom_command(
         TARGET TA02 POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory

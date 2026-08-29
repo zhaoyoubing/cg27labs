@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "scene/Primitives.h"
+#include "scene/Vertex.h"
 
 
 class MeshGeometry {

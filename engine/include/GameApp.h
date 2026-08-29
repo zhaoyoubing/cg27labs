@@ -1,4 +1,4 @@
-// ROOT/include/GameApp.h
+// engine/include/GameApp.h
 
 #pragma once
 
@@ -35,13 +35,12 @@ protected:
 
 private:
     void initWindow(std::string title);   // init window and OpenGL setup
-    
     void processEvents();     // poll events
     void shutdown();          // terminate
 
     bool bRunning_{true};
     
-    std::string appName_;
+    std::string name_;
 
     // Core engine modules (supporting your multi-window architecture)
     std::unique_ptr<Window> mainWin_;

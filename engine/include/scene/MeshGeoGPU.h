@@ -1,9 +1,10 @@
 // scene/MeshGeoGPU.h
 #pragma once
+
+#include "Vertex.h"
+
 #include <glm/glm.hpp>
 #include <vector>
-
-#include "Primitives.h"
 
 // vao vbo and ebo of mesh geometry
 class MeshGeoGPU {
