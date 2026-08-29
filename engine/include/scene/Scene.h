@@ -1,5 +1,7 @@
 #pragma once
-#include <entity/EcsWorldRegistry.h>
+
+#include "entity/EcsWorldRegistry.h"
+
 #include <string>
 
 class Scene {
@@ -10,9 +12,9 @@ public:
     void init();
     void update(float deltaTime);
 
-    EcsWorldRegistry & getRegistry() { return registry; }
+    EcsWorldRegistry & getRegistry() { return registry_; }
 
 private:
-    std::string name;
-    EcsWorldRegistry registry;
+    std::string name_;
+    EcsWorldRegistry registry_;
 };

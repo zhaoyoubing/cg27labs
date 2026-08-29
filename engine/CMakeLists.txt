@@ -5,9 +5,9 @@ add_library(engine STATIC
     scene/GltfMeshLoader.cpp
 )
 
-# Point to the root-level include directory (one level up from engine/)
+# Point to the include directory
 target_include_directories(engine PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 
 target_link_libraries(engine PUBLIC glfw glm glad stb_image tinygltf spdlog::spdlog)

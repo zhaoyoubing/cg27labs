@@ -21,7 +21,9 @@ struct TransformComp {
 };
 
 // Transform Matrix Component for GPU
+/*
 struct TransformGPUComp {
     glm::mat4 matModel;
     // glm::mat4 matNormal;  // calculate normal matrix on CPU for better efficiency
 };
+*/

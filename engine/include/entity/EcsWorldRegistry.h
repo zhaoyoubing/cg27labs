@@ -3,6 +3,7 @@
 
 #include "entity/EcsTypes.h"
 #include "entity/EntityIdAllocator.h"
+
 #include <memory>
 #include <unordered_map>
 #include <vector>

@@ -14,6 +14,8 @@ const EntityID MAX_ENTITIES = 5000;
 
 
 const std::uint8_t MAX_COMPONENTS = 32;
+
+// component mask for an entity
 // bitset representing the available components of an entity 
 using Signature = std::bitset<MAX_COMPONENTS>;
 

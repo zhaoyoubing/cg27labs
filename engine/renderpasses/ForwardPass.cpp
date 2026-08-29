@@ -41,21 +41,13 @@ void ForwardPass::execute(RenderContext& context)
         // Select the material's shader
         material.shader->bind();
 
-        material.shader->setMat4(
-            "uModel",
-            transform.matrix);
+        material.shader->setMat4("matModel", transform.matrix);
 
-        material.shader->setMat4(
-            "uView",
-            context.camera.view);
+        material.shader->setMat4("matView",  context.camera.view);
 
-        material.shader->setMat4(
-            "uProjection",
-            context.camera.projection);
+        material.shader->setMat4( "matProj", context.camera.proj);
 
-        material.shader->setVec4(
-            "uBaseColour",
-            material.baseColour);
+        material.shader->setVec4( "uBaseColour",  material.baseColour);
 
         mesh.mesh->bindAndDraw();
 

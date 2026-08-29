@@ -100,9 +100,7 @@ int main() {
         window.pollEvents();
 
         // 2. Update the frame clock/delta time
-        window.updateDeltaTime();
-
-        float dt = window.getDeltaTime();
+        float dt = window.updateDeltaTime();
 
         // 3. Run systems using window's delta time directly
         moveSys.update(ecsWorld, objId, window.getInputState(), dt);

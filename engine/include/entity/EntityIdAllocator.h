@@ -8,7 +8,7 @@
 
 #include "entity/EcsTypes.h"
 
-// Assuming types are defined globally:
+// defined in entity/EcsTypes.h :
 // using EntityID = std::uint32_t;
 // using Signature = std::bitset<32>;
 

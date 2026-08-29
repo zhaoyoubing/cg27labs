@@ -2,17 +2,18 @@
 
 #pragma once
 
-#include <memory>
-#include <chrono>
 #include "ui/Window.h"
 #include "entity/EcsWorldRegistry.h" 
 #include "scene/Scene.h"
 #include "renderpasses/RenderPipeline.h"
 
+#include <memory>
+#include <chrono>
+
 class GameApp {
 public:
     GameApp(std::string name = "My Game App");
-    virtual ~GameApp() = default;
+    ~GameApp();
 
     // Prevent copying
     GameApp(const GameApp&) = delete;

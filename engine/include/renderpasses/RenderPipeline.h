@@ -1,5 +1,7 @@
 #pragma once
 
+#include "RenderPass.h"
+
 #include <memory>
 #include <vector>
 
