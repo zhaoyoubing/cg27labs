@@ -1,4 +1,4 @@
-// include/entity/ComponentIdCounter.h
+// engine/include/entity/ComponentIdCounter.h
 
 #pragma once
 #include <cstddef>
