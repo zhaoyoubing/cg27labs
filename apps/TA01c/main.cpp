@@ -1,18 +1,19 @@
-#include <iostream>
+#include "drawColourVertex.h"
+#include "InputCallbacks.h"
+
+#include "device/GPUPipeline.h"
+#include "entity/TransformComp.h"
+
+//#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/glm.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtx/transform.hpp>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform.hpp>
+#include <iostream>
 
-#include "device/GPUPipeline.h"
-#include "drawColourVertex.h"
-
-#include "entity/TransformComp.h"
-
-#include "InputCallbacks.h"
 
 ECSWorldRegistry gEcsWorld;
 TransformComp gTrans;
