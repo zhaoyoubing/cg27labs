@@ -1,15 +1,15 @@
 #pragma once
 
 #include "entity/EcsWorldRegistry.h"
-#include <render/CameraView.h>
+#include "render/CameraView.h"
 
 struct RenderContext
 {
-    EcsWorldRegistry & registry;
+    ECSWorldRegistry & registry;
 
     CameraView & camera;
-    RenderResources& resources;
-    //int viewportWidth;
-    //int viewportHeight;
+   
+    int viewportWidth;
+    int viewportHeight;
 
 };

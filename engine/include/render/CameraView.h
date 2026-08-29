@@ -4,7 +4,7 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-#include "ecs/components/CameraComp.h"
+#include "entity/CameraComp.h"
 
 struct Viewport {
     float x = 0.0f;
@@ -24,6 +24,8 @@ private:
     Viewport viewport;
 
 public:
+    CameraView() = default;
+    
     CameraView(CameraComp cam, Viewport vp)
         : camera(cam), viewport(vp) {}
 

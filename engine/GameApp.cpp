@@ -39,6 +39,9 @@ void GameApp::initWindow(std::string title) {
 }
 
 void GameApp::run() {
+
+    init();
+    
     spdlog::info("Entering main engine loop.");
 
     while (bRunning_ && ! mainWin_->shouldClose()) {

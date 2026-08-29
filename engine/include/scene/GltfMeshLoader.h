@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scene/MeshModel.h"
+#include "MeshModel.h"
 #include "render/TextureManager.h"
 
 #include <string>

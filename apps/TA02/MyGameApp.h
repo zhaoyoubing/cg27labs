@@ -2,15 +2,41 @@
 
 #include "GameApp.h"
 
-class MyGameApp : GameApp {
+#include "PlayerMoveSystem.h"
+
+#include "scene/MeshGeoFactory.h"
+#include "scene/MeshGeometry.h"
+
+#include "device/Shader.h"
+#include "device/GPUPipeline.h"
+#include "systems/CameraSystem.h"
+
+#include <string>
+
+class MyGameApp : public GameApp {
 
 public:
 
-    MyGameApp(std:string name):GameApp(name) {
+    MyGameApp(std::string name):GameApp(name) {
 
     }
 
-    bool initRenderPipeline() ovverride {
+    void initScene() override {
+        // ================ Create object entity ================
+        objId = ecsWorld_.createEntityID();
+        ecsWorld_.addComp<TransformComp>(objId, TransformComp{});
+
+        // ================ Create player entity ================
+        // 1. Create the player entity id
+        player = ecsWorld_.createEntityID();
+
+        // ================ Model Setup ================
+        // set up data and vertex buffers
+        // std::shared_ptr<MeshModel> = GltfMeshModelLoader::loadModel();
+        std::shared_ptr<MeshGeometry> = MeshGeoFactory::createPyramid(1.0, 1.0);
+    };
+
+    void initRenderPipeline() override {
 
         // ================ Shaders and Pipeline Setup ================
         // Load individual shader stages from disk
@@ -28,18 +54,19 @@ public:
 
    void update(float dt) override {
         // 3. Run systems using window's delta time directly
-        playerSys_.update(ecsWorld, objId, window.getInputState(), dt);
-        camSys_.update(ecsWorld, window.getInputState(), dt);
+        playerSys_.update(ecsWorld_, objId, mainWin_->getInputState(), dt);
+        camSys_.update(ecsWorld_, mainWin_->getInputState(), dt);
    }
 
    void render() override {
         // Clear frame buffers
         mainWin_->clearScreen();
 
-        renderPipe_.render(RenderContext {
-            .registry = ecsWorld_;
+        renderPipe_.render({
+            .registry = ecsWorld_,
+            .camera = camera_
         });
-        
+
         /*
         // bind the pipeline (shader program) for rendering
         basicPipeline.bind();
@@ -81,4 +108,7 @@ private:
     // systems
     PlayerMoveSystem playerSys_;
     CameraSystem camSys_;
+
+    EntityID objId;
+    EntityID player;
 };

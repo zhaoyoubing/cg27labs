@@ -1,8 +1,8 @@
 // engine/include/entity/EcsWorldRegistry.h
 #pragma once
 
-#include "entity/EcsTypes.h"
-#include "entity/EntityIdAllocator.h"
+#include "EcsTypes.h"
+#include "EntityIdAllocator.h"
 
 #include <memory>
 #include <unordered_map>

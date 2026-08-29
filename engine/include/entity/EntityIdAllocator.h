@@ -1,12 +1,11 @@
 #pragma once
 
+#include "EcsTypes.h"
+
 #include <vector>
 #include <unordered_map>
 #include <bitset>
 #include <cstdint>
-
-
-#include "entity/EcsTypes.h"
 
 // defined in entity/EcsTypes.h :
 // using EntityID = std::uint32_t;

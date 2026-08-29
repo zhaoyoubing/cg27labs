@@ -12,9 +12,9 @@ public:
     void init();
     void update(float deltaTime);
 
-    EcsWorldRegistry & getRegistry() { return registry_; }
+    ECSWorldRegistry & getRegistry() { return registry_; }
 
 private:
     std::string name_;
-    EcsWorldRegistry registry_;
+    ECSWorldRegistry registry_;
 };

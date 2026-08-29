@@ -6,6 +6,8 @@
 #include "entity/EcsWorldRegistry.h" 
 #include "scene/Scene.h"
 #include "renderpasses/RenderPipeline.h"
+#include "renderpasses/ForwardPass.h"
+#include "render/CameraView.h"
 
 #include <memory>
 #include <chrono>
@@ -33,13 +35,6 @@ protected:
     virtual void update(float dt);
     virtual void render();
 
-private:
-    void initWindow(std::string title);   // init window and OpenGL setup
-    void processEvents();     // poll events
-    void shutdown();          // terminate
-
-    bool bRunning_{true};
-    
     std::string name_;
 
     // Core engine modules (supporting your multi-window architecture)
@@ -47,11 +42,22 @@ private:
     
     ECSWorldRegistry ecsWorld_; // ECS is scene
     
-    RenderPipeline renderpipe_;
+    CameraView camera_;
+
+    RenderPipeline renderPipe_;
     
     // The currently active scene instance
     std::shared_ptr<Scene> activeScene;
 
+    
+
+private:
+    void initWindow(std::string title);   // init window and OpenGL setup
+    void processEvents();     // poll events
+    void shutdown();          // terminate
+
+    bool bRunning_{true};
+    
     // Timing tracking
     std::chrono::high_resolution_clock::time_point lastFrameTime_;
 };

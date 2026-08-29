@@ -1,16 +1,14 @@
-#include <iostream>
-#include <spdlog/spdlog.h>
+
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#define GLM_ENABLE_EXPERIMENTAL
+#include "PlayerMoveSystem.h"
+#include "MyGameApp.h"
+
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform.hpp>
 
 #include "device/GPUPipeline.h"
-// #include "drawColourVertex.h"
 
 #include "entity/EcsTypes.h"
 #include "entity/EcsWorldRegistry.h"
@@ -20,22 +18,23 @@
 
 #include "ui/Window.h"
 #include "ui/InputState.h"
-#include "PlayerMoveSystem.h"
 
-#include "scene/GltfMeshModelLoader.h"
+#include "scene/GltfMeshLoader.h"
+
+#include <spdlog/spdlog.h>
+#include <iostream>
 
 
 int main() {
 
-    td::cout << "Hello, Graphics!" << std::endl; 
+    std::cout << "Hello, Graphics!" << std::endl; 
 
     spdlog::set_level(spdlog::level::debug);
 
 
     // Instantiate the game-specific application derived from GameApp
-    MyGameApp app;
+    MyGameApp app("TA02");
     
-    app.init();
     // Starts the engine loop, initializes the window/context, 
     // runs onInit(), and enters the main frame loop
     app.run();
@@ -43,7 +42,7 @@ int main() {
     return 0;
 
 
-
+    /* 
     // ================ GLFW and Glad Setup ================
     // 1. Initialize GLFW Window and Input Context
     Window window(800, 800, "TA01d");
@@ -86,7 +85,7 @@ int main() {
 
     // ================ Model Setup ================
     // set up data and vertex buffers
-    std::shared_ptr<MeshModel> = GltfMeshModelLoader::loadModel();
+    // std::shared_ptr<MeshModel> = GltfMeshModelLoader::loadModel();
 
     // ================ Rendering Mode Setup ================
     glPolygonMode(GL_FRONT, GL_FILL);
@@ -146,6 +145,6 @@ int main() {
         window.clearInputState();
     }
 
-
+    */
     return 0;
 }

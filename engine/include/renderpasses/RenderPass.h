@@ -1,6 +1,6 @@
 #pragma once
 
-class RenderContext;
+#include "RenderContext.h"
 
 class RenderPass
 {
