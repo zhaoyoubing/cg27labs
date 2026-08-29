@@ -1,11 +1,11 @@
 #pragma once
 
-#include <iostream>
+#include "InputState.h"
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h> // For colored console output
 
-#include "InputState.h"
+#include <iostream>
 
 class InputCallbackRegister {
 
