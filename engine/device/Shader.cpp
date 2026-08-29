@@ -1,4 +1,4 @@
-#include "device/shader.h"
+#include "device/Shader.h"
 
 #include <fstream>
 #include <sstream>

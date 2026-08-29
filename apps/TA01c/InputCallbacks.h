@@ -3,6 +3,7 @@
 #include <glfw/glfw3.h>
 
 #include "entity/EcsWorldRegistry.h"
+#include "entity/TransformComp.h"
 
 extern ECSWorldRegistry gEcsWorld;
 extern TransformComp gTrans;
