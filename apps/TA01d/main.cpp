@@ -1,25 +1,25 @@
-#include <iostream>
-#include <spdlog/spdlog.h>
-
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform.hpp>
+#include "drawColourVertex.h"
+#include "PlayerMoveSystem.h"
 
 #include "device/GPUPipeline.h"
-#include "drawColourVertex.h"
-
 #include "entity/EcsTypes.h"
 #include "entity/TransformComp.h"
 #include "entity/CameraComp.h"
 #include "systems/CameraSystem.h"
-
 #include "ui/Window.h"
 #include "ui/InputState.h"
-#include "PlayerMoveSystem.h"
+
+#include <glm/glm.hpp>
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+#include <spdlog/spdlog.h>
+
+#include <iostream>
+
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtx/transform.hpp>
 
 
 int main() {
