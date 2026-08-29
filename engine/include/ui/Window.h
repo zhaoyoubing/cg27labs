@@ -1,12 +1,13 @@
 #pragma once
 
+#include "inputState.h"
+#include "InputCallbackRegister.h"
+
 #include <glad/glad.h>
+
 #include <GLFW/glfw3.h>
 #include <string>
 #include <iostream>
-
-#include "inputState.h"
-#include "InputCallbackRegister.h"
 
 class Window {
 private:
