@@ -1,7 +1,7 @@
-#include "render/GPUPipeline.h"
+#include "device/GPUPipeline.h"
 
-#include <iostream>
 #include <glm/gtc/type_ptr.hpp>  // for glm::value_ptr
+#include <iostream>
 
 GPUPipeline::GPUPipeline(const std::vector<Shader*>& shaders) {
     programID_ = glCreateProgram();
