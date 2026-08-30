@@ -1,13 +1,13 @@
 #pragma once
 
 #include "scene/Vertex.h"
-#include "scene/MeshGeometry.h"
+#include "scene/Mesh.h"
 
 #include <glm/glm.hpp>
 
 #include <spdlog/spdlog.h>
 
-class SphereMesh : public MeshGeometry {
+class SphereMesh : public Mesh {
 public:
     float r_ = 1.0;
     unsigned int latSeg_ = 24;
@@ -34,47 +34,34 @@ private:
         float stepPhi = 2.0 * PI / res_phi;
         float stepTheta = PI / res_theta;
 
-        Vertex v;
-        int idx = 0;
+        uint32_t idx = 0;
 
         // Top piece
         glm::vec3 top = glm::vec3(0, 1, 0) ;
-        v.pos = radius * top;
-        v.normal = top;
-        v.uv = glm::vec2(0, 0);
-
-        vertices.push_back(v);
-        //indices.push_back(idx);
+        positions.push_back(radius * top) ;
+        normals.push_back(top);
+        uvs.push_back( glm::vec2(0, 0) );
 
         glm::vec3 pos = glm::vec3(0.0);
         float phi = 0;
 
-        for (int j = 0; j < res_phi; j++) {
+        for (uint32_t j = 0; j < res_phi; j++) {
             
             idx++;
 
-            pos.y = cos(stepTheta);
             // current radius
             float cr = sin(stepTheta);
 
-            pos.x = cr * cos(stepPhi * j);
-            pos.z = cr * sin(stepPhi * j);
+            pos = {cr * cos(stepPhi * j), cos(stepTheta),  cr * sin(stepPhi * j)   };
 
-            v.pos = radius * pos;
-            v.normal = pos;
-            v.uv = glm::vec2(j / (float) res_phi, 1 / (float) res_theta);
-            vertices.push_back(v);
-            
+            positions.push_back(radius * pos);
+            normals.push_back(pos);
+            uvs.push_back( glm::vec2(j / (float) res_phi, 1 / (float) res_theta) );
             
             if (j > 0) {
-                indices.push_back(0);
-                indices.push_back(idx - 1);
-                indices.push_back(idx);
+                indices.insert(indices.end(), {0, idx - 1, idx});
             } else {
-                // j = 0
-                indices.push_back(0);
-                indices.push_back(res_phi);
-                indices.push_back(1);
+                indices.insert(indices.end(), {0, res_phi, 1});   // j = 0
             }
 
             phi += stepPhi;
@@ -84,38 +71,26 @@ private:
         for (int i = 2; i < res_theta; i++) 
         {
             phi = 0;
-            pos.y = cos(i * stepTheta);
+            float y = cos(i * stepTheta);
             float cr = sin(i * stepTheta);
 
             for (int j = 0; j < res_phi; j++) 
             {
                 idx ++;
 
-                pos.x = cr * cos(phi);
-                pos.z = cr * sin(phi);
+                pos = glm::vec3(cr * cos(phi), y, cr * sin(phi) );
                 
-                v.pos = radius * pos;
-                v.normal = pos;
-                v.uv = glm::vec2(j / (float) res_phi, 1 / (float) res_theta);
-                vertices.push_back(v);
+                positions.push_back(radius * pos);
+                normals.push_back(pos);
+                uvs.push_back(glm::vec2(j / (float) res_phi, 1 / (float) res_theta) );
 
                 if (j > 0) {
-                    indices.push_back(idx - 1 - res_phi);
-                    indices.push_back(idx - 1);
-                    indices.push_back(idx);
-
-                    indices.push_back(idx - res_phi);
-                    indices.push_back(idx - 1 - res_phi);
-                    indices.push_back(idx);
+                    indices.insert(indices.end(), {idx - 1 - res_phi, idx - 1, idx  });
+                    indices.insert(indices.end(), {idx - res_phi, idx - 1 - res_phi, idx  });
                 } else {
                     // j = 0
-                    indices.push_back(idx - res_phi);
-                    indices.push_back(idx - 1);
-                    indices.push_back(idx);
-
-                    indices.push_back(idx - 1);
-                    indices.push_back(idx + res_phi - 1);
-                    indices.push_back(idx);
+                    indices.insert(indices.end(), {idx - res_phi, idx - 1, idx});
+                    indices.insert(indices.end(), {idx - 1, idx + res_phi - 1, idx});
                 }
 
                 phi += stepPhi;
@@ -124,41 +99,24 @@ private:
 
         // Bottom piece
         glm::vec3 bottom = glm::normalize(glm::vec3(0, -1, 0));
-        v.pos = radius * bottom;
-        v.normal = bottom;
-        v.uv = glm::vec2(0, 1.0);
-        vertices.push_back(v);
+        positions.push_back(radius * bottom);
+        normals.push_back(bottom);
+        uvs.push_back(glm::vec2(0, 1.0));
 
         phi = 0;
 
-        for (int j = 0; j < res_phi; j++) {
+        for (uint32_t j = 0; j < res_phi; j++) {
             idx++;
-    /*
-            pos.y = cos(PI - stepTheta);
-            float cr = sin(PI - stepTheta);
-            pos.x = cr * cos(phi);
-            pos.z = cr * sin(phi);
 
-            v.pos = radius * pos;
-            v.normal = pos;
-            v.uv = glm::vec2(j / (float) res_phi, (1 - 1 / (float) res_theta));
-            vertices.push_back(v);
-    */
             if (j > 0) {
-                indices.push_back(idx - res_phi);
-                indices.push_back(idx - res_phi - 1);
-                indices.push_back(res_phi * ( res_theta - 1) + 1);
+                indices.insert(indices.end(), {idx - res_phi, idx - res_phi - 1, res_phi * ( res_theta - 1) + 1});
             } else {
                 // j = 0
-                indices.push_back(res_phi * ( res_theta - 1) );
-                indices.push_back(idx - res_phi);
-                indices.push_back(res_phi * ( res_theta - 1) + 1);
+                indices.insert(indices.end(), {res_phi * ( res_theta - 1) , idx - res_phi, res_phi * ( res_theta - 1) + 1});
             }
-
-            //phi += stepPhi;
 
         }
 
-        spdlog::debug("Vertex number {}, Index number {}", vertices.size(), indices.size());
+        spdlog::debug("Vertex number {}, Index number {}", positions.size(), indices.size());
     }
 };

@@ -56,6 +56,8 @@ public:
             if (input.isKeyHeld(GLFW_KEY_S)) transform.pos -= camera.front * velocity;
             if (input.isKeyHeld(GLFW_KEY_A)) transform.pos -= right * velocity;
             if (input.isKeyHeld(GLFW_KEY_D)) transform.pos += right * velocity;
+
+            //camera.eye = transform.pos;
         }
     }
 };

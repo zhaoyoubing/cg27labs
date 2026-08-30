@@ -1,56 +1,55 @@
 #include "renderpasses/ForwardPass.h"
 
+#include "entity/TransformComp.h"
+#include "entity/MaterialComp.h"
+#include "entity/MeshComp.h"
+
 void ForwardPass::execute(RenderContext& context)
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     glViewport(
-        0,
-        0,
-        context.viewportWidth,
-        context.viewportHeight);
+        0, 0, context.camera_.viewport.w, context.camera_.viewport.h);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    auto view = context.registry.view<
-        TransformComponent,
-        MeshComponent,
-        MaterialComponent>();
+    auto view = context.registry_.view<
+        TransformComp,
+        MeshComp,
+        MaterialComp>();
 
     for (auto entity : view)
     {
-              const auto& transform =
-            view.get<TransformComponent>(entity);
+        const auto& transform =
+            context.registry_.getComp<TransformComp>(entity);
 
         const auto& mesh =
-            view.get<MeshComponent>(entity);
+            context.registry_.getComp<MeshComp>(entity);
 
-        const auto& materialComponent =
-            view.get<MaterialComponent>(entity);
+        const auto& materialComp =
+           context.registry_.getComp<MaterialComp>(entity);
 
-        if (!mesh.mesh)
+        if (! mesh.meshBuf)
             continue;
 
         Material& material =
-            context.resources.materials().get(
-                materialComponent.material);
+            context.matMgr_.get(materialComp.material);
 
         // Select the material's shader
-        material.shader->bind();
+        material.gpuPipe->bind();
 
-        material.shader->setMat4("matModel", transform.matrix);
+        material.gpuPipe->setMat4("matModel", transform.getLocalMatrix());
+        material.gpuPipe->setMat4("matView",  context.camera_.getViewMatrix());
+        material.gpuPipe->setMat4( "matProj", context.camera_.getProjMatrix());
+        material.gpuPipe->setVec3( "uBaseColour",  material.baseColour);
 
-        material.shader->setMat4("matView",  context.camera.view);
+        mesh.meshBuf->bind();
+        mesh.meshBuf->draw();
+        mesh.meshBuf->unbind();
 
-        material.shader->setMat4( "matProj", context.camera.proj);
-
-        material.shader->setVec4( "uBaseColour",  material.baseColour);
-
-        mesh.mesh->bindAndDraw();
-
-        material.shader->unbind();
+        material.gpuPipe->unbind();
     }
 }

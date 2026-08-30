@@ -1,12 +1,13 @@
 add_library(engine STATIC)
 
+file(GLOB_RECURSE ENGINE_SOURCES
+    "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
+)
+
 # source file
 target_sources(engine
     PRIVATE
-        GameApp.cpp
-        device/Shader.cpp
-        device/GPUPipeline.cpp
-        scene/GltfMeshLoader.cpp
+    ${ENGINE_SOURCES}
 )
 
 # the include directory

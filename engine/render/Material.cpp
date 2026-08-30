@@ -21,8 +21,8 @@ void Material::bind() const {
     gpuPipe->bind();
 
     // 2. Pass material color/property uniforms
-    gpuPipe->setVec3("material.diffuseColor", diffuseColor);
-    gpuPipe->setVec3("material.specularColor", specularColor);
+    gpuPipe->setVec3("material.baseColor", baseColour);
+    gpuPipe->setVec3("material.specularColor", specularColour);
     gpuPipe->setFloat("material.shininess", shininess);
 
     // 3. Bind all associated textures dynamically

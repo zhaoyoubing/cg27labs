@@ -8,6 +8,8 @@
 #include "renderpasses/RenderPipeline.h"
 #include "renderpasses/ForwardPass.h"
 #include "render/CameraView.h"
+#include "render/MaterialManager.h"
+#include "render/TextureManager.h"
 
 #include <memory>
 #include <chrono>
@@ -29,11 +31,11 @@ public:
 protected:
 
     //virtual bool initResources();
-    virtual void initRenderPipeline();
-    virtual void initScene();
+    virtual void initRenderPipeline() = 0;
+    virtual void initScene() = 0;
 
-    virtual void update(float dt);
-    virtual void render();
+    virtual void update(float dt) = 0;
+    virtual void render() = 0;
 
     std::string name_;
 
@@ -49,6 +51,8 @@ protected:
     // The currently active scene instance
     std::shared_ptr<Scene> activeScene;
 
+    MaterialManager matMgr_;
+    TextureManager texMgr_;
     
 
 private:

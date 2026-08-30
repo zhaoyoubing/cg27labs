@@ -1,6 +1,9 @@
 #pragma once
 
-struct MaterialComponent
+
+#include "render/Material.h"
+
+struct MaterialComp
 {
     MaterialID material;
 };

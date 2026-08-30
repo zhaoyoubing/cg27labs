@@ -8,7 +8,8 @@
 #include <tiny_gltf.h>
 
 #include "scene/GltfMeshLoader.h"
-#include "scene/MeshGeoGPU.h"
+#include "scene/Vertex.h"
+//#include "scene/MeshGeoGPU.h"
 
 #include "render/Texture.h"
 

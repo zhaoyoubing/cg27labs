@@ -1,10 +1,10 @@
 #pragma once
 
-#include "scene/MeshGeometry.h"
+#include "scene/Mesh.h"
 
 #include <vector>
 
-class OpenCylinderMesh : public MeshGeometry {
+class OpenCylinderMesh : public Mesh {
 public:
     float r_ = 1.0;
     float h_ = 1.0;
@@ -43,7 +43,7 @@ private:
                 float xPos = radius * std::cos(theta);
                 float zPos = radius * std::sin(theta);
 
-                glm::vec3 position{xPos, yPos, zPos ;
+                glm::vec3 position{xPos, yPos, zPos} ;
                 glm::vec3 normal = glm::normalize(glm::vec3(xPos, 0.0f, zPos ));
                 vertices.push_back({position, normal, {u, v} });
             }

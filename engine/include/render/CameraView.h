@@ -17,15 +17,13 @@ struct Viewport {
     }
 };
 
-class CameraView {
-private:
+struct CameraView {
     glm::vec3 eye = {0.0f, 0.0f, 0.0f};
     CameraComp camera;
     Viewport viewport;
 
-public:
     CameraView() = default;
-    
+
     CameraView(CameraComp cam, Viewport vp)
         : camera(cam), viewport(vp) {}
 
@@ -35,13 +33,13 @@ public:
     }
 
     // It can query the world directly when needed
-    glm::mat4 getProjMatrix(const CameraComp& camera) const {
+    glm::mat4 getProjMatrix() const {
         return glm::perspective(glm::radians(camera.fov), viewport.GetAspectRatio(), camera.near, camera.far);
     }
 
     // Calculates the view matrix using the entity's world position and camera front vector
-    glm::mat4 getViewMatrix(const glm::vec3& e) const {
-        return glm::lookAt(e, e + camera.front, camera.up);
+    glm::mat4 getViewMatrix() const {
+        return glm::lookAt(eye, eye + camera.front, camera.up);
     }
 
     // You can even wrap OpenGL's viewport command here!
