@@ -11,6 +11,7 @@
 #include "entity/EcsWorldRegistry.h"
 #include "entity/TransformComp.h"
 #include "entity/CameraComp.h"
+#include "render/CameraView.h"
 
 
 
@@ -23,7 +24,6 @@ public:
 
             auto& transform = world.getComp<TransformComp>(id);
             auto& camera = world.getComp<CameraComp>(id);
-
             
             // left button pressed
             if (! input.isLeftButtonPressed()) {
@@ -36,7 +36,6 @@ public:
 
             spdlog::trace("Mouse offsets: x = {}, y ={}", xOffset, yOffset);
             
-
             camera.yaw += static_cast<float>(xOffset);
             camera.pitch += static_cast<float>(yOffset);
 
@@ -57,7 +56,8 @@ public:
             if (input.isKeyHeld(GLFW_KEY_A)) transform.pos -= right * velocity;
             if (input.isKeyHeld(GLFW_KEY_D)) transform.pos += right * velocity;
 
-            //camera.eye = transform.pos;
+            // update camera position
+            camera.eye = transform.pos;
         }
     }
 };

@@ -12,6 +12,9 @@ struct CameraComp {
     float far = 100.0f;
     float aspect = 1.0f;
     
+    // camera position
+    glm::vec3 eye = glm::vec3(0.0f);
+
     // Look orientation vectors & angles
     glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
