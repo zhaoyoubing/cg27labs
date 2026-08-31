@@ -34,8 +34,10 @@ public:
 
 
 #ifdef __APPLE__
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE; // Required for macOS
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE); // Required for macOS
 #endif
+
+        // glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
         // 2. Create the window object
         window_ = glfwCreateWindow(width_, height_, title_.c_str(), nullptr, nullptr);
@@ -89,6 +91,10 @@ public:
     // Swap the front and back rendering buffers
     void swapBuffers() const {
         glfwSwapBuffers(window_);
+    }
+
+    void show() const {
+        glfwShowWindow(window_);
     }
 
     // Returns current time in seconds since GLFW started
