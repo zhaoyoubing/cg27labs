@@ -13,7 +13,7 @@ GameApp::~GameApp() {
 }
 
 void GameApp::init() {
-    spdlog::info("Initializing GameApp and core subsystems...");
+    spdlog::info("Initialising GameApp and core subsystems ...");
 
     initWindow(name_);
 
@@ -29,6 +29,8 @@ void GameApp::init() {
 }
 
 void GameApp::initWindow(std::string title) {
+
+    spdlog::info("Initialising the main window ...");
     
     // 1. Initialize primary window (GLFW context, user pointers, callbacks)
     mainWin_ = std::make_unique<Window>(800, 600, title);

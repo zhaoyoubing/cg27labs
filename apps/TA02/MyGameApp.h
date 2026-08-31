@@ -17,12 +17,12 @@ class MyGameApp : public GameApp {
 
 public:
 
-    MyGameApp(std::string name):GameApp(name) {
-
-    }
+    MyGameApp(std::string name):GameApp(name) {  }
 
 protected:
     void initScene() override {
+        spdlog::info("Initialising entity-component-system (ECS), scene, models ...");
+
         // ================ Create object entity ================
         objId = ecsWorld_.createEntityID();
         ecsWorld_.addComp<TransformComp>(objId, TransformComp{});
@@ -38,6 +38,8 @@ protected:
     };
 
     void initRenderPipeline() override {
+
+        spdlog::info("Initialising the rendering peipeline  ...");
 
         // ================ Shaders and Pipeline Setup ================
         // Load individual shader stages from disk
