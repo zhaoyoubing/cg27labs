@@ -1,25 +1,26 @@
 #pragma once
 
-#include "scene/Mesh.h"
+#include "device/MeshBufferGPU.h"
+
 #include <vector>
 
 class MeshManager {
 public:
-    MeshID add(Mesh mesh) {
-        MeshID id {
+    MeshHandle add(std::shared_ptr<MeshBufferGPU>  mesh) {
+        MeshHandle h {
             static_cast<std::uint32_t>(meshes_.size())
         };
 
-        meshes_.push_back(std::move(mesh));
+        meshes_.push_back(mesh);
 
-        return id;
+        return h;
     }
 
-    Meshe & get(MeshID id) {
-        return meshes_[id];
+    std::shared_ptr<MeshBufferGPU> & get(MeshHandle h) {
+        return meshes_[h];
     }
 
 private:
-    std::vector<Material> meshes_;
+   std::vector<std::shared_ptr<MeshBufferGPU> > meshes_;
 
 };

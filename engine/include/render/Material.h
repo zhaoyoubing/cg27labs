@@ -9,11 +9,12 @@
 #include <memory>
 #include <unordered_map>
 
-using MaterialID = uint32_t;
+using MaterialHandle = uint32_t;
 
 
 enum class ShadingModel
 {
+    Plain, // no lighting needed
     Phong,
     BlinnPhong,
     PBR

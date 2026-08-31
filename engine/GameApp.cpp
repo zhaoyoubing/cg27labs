@@ -23,9 +23,7 @@ void GameApp::init() {
 
     initWindow(name_);
 
-    initRenderPipeline();
-
-    initScene();
+    initResources();
 
     bInitialised_ = true;
 
@@ -51,8 +49,6 @@ void GameApp::run() {
     bRunning_ = true;
 
     spdlog::info("Entering main engine loop.");
-
-    mainWin_->show();
 
     while (bRunning_ && ! mainWin_->shouldClose()) {
         

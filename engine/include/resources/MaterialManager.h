@@ -5,8 +5,8 @@
 
 class MaterialManager {
 public:
-    MaterialID add(Material material) {
-        MaterialID id{
+    MaterialHandle add(Material material) {
+        MaterialHandle id{
             static_cast<std::uint32_t>(materials_.size())
         };
 
@@ -15,7 +15,7 @@ public:
         return id;
     }
 
-    Material& get(MaterialID id) {
+    Material& get(MaterialHandle id) {
         return materials_[id];
     }
 

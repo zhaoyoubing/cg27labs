@@ -6,6 +6,8 @@
 #include "scene/Mesh.h"
 
 #include <glm/glm.hpp>
+
+#include <memory>
 #include <vector>
 
 // vao vbo and ebo of mesh geometry
@@ -20,8 +22,13 @@ class MeshBufferGPU {
     MeshBufferGPU& operator=(const MeshBufferGPU&) = delete;
 
     // Movable
-    MeshBufferGPU(MeshBufferGPU&& other) noexcept;
-    MeshBufferGPU& operator=(MeshBufferGPU&& other) noexcept;
+    //MeshBufferGPU(MeshBufferGPU&& other) noexcept;
+    //MeshBufferGPU& operator=(MeshBufferGPU&& other) noexcept;
+
+    void createAndUploadBuffers(std::shared_ptr<Mesh> mesh) {
+        createBufferIds(mesh);
+        uploadBuffers2GPU(mesh);
+    }
 
     void bind() const;
     void draw() const;
@@ -38,6 +45,6 @@ private:
 
     GLsizei indexCount_ {0};
 
-    void createBufferIds(Mesh & mesh);
-    void uploadBuffers2GPU(Mesh & mesh);
+    void createBufferIds(std::shared_ptr<Mesh>);
+    void uploadBuffers2GPU(std::shared_ptr<Mesh>);
 };

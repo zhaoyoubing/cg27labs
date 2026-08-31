@@ -16,7 +16,7 @@ struct Vertex {
 };
 */
 
-using MeshID = uint32_t;
+using MeshHandle = uint32_t;
 
 class Mesh {
 public:

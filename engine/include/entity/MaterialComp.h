@@ -5,5 +5,5 @@
 
 struct MaterialComp
 {
-    MaterialID material;
+    MaterialHandle hMat;
 };

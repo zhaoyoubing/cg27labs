@@ -10,8 +10,9 @@
 class ForwardPass : public RenderPass
 {
 public:
+    explicit ForwardPass() { }
     explicit ForwardPass(std::shared_ptr<GPUPipeline> gpuPipe) { }
-
+    
     // Called once per frame.
     void execute(RenderContext& context) override;
 

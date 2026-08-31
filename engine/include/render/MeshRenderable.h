@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "scene/MeshGeoGPU.h"
+#include "device/MeshBufferGPU.h"
 #include "render/Material.h"
 
 struct MeshRenderable {

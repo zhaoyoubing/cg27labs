@@ -2,11 +2,11 @@
 #pragma once
 
 #include <memory>
-#include "device/MeshBufferGPU.h"
-#include "render/Material.h" // for textures, shaders, colors
+
+#include "scene/Mesh.h"
+
 
 // the renderable mesh
 struct MeshComp {
-    std::shared_ptr<MeshBufferGPU> meshBuf;
-    std::shared_ptr<Material> material; // Unique material or shared
+    MeshHandle hMesh;
 };

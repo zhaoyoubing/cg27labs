@@ -9,6 +9,8 @@
 #include "renderpasses/RenderPipeline.h"
 #include "renderpasses/ForwardPass.h"
 #include "render/CameraView.h"
+
+#include "resources/MeshManager.h"
 #include "resources/MaterialManager.h"
 #include "resources/TextureManager.h"
 
@@ -31,9 +33,7 @@ public:
 
 protected:
 
-    //virtual bool initResources();
-    virtual void initRenderPipeline() = 0;
-    virtual void initScene() = 0;
+    virtual void initResources() = 0;
 
     virtual void update(float dt) = 0;
     virtual void render() = 0;
@@ -52,10 +52,10 @@ protected:
     // The currently active scene instance
     std::shared_ptr<Scene> activeScene;
 
+    MeshManager meshMgr_;
     MaterialManager matMgr_;
     TextureManager texMgr_;
     
-
 private:
     void initWindow(std::string title);   // init window and OpenGL setup
     void processEvents();     // poll events

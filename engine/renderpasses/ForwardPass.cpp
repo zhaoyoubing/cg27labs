@@ -6,7 +6,7 @@
 
 void ForwardPass::execute(RenderContext& context)
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     glViewport(
         0, 0, context.camera_.viewport.w, context.camera_.viewport.h);
@@ -17,26 +17,25 @@ void ForwardPass::execute(RenderContext& context)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     auto view = context.registry_.view<
-        TransformComp,
-        MeshComp,
-        MaterialComp>();
+        TransformComp, MeshComp, MaterialComp>();
 
     for (auto entity : view)
     {
         const auto& transform =
             context.registry_.getComp<TransformComp>(entity);
 
-        const auto& mesh =
+        const auto& meshComp =
             context.registry_.getComp<MeshComp>(entity);
 
-        const auto& materialComp =
+        const auto& matComp =
            context.registry_.getComp<MaterialComp>(entity);
 
-        if (! mesh.meshBuf)
+        std::shared_ptr<MeshBufferGPU> meshBuf = context.meshMgr_.get(meshComp.hMesh);
+
+        if (! meshBuf)
             continue;
 
-        Material& material =
-            context.matMgr_.get(materialComp.material);
+        Material& material = context.matMgr_.get(matComp.hMat);
 
         // Select the material's shader
         material.gpuPipe->bind();
@@ -46,9 +45,9 @@ void ForwardPass::execute(RenderContext& context)
         material.gpuPipe->setMat4( "matProj", context.camera_.getProjMatrix());
         material.gpuPipe->setVec3( "uBaseColour",  material.baseColour);
 
-        mesh.meshBuf->bind();
-        mesh.meshBuf->draw();
-        mesh.meshBuf->unbind();
+        meshBuf->bind();
+        meshBuf->draw();
+        meshBuf->unbind();
 
         material.gpuPipe->unbind();
     }

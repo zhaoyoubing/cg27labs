@@ -4,6 +4,8 @@
 #include <glad/glad.h>
 #include <string>
 
+using TextureHandle = uint32_t;
+
 class Texture {
 private:
     GLuint id = 0;

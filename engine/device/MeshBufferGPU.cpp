@@ -28,9 +28,9 @@ MeshBufferGPU::~MeshBufferGPU()
 }
 
 // create and upload buffers
-void MeshBufferGPU::createBufferIds(Mesh & mesh)
+void MeshBufferGPU::createBufferIds(std::shared_ptr<Mesh> mesh)
 {
-    if ( mesh.vertices.empty() || mesh.indices.empty()) {
+    if ( mesh->vertices.empty() || mesh->indices.empty()) {
         spdlog::error("Mesh empty, quitting createBufferIds.");
         return;
     }
@@ -39,16 +39,16 @@ void MeshBufferGPU::createBufferIds(Mesh & mesh)
     glGenBuffers(1, &vertexVBO_);
     glGenBuffers(1, &indexEBO_);
 
-    if (!mesh.tangents.empty())
+    if (!mesh->tangents.empty())
         glGenBuffers(1, &tangentVBO_);
     
-    if (!mesh.colours.empty())
+    if (!mesh->colours.empty())
         glGenBuffers(1, &colourVBO_);
 }
 
 
 // create and upload buffers
-void MeshBufferGPU::uploadBuffers2GPU(Mesh & mesh)
+void MeshBufferGPU::uploadBuffers2GPU(std::shared_ptr<Mesh> mesh)
 {
     if ( ! vertexVBO_ || ! indexEBO_) {
         spdlog::error("Invalid VBO or EBO , quitting uploadBuffers.");
@@ -64,8 +64,8 @@ void MeshBufferGPU::uploadBuffers2GPU(Mesh & mesh)
 
     glBufferData(
         GL_ARRAY_BUFFER,
-        mesh.vertices.size() * sizeof(glm::vec3),
-        mesh.vertices.data(),
+        mesh->vertices.size() * sizeof(glm::vec3),
+        mesh->vertices.data(),
         GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
@@ -96,8 +96,8 @@ void MeshBufferGPU::uploadBuffers2GPU(Mesh & mesh)
 
         glBufferData(
             GL_ARRAY_BUFFER,
-            mesh.tangents.size() * sizeof(glm::vec3),
-            mesh.tangents.data(),
+            mesh->tangents.size() * sizeof(glm::vec3),
+            mesh->tangents.data(),
             GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(3);
@@ -114,8 +114,8 @@ void MeshBufferGPU::uploadBuffers2GPU(Mesh & mesh)
 
         glBufferData(
             GL_ARRAY_BUFFER,
-            mesh.colours.size() * sizeof(glm::vec3),
-            mesh.colours.data(),
+            mesh->colours.size() * sizeof(glm::vec3),
+            mesh->colours.data(),
             GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(4);
@@ -133,11 +133,11 @@ void MeshBufferGPU::uploadBuffers2GPU(Mesh & mesh)
 
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
-        mesh.indices.size() * sizeof(uint32_t),
-        mesh.indices.data(),
+        mesh->indices.size() * sizeof(uint32_t),
+        mesh->indices.data(),
         GL_STATIC_DRAW);
 
-    indexCount_ = static_cast<GLsizei>(mesh.indices.size());
+    indexCount_ = static_cast<GLsizei>(mesh->indices.size());
     
 
     // The EBO binding is stored in the VAO.
