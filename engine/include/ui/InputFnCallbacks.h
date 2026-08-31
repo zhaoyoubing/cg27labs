@@ -5,13 +5,10 @@
 #include <vector>
 #include <functional>
 
-// A class allowing the user to register multiple input event callbacks.
-// NOT in USE as we are using ECS and InputState now,
-// However it serves a good example for learning.
-
+// NOT in USE
 // A GLFW key and mouse callback wrapper
 // supports registration of multiple callbacks 
-class InputFnCallbacks {
+class InputCallbacks {
 public:
     // --- Callback Signatures for Client Projects ---
     using KeyCallbackFn   = std::function<void(int key, int action)>;
