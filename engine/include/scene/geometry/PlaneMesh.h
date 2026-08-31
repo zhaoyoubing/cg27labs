@@ -3,6 +3,8 @@
 #include "scene/Vertex.h"
 #include "scene/Mesh.h"
 
+#include <spdlog/spdlog.h>
+
 enum class PlaneDirection {
     XY,
     XZ,
@@ -36,6 +38,8 @@ public:
         else {
             createYZ();
         }
+
+        spdlog::debug("Vertex number {}, Index number {}", vertices.size(), indices.size());
     }
 
 private:
@@ -44,11 +48,13 @@ private:
         float leapWid = (float) width_ / (float)resWid_;
         float leapLen = (float) len_ / (float)resLen_;
 
+        Vertex v;
         for (float z = 0; z < resLen_; z += 1.0f) {
             for (float x = 0; x < resWid_; x += 1.0f) {
-                positions.push_back ( glm::vec3(x * leapWid, 0, z * leapLen) + origin_);
-                normals.push_back(glm::vec3(0,1,0));
-                uvs.push_back(glm::vec2(x /(resWid_ - 1), z / (resLen_-1)) );          
+                v.pos = glm::vec3(x * leapWid, 0, z * leapLen) + origin_;
+                v.normal = glm::vec3(0,1,0);
+                v.uv = glm::vec2(x /(resWid_ - 1), z / (resLen_-1)) ; 
+                vertices.push_back(v);         
             }
         }
 

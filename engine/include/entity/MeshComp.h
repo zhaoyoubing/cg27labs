@@ -2,7 +2,7 @@
 #pragma once
 
 #include <memory>
-#include "scene/MeshBufferGPU.h"
+#include "device/MeshBufferGPU.h"
 #include "render/Material.h" // for textures, shaders, colors
 
 // the renderable mesh

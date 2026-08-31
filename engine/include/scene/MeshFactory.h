@@ -23,20 +23,21 @@ public:
 
         float halfSize = size / 2.0;
 
-        std::vector<glm::vec3> positions = {
-            { -halfSize,  halfSize, 0.f },  // v0
-            { -halfSize, -halfSize, 0.f },  // v1
-            {  halfSize, -halfSize, 0.f },  // v2
-            {  halfSize,  halfSize, 0.f },  // v3
-            {      0.0f,      0.0f, -height }  // v4
+        // not using normals and texture uvs
+        std::vector<Vertex> vertices = {
+            { { -halfSize,  halfSize, 0.f }, glm::vec3(0, 0, -1), glm::vec2(0, 0)  }, // v0
+            { { -halfSize, -halfSize, 0.f }, glm::vec3(0, 0, -1), glm::vec2(0, 0)  },  // v1
+            { {  halfSize, -halfSize, 0.f }, glm::vec3(0, 0, -1), glm::vec2(0, 0)  },  // v2
+            { {  halfSize,  halfSize, 0.f }, glm::vec3(0, 0, -1), glm::vec2(0, 0)  },  // v3
+            { {      0.0f,  0.0f, -height }, glm::vec3(0, 0, 1), glm::vec2(0, 0)   }  // v4
         };
 
         std::vector<glm::vec3> colours = {
             { 1.f, 0.f, 0.f },  // Red 
-            { 0.f, 1.f, 0.f },   // Green  
-            { 0.f, 1.f, 0.f },   // Blue  
-            { 1.f, 1.f, 0.f },   // Yellow  
-            { 1.f, 1.f, 1.f },   // White        
+            { 0.f, 1.f, 0.f },  // Green  
+            { 0.f, 1.f, 0.f },  // Blue  
+            { 1.f, 1.f, 0.f },  // Yellow  
+            { 1.f, 1.f, 1.f },  // White        
         };
 
         std::vector<uint32_t> indices = {
@@ -50,7 +51,7 @@ public:
         };
 
         std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
-        mesh->positions = positions;
+        mesh->vertices = vertices;
         mesh->colours = colours;
         mesh->indices = indices;
 

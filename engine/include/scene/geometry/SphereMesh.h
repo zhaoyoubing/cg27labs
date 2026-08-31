@@ -36,11 +36,10 @@ private:
 
         uint32_t idx = 0;
 
+        Vertex v;
         // Top piece
         glm::vec3 top = glm::vec3(0, 1, 0) ;
-        positions.push_back(radius * top) ;
-        normals.push_back(top);
-        uvs.push_back( glm::vec2(0, 0) );
+        vertices.push_back({radius * top, top, glm::vec2(0,0)});
 
         glm::vec3 pos = glm::vec3(0.0);
         float phi = 0;
@@ -54,9 +53,11 @@ private:
 
             pos = {cr * cos(stepPhi * j), cos(stepTheta),  cr * sin(stepPhi * j)   };
 
-            positions.push_back(radius * pos);
-            normals.push_back(pos);
-            uvs.push_back( glm::vec2(j / (float) res_phi, 1 / (float) res_theta) );
+            vertices.push_back({radius * pos, pos, glm::vec2(j / (float) res_phi, 1 / (float) res_theta) });
+
+            //positions.push_back(radius * pos);
+            //normals.push_back(pos);
+            //uvs.push_back( glm::vec2(j / (float) res_phi, 1 / (float) res_theta) );
             
             if (j > 0) {
                 indices.insert(indices.end(), {0, idx - 1, idx});
@@ -80,9 +81,11 @@ private:
 
                 pos = glm::vec3(cr * cos(phi), y, cr * sin(phi) );
                 
-                positions.push_back(radius * pos);
-                normals.push_back(pos);
-                uvs.push_back(glm::vec2(j / (float) res_phi, 1 / (float) res_theta) );
+                vertices.push_back({radius * pos, pos, glm::vec2(j / (float) res_phi, 1 / (float) res_theta) });
+
+                //positions.push_back(radius * pos);
+                //normals.push_back(pos);
+                //uvs.push_back(glm::vec2(j / (float) res_phi, 1 / (float) res_theta) );
 
                 if (j > 0) {
                     indices.insert(indices.end(), {idx - 1 - res_phi, idx - 1, idx  });
@@ -99,9 +102,12 @@ private:
 
         // Bottom piece
         glm::vec3 bottom = glm::normalize(glm::vec3(0, -1, 0));
-        positions.push_back(radius * bottom);
-        normals.push_back(bottom);
-        uvs.push_back(glm::vec2(0, 1.0));
+
+        vertices.push_back({radius * bottom, bottom, glm::vec2(0, 1.0) });
+
+        //positions.push_back(radius * bottom);
+        //normals.push_back(bottom);
+        //uvs.push_back(glm::vec2(0, 1.0));
 
         phi = 0;
 
@@ -117,6 +123,6 @@ private:
 
         }
 
-        spdlog::debug("Vertex number {}, Index number {}", positions.size(), indices.size());
+        spdlog::debug("Vertex number {}, Index number {}", vertices.size(), indices.size());
     }
 };

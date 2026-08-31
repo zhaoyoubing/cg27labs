@@ -1,9 +1,9 @@
-// scene/MeshGeoGPU.h
+// device/MeshGeoGPU.h
 #pragma once
 
 #include <glad/glad.h>
 
-#include "Mesh.h"
+#include "scene/Mesh.h"
 
 #include <glm/glm.hpp>
 #include <vector>
@@ -30,9 +30,7 @@ class MeshBufferGPU {
 private:
     GLuint vao_ {0};
 
-    GLuint positionVBO_ {0};
-    GLuint normalVBO_ {0};
-    GLuint uvVBO_ {0};
+    GLuint vertexVBO_ {0};
     GLuint tangentVBO_ {0};
     GLuint colourVBO_ {0};
 
@@ -40,5 +38,6 @@ private:
 
     GLsizei indexCount_ {0};
 
-    void genBuffers(Mesh & mesh);
+    void createBufferIds(Mesh & mesh);
+    void uploadBuffers2GPU(Mesh & mesh);
 };
