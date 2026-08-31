@@ -24,17 +24,17 @@ protected:
         spdlog::info("Initialising entity-component-system (ECS), scene, models ...");
 
         // ================ Create object entity ================
-        objId = ecsWorld_.createEntityID();
-        ecsWorld_.addComp<TransformComp>(objId, TransformComp{});
+        objId_ = ecsWorld_.createEntityID();
+        ecsWorld_.addComp<TransformComp>(objId_, TransformComp{});
 
         // ================ Create player entity ================
         // 1. Create the player entity id
-        player = ecsWorld_.createEntityID();
+        playerId_ = ecsWorld_.createEntityID();
 
         // ================ Model Setup ================
         // set up data and vertex buffers
         // std::shared_ptr<MeshModel> = GltfMeshModelLoader::loadModel();
-        std::shared_ptr<Mesh> mesh = MeshFactory::createPyramid(1.0, 1.0);
+        mesh_ = MeshFactory::createPyramid(1.0, 1.0);
     };
 
     void initRenderPipeline() override {
@@ -56,7 +56,7 @@ protected:
 
    void update(float dt) override {
         // 3. Run systems using window's delta time directly
-        playerSys_.update(ecsWorld_, objId, mainWin_->getInputState(), dt);
+        playerSys_.update(ecsWorld_, objId_, mainWin_->getInputState(), dt);
         camSys_.update(ecsWorld_, mainWin_->getInputState(), dt);
    }
 
@@ -84,6 +84,7 @@ private:
     PlayerMoveSystem playerSys_;
     CameraSystem camSys_;
 
-    EntityID objId;
-    EntityID player;
+    EntityID objId_;
+    EntityID playerId_;
+    std::shared_ptr<Mesh> mesh_;
 };

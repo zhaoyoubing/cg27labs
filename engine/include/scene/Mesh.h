@@ -15,6 +15,9 @@ struct Vertex {
     glm::vec2 uv;        // 8 bytes, texture coordinates
 };
 */
+
+using MeshID = uint32_t;
+
 class Mesh {
 public:
     // positions, normals, uvs

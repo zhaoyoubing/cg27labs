@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MeshModel.h"
-#include "render/TextureManager.h"
+#include "resources/TextureManager.h"
 
 #include <string>
 #include <memory>

@@ -9,8 +9,8 @@
 #include "renderpasses/RenderPipeline.h"
 #include "renderpasses/ForwardPass.h"
 #include "render/CameraView.h"
-#include "render/MaterialManager.h"
-#include "render/TextureManager.h"
+#include "resources/MaterialManager.h"
+#include "resources/TextureManager.h"
 
 #include <memory>
 //#include <chrono>

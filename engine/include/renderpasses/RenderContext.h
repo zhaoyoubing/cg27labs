@@ -2,8 +2,8 @@
 
 #include "entity/EcsWorldRegistry.h"
 #include "render/CameraView.h"
-#include "render/MaterialManager.h"
-#include "render/TextureManager.h"
+#include "resources/MaterialManager.h"
+#include "resources/TextureManager.h"
 
 struct RenderContext
 {
@@ -12,7 +12,7 @@ struct RenderContext
     CameraView & camera_;
 
     MaterialManager & matMgr_;
-    
+
     TextureManager & texMgr_;
 
     //int viewportWidth;
