@@ -19,8 +19,6 @@ void GameApp::init() {
 
     initRenderPipeline();
 
-    //initResources();
-
     initScene();
 
     bInitialised_ = true;
@@ -36,7 +34,7 @@ void GameApp::initWindow(std::string title) {
     mainWin_ = std::make_unique<Window>(800, 600, title);
 
     // 2. Initialize timing baseline
-    lastFrameTime_ = std::chrono::high_resolution_clock::now();
+    //lastFrameTime_ = std::chrono::high_resolution_clock::now();
     
 }
 
@@ -58,7 +56,7 @@ void GameApp::run() {
         // lastFrameTime_ = currentTime;
         // float deltaTime = elapsed.count();
 
-        float dt = mainWin_->updateDeltaTime();
+        float dt = clock_.tick();;
 
         // --- Event Handling ---
         processEvents();

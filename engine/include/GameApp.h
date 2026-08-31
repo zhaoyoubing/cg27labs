@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Clock.h"
 #include "ui/Window.h"
 #include "entity/EcsWorldRegistry.h" 
 #include "scene/Scene.h"
@@ -12,7 +13,7 @@
 #include "render/TextureManager.h"
 
 #include <memory>
-#include <chrono>
+//#include <chrono>
 
 class GameApp {
 public:
@@ -64,5 +65,6 @@ private:
     bool bRunning_{false};
     
     // Timing tracking
-    std::chrono::high_resolution_clock::time_point lastFrameTime_;
+    // std::chrono::high_resolution_clock::time_point lastFrameTime_;
+    Clock clock_;
 };
