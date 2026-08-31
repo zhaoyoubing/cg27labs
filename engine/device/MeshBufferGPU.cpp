@@ -64,7 +64,7 @@ void MeshBufferGPU::uploadBuffers2GPU(std::shared_ptr<Mesh> mesh)
 
     glBufferData(
         GL_ARRAY_BUFFER,
-        mesh->vertices.size() * sizeof(glm::vec3),
+        mesh->vertices.size() * sizeof(Vertex),
         mesh->vertices.data(),
         GL_STATIC_DRAW);
 
@@ -137,7 +137,10 @@ void MeshBufferGPU::uploadBuffers2GPU(std::shared_ptr<Mesh> mesh)
         mesh->indices.data(),
         GL_STATIC_DRAW);
 
+    
     indexCount_ = static_cast<GLsizei>(mesh->indices.size());
+
+    spdlog::debug("Index count {}", indexCount_);
     
 
     // The EBO binding is stored in the VAO.

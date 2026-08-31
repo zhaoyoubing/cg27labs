@@ -3,7 +3,7 @@
 in layout(location=0) vec3 aPos;
 in layout(location=1) vec3 aNormal;
 in layout(location=2) vec2 aUV;
-in layout(location=3) vec3 in_colour;
+in layout(location=4) vec3 in_colour;
 
 uniform mat4 uModel;
 uniform mat4 uView;

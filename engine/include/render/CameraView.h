@@ -18,7 +18,7 @@ struct Viewport {
 };
 
 struct CameraView {
-    glm::vec3 eye = {0.0f, 0.0f, 0.0f};
+    glm::vec3 eye = {0.0f, 0.0f, 1.0f};
     CameraComp camera;
     Viewport viewport;
 
