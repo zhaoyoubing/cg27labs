@@ -46,7 +46,7 @@ protected:
 
         // ================ Shaders and Material Setup ================
         // Load individual shader stages from disk
-        Shader vertShader(ShaderStage::Vertex, "shaders/vcolour_d.vert");
+        Shader vertShader(ShaderStage::Vertex, "shaders/vcolour_2a.vert");
         Shader fragShader(ShaderStage::Fragment, "shaders/vcolour.frag");
 
         // Group the compiled stages into a Pipeline (Vertex-Fragment pair)
@@ -55,6 +55,9 @@ protected:
 
         Material mat(plainPipeline);
         mat.shadingModel = ShadingModel::Plain;
+        // you should add material parameters here
+
+
         MaterialHandle hMat = matMgr_.add(mat);
         ecsWorld_.addComp<MaterialComp>(objId_, MaterialComp{ hMat });
 

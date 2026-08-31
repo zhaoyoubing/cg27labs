@@ -7,7 +7,9 @@
 
 #include <string>
 #include <memory>
+#include <variant>
 #include <unordered_map>
+
 
 using MaterialHandle = uint32_t;
 
@@ -20,11 +22,23 @@ enum class ShadingModel
     PBR
 };
 
+using MaterialValue = std::variant<
+    int,
+    float,
+    glm::vec2,
+    glm::vec3,
+    glm::vec4,
+    glm::mat4,
+    TextureHandle
+>;
+
+
 class Material {
 public:
 
     ShadingModel shadingModel = ShadingModel::BlinnPhong;
 
+    
     // Phong/Blinn-Phong material properties
     glm::vec3 baseColour = glm::vec3(1.0f);
     glm::vec3 specularColour = glm::vec3(1.0f);
@@ -36,6 +50,7 @@ public:
 
     // Key = Uniform name in shader (e.g., "material.diffuseMap")
     std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
+    std::unordered_map<std::string, MaterialValue> parameters;
 
     std::shared_ptr<GPUPipeline> gpuPipe;
 

@@ -40,10 +40,11 @@ void ForwardPass::execute(RenderContext& context)
         // Select the material's shader
         material.gpuPipe->bind();
 
-        material.gpuPipe->setMat4("matModel", transform.getLocalMatrix());
-        material.gpuPipe->setMat4("matView",  context.camera_.getViewMatrix());
-        material.gpuPipe->setMat4( "matProj", context.camera_.getProjMatrix());
-        material.gpuPipe->setVec3( "uBaseColour",  material.baseColour);
+        material.gpuPipe->setMat4("uModel", transform.getLocalMatrix());
+        material.gpuPipe->setMat4("uView",  context.camera_.getViewMatrix());
+        material.gpuPipe->setMat4( "uProj", context.camera_.getProjMatrix());
+
+        //material.gpuPipe->setVec3( "uBaseColour",  material.baseColour);
 
         meshBuf->bind();
         meshBuf->draw();
