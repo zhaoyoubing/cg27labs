@@ -29,11 +29,10 @@ int main() {
 
     spdlog::set_level(spdlog::level::debug);
 
-
     // Instantiate the game-specific application derived from GameApp
     MyGameApp app("TA02");
     
-    // calls init(), initializes the window/context
+    // calls init(), initialises the window/context
     app.init();
 
     // starts the engine main event/rendering loop, 

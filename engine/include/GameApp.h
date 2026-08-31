@@ -40,7 +40,7 @@ protected:
 
     std::string name_;
 
-    // Core engine modules (supporting your multi-window architecture)
+    // Core engine modules
     std::unique_ptr<Window> mainWin_;
     
     ECSWorldRegistry ecsWorld_; // ECS is scene

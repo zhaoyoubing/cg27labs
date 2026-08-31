@@ -40,7 +40,7 @@ protected:
     void initRenderPipeline() override {
 
         spdlog::info("Initialising the rendering peipeline  ...");
-
+        
         // ================ Shaders and Pipeline Setup ================
         // Load individual shader stages from disk
         Shader vertShader(ShaderStage::Vertex, "shaders/vcolour_d.vert");
@@ -51,7 +51,7 @@ protected:
         std::shared_ptr<GPUPipeline> basicPipeline = std::make_shared<GPUPipeline>(shaderStages);
 
         renderPipe_.addPass(std::make_unique<ForwardPass>(basicPipeline) );
-                
+             
     }
 
    void update(float dt) override {
