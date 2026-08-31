@@ -60,7 +60,8 @@ private:
     void processEvents();     // poll events
     void shutdown();          // terminate
 
-    bool bRunning_{true};
+    bool bInitialised_{false};
+    bool bRunning_{false};
     
     // Timing tracking
     std::chrono::high_resolution_clock::time_point lastFrameTime_;

@@ -23,7 +23,7 @@ void GameApp::init() {
 
     initScene();
 
-    bRunning_ = true;
+    bInitialised_ = true;
 
     spdlog::info("GameApp initialisation complete.");
 }
@@ -40,8 +40,13 @@ void GameApp::initWindow(std::string title) {
 
 void GameApp::run() {
 
-    init();
-    
+    if (! bInitialised_) {
+        spdlog::error("GameApp not initialised, please call GameApp's init() before run().");
+        return;
+    }
+
+    bRunning_ = true;
+
     spdlog::info("Entering main engine loop.");
 
     while (bRunning_ && ! mainWin_->shouldClose()) {

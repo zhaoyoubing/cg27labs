@@ -33,116 +33,12 @@ int main() {
     // Instantiate the game-specific application derived from GameApp
     MyGameApp app("TA02");
     
-    // Starts the engine loop, initializes the window/context, 
-    // runs onInit(), and enters the main frame loop
+    // calls init(), initializes the window/context
+    app.init();
+
+    // starts the engine main event/rendering loop, 
     app.run();
     
     return 0;
 
-
-    /* 
-    // ================ GLFW and Glad Setup ================
-    // 1. Initialize GLFW Window and Input Context
-    Window window(800, 800, "TA01d");
-
-    // 2. Initialize ECS World Registry
-    ECSWorldRegistry ecsWorld;
-    PlayerMoveSystem moveSys;
-    CameraSystem camSys;
-
-    // ================ Create object entity ================
-    EntityID objId = ecsWorld.createEntityID();
-    ecsWorld.addComp<TransformComp>(objId, TransformComp{});
-
-    // ================ Create player entity ================
-    // 1. Create the player entity id
-    EntityID player = ecsWorld.createEntityID();
-
-    // 2. Attach a single TransformCompto it
-    ecsWorld.addComp<TransformComp>(player, TransformComp{
-        .pos = glm::vec3(0.0f, 0.0f, 2.0f) // also eye position
-    });
-
-    // 3. Attach a single CameraComp to the player (First Person View)
-    ecsWorld.addComp<CameraComp>(player, CameraComp{
-        .fov = 45.0f,
-        .front = glm::vec3(0, 0, -1),
-        .yaw = -90.0f,
-        .pitch = 0.0f
-    });
-
-    // ================ Shaders and Pipeline Setup ================
-    // Load individual shader stages from disk
-    Shader vertShader(ShaderStage::Vertex, "shaders/vcolour_d.vert");
-    Shader fragShader(ShaderStage::Fragment, "shaders/vcolour.frag");
-    
-    // Group the compiled stages into a Pipeline (Vertex-Fragment pair)
-    std::vector<Shader*> shaderStages = { &vertShader, &fragShader };
-    GPUPipeline basicPipeline(shaderStages);
-    
-
-    // ================ Model Setup ================
-    // set up data and vertex buffers
-    // std::shared_ptr<MeshModel> = GltfMeshModelLoader::loadModel();
-
-    // ================ Rendering Mode Setup ================
-    glPolygonMode(GL_FRONT, GL_FILL);
-    //glEnable(GL_CULL_FACE);
-    //glCullFace(GL_BACK); 
-    glEnable(GL_DEPTH_TEST);
-
-    // ================ Main Render and Event Loop ================
-    while (! window.shouldClose()) {
-        // 1. Poll events from the OS
-        window.pollEvents();
-
-        // 2. Update the frame clock/delta time
-        float dt = window.updateDeltaTime();
-
-        // 3. Run systems using window's delta time directly
-        moveSys.update(ecsWorld, objId, window.getInputState(), dt);
-        camSys.update(ecsWorld, window.getInputState(), dt);
-
-        // 4. Render
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // bind the pipeline (shader program) for rendering
-        basicPipeline.bind();
-
-        // update the model matrix uniform in the shader
-        // the order is always TRS (translate, rotate, scale) for the modelview matrix
-        // the rotation is around the local axes (intrinsic) : x-axis first, then y-axis and z-axis
-        TransformComp& trans = ecsWorld.getComp<TransformComp>(objId);
-        glm::mat4 mat_model = trans.getLocalMatrix();
-        
-        basicPipeline.setMat4("matModel", mat_model);
-
-
-        TransformComp & transPlayer = ecsWorld.getComp<TransformComp>(player);
-        CameraComp & camera = ecsWorld.getComp<CameraComp>(player);
-
-        // set up the view matrix for the camera
-        glm::mat4 view = glm::lookAt(
-            transPlayer.pos, // Camera position in world space
-            transPlayer.pos + camera.front, // Look at target
-            camera.up  // Up vector
-        );
-
-        glm::mat4 proj = glm::perspective(camera.fov, camera.aspect, camera.near, camera.far);
-
-        // update the view matrix uniform in the shader
-        basicPipeline.setMat4("matView", view);
-        basicPipeline.setMat4("matProj", proj);
-
-        //drawColourVertex();
-
-
-        window.swapBuffers();
-
-        // set mouse x and y offsets to 0
-        window.clearInputState();
-    }
-
-    */
-    return 0;
 }
