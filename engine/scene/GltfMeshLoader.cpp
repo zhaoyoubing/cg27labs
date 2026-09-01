@@ -1,6 +1,5 @@
 // engine/scene/GltfMeshLoader.cpp
 
-
 #define TINYGLTF_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -8,7 +7,6 @@
 
 #include "scene/GltfMeshLoader.h"
 #include "scene/Vertex.h"
-//#include "scene/MeshGeoGPU.h"
 
 #include "render/Texture.h"
 
@@ -16,7 +14,7 @@
 #include <memory>
 #include <filesystem>
 
-std::shared_ptr<Mesh> GltfMeshLoader::loadModel(const std::string& filepath, TextureManager& textureManager) {
+std::shared_ptr<Mesh> GltfMeshLoader::loadModel(const std::string& filepath, TextureManager& texMgr, MaterialManager& matMgr) {
     tinygltf::Model gltfModel;
     tinygltf::TinyGLTF loader;
     std::string err;
@@ -31,13 +29,13 @@ std::shared_ptr<Mesh> GltfMeshLoader::loadModel(const std::string& filepath, Tex
     }
 
     if (!warn.empty()) {
-        std::cout << "[GltfLoader Warning]: " << warn << std::endl;
+        spdlog::warn("[GltfLoader Warning]: {}", warn);
     }
     if (!err.empty()) {
-        std::cerr << "[GltfLoader Error]: " << err << std::endl;
+        spdlog::error("[GltfLoader Error]: {}", err);
     }
     if (!success) {
-        std::cerr << "[GltfLoader] Failed to load parsed glTF: " << filepath << std::endl;
+        spdlog::error("[GltfLoader] Failed to load parsed glTF: {}", filepath);
         return nullptr;
     }
 
@@ -50,24 +48,17 @@ std::shared_ptr<Mesh> GltfMeshLoader::loadModel(const std::string& filepath, Tex
 
         std::string key;
 
-        if (!img.uri.empty())
-        {
+        if (!img.uri.empty()) {
             std::filesystem::path modelPath(filepath);
             std::filesystem::path texturePath = modelPath.parent_path() / img.uri;
 
             key = texturePath.lexically_normal().string();
-        }
-        else
-        {
+        } else if (!img.name.empty()) {
             key = filepath + "_image_" + std::to_string(i);
         }
 
-        auto texture = textureManager.loadFromMemory(
-            key,
-            img.image.data(),
-            img.width,
-            img.height,
-            img.component
+        auto texture = texMgr.loadFromMemory(
+            key, img.image.data(), img.width, img.height, img.component
         );
 
         loadedTextures.push_back(texture);
@@ -156,6 +147,33 @@ std::shared_ptr<Mesh> GltfMeshLoader::loadModel(const std::string& filepath, Tex
 
             // 4. Track material index mapping
             unsigned int materialIdx = primitive.material >= 0 ? primitive.material : 0;
+            if (materialIdx >= 0)
+            {
+                const tinygltf::Material& gltfMaterial = gltfModel.materials[materialIdx];
+                const auto& pbr = gltfMaterial.pbrMetallicRoughness;
+                std::vector<double> baseColorFactor = pbr.baseColorFactor;
+
+                Material material;
+                material.baseColour = glm::vec3(baseColorFactor[0], baseColorFactor[1], baseColorFactor[2]);
+                material.roughness = pbr.roughnessFactor;
+                material.metallic = pbr.metallicFactor;
+
+                std::shared_ptr<Texture> baseColorTexture = nullptr;
+                if (pbr.baseColorTexture.index >= 0) {
+                        // Use base color texture
+                        int textureIndex = pbr.baseColorTexture.index;
+
+                        const tinygltf::Texture& texGltf = gltfModel.textures[textureIndex];
+
+                        int imageIndex = texGltf.source;
+
+                        std::shared_ptr<Texture> texture = loadedTextures[imageIndex];
+
+                        material.setTexture("baseColorTexture", texture);
+
+                }
+                matMgr.add(material);
+            }
 
             // 5. Push sub-mesh into the container model
             //meshModel->addSubMesh(geometry, materialIdx);

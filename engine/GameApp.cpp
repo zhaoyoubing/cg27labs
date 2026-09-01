@@ -52,11 +52,6 @@ void GameApp::run() {
 
     while (bRunning_ && ! mainWin_->shouldClose()) {
         
-        // auto currentTime = std::chrono::high_resolution_clock::now();
-        // std::chrono::duration<float> elapsed = currentTime - lastFrameTime_;
-        // lastFrameTime_ = currentTime;
-        // float deltaTime = elapsed.count();
-
         float dt = clock_.tick();;
 
         // --- Event Handling ---

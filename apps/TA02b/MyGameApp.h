@@ -46,7 +46,7 @@ protected:
 
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
-        std::shared_ptr<Mesh> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_);
+        std::shared_ptr<Mesh> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_);
        
         std::shared_ptr<MeshBufferGPU> meshBuf = std::make_shared<MeshBufferGPU>();
         meshBuf->createAndUploadBuffers(mesh);

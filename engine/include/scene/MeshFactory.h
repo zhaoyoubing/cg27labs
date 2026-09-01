@@ -14,9 +14,9 @@
 class MeshFactory {
 public:
 
-    static std::shared_ptr<Mesh> loadGltf(std::string filepath, TextureManager& texMgr) {
+    static std::shared_ptr<Mesh> loadGltf(std::string filepath, TextureManager& texMgr, MaterialManager& matMgr) {
         // Load a glTF model using the GltfMeshLoader
-        std::shared_ptr<Mesh> mesh = GltfMeshLoader::loadModel(filepath, texMgr);
+        std::shared_ptr<Mesh> mesh = GltfMeshLoader::loadModel(filepath, texMgr, matMgr);
         return mesh;
     }
 

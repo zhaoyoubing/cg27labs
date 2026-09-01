@@ -28,8 +28,7 @@ using MaterialValue = std::variant<
     glm::vec2,
     glm::vec3,
     glm::vec4,
-    glm::mat4,
-    TextureHandle
+    glm::mat4
 >;
 
 
@@ -38,7 +37,6 @@ public:
 
     ShadingModel shadingModel = ShadingModel::BlinnPhong;
 
-    
     // Phong/Blinn-Phong material properties
     glm::vec3 baseColour = glm::vec3(1.0f);
     glm::vec3 specularColour = glm::vec3(1.0f);
@@ -55,6 +53,7 @@ public:
     std::shared_ptr<GPUPipeline> gpuPipe;
 
 public:
+    Material() = default;
     Material(std::shared_ptr<GPUPipeline> shaderProgram);
     ~Material() = default;
 
@@ -63,10 +62,6 @@ public:
 
     // Setters for textures and properties
     void setTexture(const std::string& uniformName, std::shared_ptr<Texture> texture);
-
-    //void setBaseColor(const glm::vec3& c) { baseColour = c; }
-    //void setSpecularColor(const glm::vec3& c) { specularColour = c; }
-    //void setShininess(float value) { shininess = value; }
 
     // Getters
     // std::shared_ptr<GPUPipeline> getGPUPipeline() const { return gpuPipe; }
