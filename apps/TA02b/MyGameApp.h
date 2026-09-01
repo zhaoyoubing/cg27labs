@@ -56,8 +56,8 @@ protected:
 
         // ================ Shaders and Material Setup ================
         // 4. Load individual shader stages from disk
-        Shader vertShader(ShaderStage::Vertex, "shaders/vcolour_2a.vert");
-        Shader fragShader(ShaderStage::Fragment, "shaders/vcolour.frag");
+        Shader vertShader(ShaderStage::Vertex, "shaders/vtexture.vert");
+        Shader fragShader(ShaderStage::Fragment, "shaders/vtexture.frag");
 
         // Group the compiled stages into a Pipeline (Vertex-Fragment pair)
         std::vector<Shader*> shaderStages = { &vertShader, &fragShader };
