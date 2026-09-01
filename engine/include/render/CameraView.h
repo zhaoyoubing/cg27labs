@@ -4,7 +4,7 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-#include "ecs/components/CameraComp.h"
+#include "entity/CameraComp.h"
 
 struct Viewport {
     float x = 0.0f;
@@ -12,11 +12,13 @@ struct Viewport {
     float w = 800.0f;
     float h = 600.0f;
 
-    float GetAspectRatio() const {
+    float getAspectRatio() const {
         return (h > 0.0f) ? (w / h) : (16.0f / 9.0f);
     }
 };
 
+
+/*
 class CameraView {
 private:
     glm::vec3 eye = {0.0f, 0.0f, 0.0f};
@@ -50,3 +52,4 @@ public:
                    static_cast<GLsizei>(viewport.h));
     }
 };
+*/
