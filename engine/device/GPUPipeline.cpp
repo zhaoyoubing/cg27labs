@@ -1,7 +1,8 @@
+#include <iostream>
+
 #include "device/GPUPipeline.h"
 
 #include <glm/gtc/type_ptr.hpp>  // for glm::value_ptr
-#include <iostream>
 
 GPUPipeline::GPUPipeline(const std::vector<Shader*>& shaders) {
     programID_ = glCreateProgram();
@@ -27,6 +28,7 @@ void GPUPipeline::unbind() const {
     glUseProgram(0);
 }
 
+
 GLint GPUPipeline::getUniformLocation(const std::string& name) const {
     if (uniformLocCache_.find(name) != uniformLocCache_.end())
         return uniformLocCache_[name];
@@ -39,12 +41,23 @@ GLint GPUPipeline::getUniformLocation(const std::string& name) const {
     return location;
 }
 
+bool GPUPipeline::hasUniform(std::string_view name) const {
+    GLint location =
+        glGetUniformLocation(programID_, std::string(name).c_str());
+
+    return location != -1;
+}
+
 void GPUPipeline::setInt(const std::string& name, int value) const {
     glUniform1i(getUniformLocation(name), value);
 }
 
 void GPUPipeline::setFloat(const std::string& name, float value) const {
     glUniform1f(getUniformLocation(name), value);
+}
+
+void GPUPipeline::setVec2(const std::string& name, const glm::vec2& value) const {
+    glUniform2f(getUniformLocation(name), value.x, value.y);
 }
 
 void GPUPipeline::setVec3(const std::string& name, const glm::vec3& value) const {
@@ -62,8 +75,6 @@ void GPUPipeline::setMat3(const std::string& name, const glm::mat3& mat) const {
 void GPUPipeline::setMat4(const std::string& name, const glm::mat4& mat) const {
     glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(mat));
 }
-
-
 
 void GPUPipeline::checkLinkErrors() {
     GLint success;
