@@ -4,7 +4,12 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-#include "entity/CameraComp.h"
+//#include "entity/CameraComp.h"
+
+enum class ProjectionType {
+    Perspective,
+    Orthographic
+};
 
 struct Viewport {
     float x = 0.0f;
@@ -12,11 +17,12 @@ struct Viewport {
     float w = 800.0f;
     float h = 600.0f;
 
-    float GetAspectRatio() const {
+    float getAspectRatio() const {
         return (h > 0.0f) ? (w / h) : (16.0f / 9.0f);
     }
 };
 
+/*
 struct CameraView {
     glm::vec3 eye = {0.0f, 0.0f, 1.0f};
     CameraComp camera;
@@ -50,3 +56,5 @@ struct CameraView {
                    static_cast<GLsizei>(viewport.h));
     }
 };
+
+*/

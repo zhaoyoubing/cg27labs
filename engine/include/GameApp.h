@@ -45,7 +45,7 @@ protected:
     
     ECSWorldRegistry ecsWorld_; // ECS is scene
     
-    CameraView camera_;
+    //CameraView camera_;
 
     RenderPipeline renderPipe_;
     

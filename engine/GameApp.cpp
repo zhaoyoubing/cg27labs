@@ -67,6 +67,9 @@ void GameApp::run() {
 
         // --- 4. Mesh Rendering Pass ---
         render();
+
+        // set mouse x and y offsets to 0
+        mainWin_->clearInputState();
     }
 }
 

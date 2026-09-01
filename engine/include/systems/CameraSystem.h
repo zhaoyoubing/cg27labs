@@ -18,14 +18,19 @@
 class CameraSystem {
 public:
     void update(ECSWorldRegistry & world, InputState&  input, float deltaTime) {
-        auto entities = world.view<TransformComp, CameraComp>();
+        auto entities = world.view<CameraComp>();
 
         for (EntityID id : entities) {
 
-            auto& transform = world.getComp<TransformComp>(id);
+            //auto& transform = world.getComp<TransformComp>(id);
             auto& camera = world.getComp<CameraComp>(id);
+
+            if (camera.isPrimary == false) {
+                continue; // skip non-primary cameras
+            }
             
             // left button pressed
+            // comment it if you want Unreal style camera control
             if (! input.isLeftButtonPressed()) {
                 continue; 
             }
@@ -34,7 +39,7 @@ public:
             double xOffset = input.getMouseOffsetX() * camera.sensitivity;
             double yOffset = input.getMouseOffsetY() * camera.sensitivity;
 
-            spdlog::trace("Mouse offsets: x = {}, y ={}", xOffset, yOffset);
+            spdlog::debug("Mouse offsets: x = {}, y ={}", xOffset, yOffset);
             
             camera.yaw += static_cast<float>(xOffset);
             camera.pitch += static_cast<float>(yOffset);
@@ -51,13 +56,14 @@ public:
             float velocity = 5.0f * deltaTime;
             glm::vec3 right = glm::normalize(glm::cross(camera.front, camera.up));
 
-            if (input.isKeyHeld(GLFW_KEY_W)) transform.pos += camera.front * velocity;
-            if (input.isKeyHeld(GLFW_KEY_S)) transform.pos -= camera.front * velocity;
-            if (input.isKeyHeld(GLFW_KEY_A)) transform.pos -= right * velocity;
-            if (input.isKeyHeld(GLFW_KEY_D)) transform.pos += right * velocity;
+            if (input.isKeyHeld(GLFW_KEY_W)) camera.eye += camera.front * velocity;
+            if (input.isKeyHeld(GLFW_KEY_S)) camera.eye -= camera.front * velocity;
+            if (input.isKeyHeld(GLFW_KEY_A)) camera.eye -= right * velocity;
+            if (input.isKeyHeld(GLFW_KEY_D)) camera.eye += right * velocity;
 
-            // update camera position
-            camera.eye = transform.pos;
+            camera.isDirty = true; // Mark camera as dirty to recalculate matrices
+
+            break;
         }
     }
 };
