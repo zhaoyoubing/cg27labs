@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MeshModel.h"
+#include "Mesh.h"
 #include "resources/TextureManager.h"
 
 #include <string>
@@ -10,5 +10,5 @@
 class GltfMeshLoader {
 public:
     // Loads a .gltf or .glb file and returns a fully initialized MeshModel
-    static std::shared_ptr<MeshModel> loadModel(const std::string& filepath, TextureManager& texMgr);
+    static std::shared_ptr<Mesh> loadModel(const std::string& filepath, TextureManager& texMgr);
 };

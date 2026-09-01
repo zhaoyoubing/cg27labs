@@ -4,6 +4,8 @@
 #include "geometry/SphereMesh.h"
 #include "geometry/OpenCylinderMesh.h"
 
+#include "GltfMeshLoader.h"
+
 #include "Mesh.h" // Mesh without materials
 
 #include <memory>
@@ -11,6 +13,13 @@
 
 class MeshFactory {
 public:
+
+    static std::shared_ptr<Mesh> loadGltf(std::string filepath, TextureManager& texMgr) {
+        // Load a glTF model using the GltfMeshLoader
+        std::shared_ptr<Mesh> mesh = GltfMeshLoader::loadModel(filepath, texMgr);
+        return mesh;
+    }
+
     // Generate an axis-aligned box (width, height, depth)
     static std::shared_ptr<Mesh> createBox(float width, float height, float depth) {
         auto model = std::make_shared<Mesh>();

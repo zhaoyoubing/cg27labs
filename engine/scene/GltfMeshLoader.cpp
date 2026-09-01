@@ -1,6 +1,5 @@
 // engine/scene/GltfMeshLoader.cpp
-#include <iostream>
-#include <memory>
+
 
 #define TINYGLTF_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
@@ -13,7 +12,10 @@
 
 #include "render/Texture.h"
 
-std::shared_ptr<MeshModel> GltfMeshLoader::loadModel(const std::string& filepath, TextureManager& textureManager) {
+#include <iostream>
+#include <memory>
+
+std::shared_ptr<Mesh> GltfMeshLoader::loadModel(const std::string& filepath, TextureManager& textureManager) {
     tinygltf::Model gltfModel;
     tinygltf::TinyGLTF loader;
     std::string err;
@@ -38,7 +40,7 @@ std::shared_ptr<MeshModel> GltfMeshLoader::loadModel(const std::string& filepath
         return nullptr;
     }
 
-    auto meshModel = std::make_shared<MeshModel>(filepath);
+    auto meshModel = std::make_shared<Mesh>();
 
     // 1. Load Textures from glTF
     std::vector<std::shared_ptr<Texture>> loadedTextures;

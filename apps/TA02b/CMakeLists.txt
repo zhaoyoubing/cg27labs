@@ -17,6 +17,7 @@ target_link_libraries(TA02b PRIVATE
     glad
     engine
     spdlog::spdlog
+    tinygltf
 )
 
 # copy shaders and models to the target directory
