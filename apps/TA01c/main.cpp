@@ -96,12 +96,12 @@ int main() {
             * glm::rotate(glm::radians(gTrans.rot.y), glm::vec3(0.0f, 1.0f, 0.0f)) 
             * glm::scale(glm::vec3(1.0f));
         
-        basicPipeline.setMat4("matModel", mat_model);
+        basicPipeline.setMat4("uModel", mat_model);
 
 
         // update the view matrix uniform in the shader
-        // basicPipeline.setMat4("matView", view);
-        // basicPipeline.setMat4("matProj", proj);
+        // basicPipeline.setMat4("uView", view);
+        // basicPipeline.setMat4("uProj", proj);
 
         drawColourVertex();
 

@@ -18,9 +18,6 @@
 
 #include <iostream>
 
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtx/transform.hpp>
-
 
 int main() {
  
@@ -52,10 +49,12 @@ int main() {
 
     // 3. Attach a single CameraComp to the player (First Person View)
     ecsWorld.addComp<CameraComp>(player, CameraComp{
+        .eye = {0, 0, 2.0},
         .fov = 45.0f,
         .front = glm::vec3(0, 0, -1),
         .yaw = -90.0f,
-        .pitch = 0.0f
+        .pitch = 0.0f,
+        .viewport = Viewport(0, 0, window.getWidth(), window.getHeight())
     });
 
     // ================ Shaders and Pipeline Setup ================
@@ -78,15 +77,16 @@ int main() {
     //glCullFace(GL_BACK); 
     glEnable(GL_DEPTH_TEST);
 
+    float lastFrameTime = glfwGetTime();
+
     // ================ Main Render and Event Loop ================
     while (! window.shouldClose()) {
         // 1. Poll events from the OS
         window.pollEvents();
 
         // 2. Update the frame clock/delta time
-        window.updateDeltaTime();
-
-        float dt = window.getDeltaTime();
+        float currentFrameTime = glfwGetTime();
+        float dt = currentFrameTime - lastFrameTime;
 
         // 3. Run systems using window's delta time directly
         moveSys.update(ecsWorld, objId, window.getInputState(), dt);
@@ -102,26 +102,20 @@ int main() {
         // the order is always TRS (translate, rotate, scale) for the modelview matrix
         // the rotation is around the local axes (intrinsic) : x-axis first, then y-axis and z-axis
         TransformComp& trans = ecsWorld.getComp<TransformComp>(objId);
-        glm::mat4 mat_model = trans.getLocalMatrix();
-        
-        basicPipeline.setMat4("matModel", mat_model);
+      
+        basicPipeline.setMat4("uModel", trans.getLocalMatrix());
 
 
         TransformComp & transPlayer = ecsWorld.getComp<TransformComp>(player);
         CameraComp & camera = ecsWorld.getComp<CameraComp>(player);
 
         // set up the view matrix for the camera
-        glm::mat4 view = glm::lookAt(
-            transPlayer.pos, // Camera position in world space
-            transPlayer.pos + camera.front, // Look at target
-            camera.up  // Up vector
-        );
-
-        glm::mat4 proj = glm::perspective(camera.fov, camera.aspect, camera.near, camera.far);
+        //glm::mat4 view = camera.getViewMatrix();
+        //glm::mat4 proj = camera.getProjMatrix();
 
         // update the view matrix uniform in the shader
-        basicPipeline.setMat4("matView", view);
-        basicPipeline.setMat4("matProj", proj);
+        basicPipeline.setMat4("uView",  camera.getViewMatrix());
+        basicPipeline.setMat4("uProj", camera.getProjMatrix());
 
         drawColourVertex();
 
@@ -130,6 +124,8 @@ int main() {
 
         // set mouse x and y offsets to 0
         window.clearInputState();
+
+        lastFrameTime = currentFrameTime;
     }
 
 
