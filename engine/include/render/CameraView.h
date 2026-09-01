@@ -4,7 +4,12 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-#include "entity/CameraComp.h"
+//#include "entity/CameraComp.h"
+
+enum class ProjectionType {
+    Perspective,
+    Orthographic
+};
 
 struct Viewport {
     float x = 0.0f;
