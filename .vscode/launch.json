@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Debug",
-            "type": "cppdbg",
+            "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/apps/TA02b/Debug/Ta02b",
             "args": [],
@@ -14,7 +14,7 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "preLaunchTask": "build"
+//            "preLaunchTask": "build"
         }
     ]
 }

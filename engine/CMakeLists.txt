@@ -16,4 +16,4 @@ target_include_directories(engine PUBLIC
 )
 
 # external libraries
-target_link_libraries(engine PUBLIC glfw glm glad stb_image tinygltf spdlog::spdlog)
+target_link_libraries(engine PUBLIC glfw glm glad tinygltf spdlog::spdlog)

@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <memory>
+#include <filesystem>
 
 std::shared_ptr<Mesh> GltfMeshLoader::loadModel(const std::string& filepath, TextureManager& textureManager) {
     tinygltf::Model gltfModel;
@@ -46,15 +47,29 @@ std::shared_ptr<Mesh> GltfMeshLoader::loadModel(const std::string& filepath, Tex
     std::vector<std::shared_ptr<Texture>> loadedTextures;
     for (size_t i = 0; i < gltfModel.images.size(); ++i) {
         const auto& img = gltfModel.images[i];
-        std::string texKey = filepath + "_img_" + std::to_string(i);
-        
+
+        std::string key;
+
+        if (!img.uri.empty())
+        {
+            std::filesystem::path modelPath(filepath);
+            std::filesystem::path texturePath = modelPath.parent_path() / img.uri;
+
+            key = texturePath.lexically_normal().string();
+        }
+        else
+        {
+            key = filepath + "_image_" + std::to_string(i);
+        }
+
         auto texture = textureManager.loadFromMemory(
-            texKey, 
-            img.image.data(), 
-            img.width, 
-            img.height, 
+            key,
+            img.image.data(),
+            img.width,
+            img.height,
             img.component
         );
+
         loadedTextures.push_back(texture);
     }
 

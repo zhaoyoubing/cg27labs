@@ -6,14 +6,13 @@
 
 using TextureHandle = uint32_t;
 
-class Texture {
-private:
+struct Texture {
     GLuint id = 0;
     int width = 0;
     int height = 0;
+    int channels = 0;
     std::string path;
 
-public:
     Texture(const unsigned char* imageBytes, int w, int h, int channels);
     ~Texture();
 
