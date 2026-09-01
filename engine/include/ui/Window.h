@@ -19,9 +19,6 @@ private:
 
     InputState inputState_;
 
-    float lastFrameTime_ = 0.0f;
-    float deltaTime_ = 0.0f; // Tracked internally
-
 public:
     Window(int width, int height, const std::string& title)
         : width_(width), height_(height), title_(title) {
@@ -95,24 +92,6 @@ public:
 
     void show() const {
         glfwShowWindow(window_);
-    }
-
-    // Returns current time in seconds since GLFW started
-    float getTime() const {
-        return static_cast<float>(glfwGetTime());
-    }
-
-    // Call this once per frame, right after polling events
-    float updateDeltaTime() {
-        float currentFrameTime = static_cast<float>(glfwGetTime());
-        deltaTime_ = currentFrameTime - lastFrameTime_;
-        lastFrameTime_ = currentFrameTime;
-
-        return deltaTime_;
-    }
-
-    float getDeltaTime() const {
-        return deltaTime_;
     }
 
     InputState & getInputState() { return inputState_; }
