@@ -77,8 +77,32 @@ std::unique_ptr<SceneNode> GltfMeshLoader::loadModel(const std::string& filepath
     const tinygltf::Scene& scene = gltfModel.scenes[gltfModel.defaultScene > -1 ? gltfModel.defaultScene : 0];
     for (size_t nodeIdx : scene.nodes) {
         const tinygltf::Node& node = gltfModel.nodes[nodeIdx];
-        if (node.mesh < 0) continue;
+        /*
+        // TODO recursively loading
+        
+        auto node = std::make_unique<Node>();
 
+        // Load transform
+        node->transform = loadTransform(gltfNode);
+
+        // Mesh is optional
+        if (gltfNode.mesh >= 0)
+        {
+            node->renderable = loadMesh(
+                gltfModel,
+                gltfNode.mesh);
+        }
+
+        // Always process children
+        for (int childIdx : gltfNode.children)
+        {
+            node->children.push_back(
+                loadNode(gltfModel, childIdx));
+        }
+
+        return node;
+
+        */
         const tinygltf::Mesh& mesh = gltfModel.meshes[node.mesh];
 
        

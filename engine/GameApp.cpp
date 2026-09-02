@@ -23,6 +23,8 @@ void GameApp::init() {
 
     initWindow(name_);
 
+    initScene();
+    
     initResources();
 
     bInitialised_ = true;
@@ -37,6 +39,10 @@ void GameApp::initWindow(std::string title) {
     // 1. Initialize primary window (GLFW context, user pointers, callbacks)
     mainWin_ = std::make_unique<Window>(800, 600, title);
     
+}
+
+void GameApp::initScene() {
+    scene_ = std::make_shared<Scene>();
 }
 
 void GameApp::run() {

@@ -11,7 +11,7 @@ struct Scene {
     std::string name_;
     ECSWorldRegistry ecsWorld_;
 
-    Scene(const std::string& name) : name_ (name) {}
+    Scene(const std::string& name = "default") : name_ (name) {}
     ~Scene() = default;
 
     //void init();

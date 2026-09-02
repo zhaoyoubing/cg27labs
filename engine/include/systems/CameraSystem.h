@@ -39,7 +39,7 @@ public:
             double xOffset = input.getMouseOffsetX() * camera.sensitivity;
             double yOffset = input.getMouseOffsetY() * camera.sensitivity;
 
-            spdlog::debug("Mouse offsets: x = {}, y ={}", xOffset, yOffset);
+            spdlog::trace("Mouse offsets: x = {}, y ={}", xOffset, yOffset);
             
             camera.yaw += static_cast<float>(xOffset);
             camera.pitch += static_cast<float>(yOffset);

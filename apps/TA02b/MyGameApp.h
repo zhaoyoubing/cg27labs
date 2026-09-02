@@ -6,6 +6,7 @@
 
 #include "scene/MeshFactory.h"
 #include "scene/MeshGeometry.h"
+#include "scene/Scene.h"
 
 #include "device/Shader.h"
 #include "device/GPUPipeline.h"

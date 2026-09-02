@@ -61,6 +61,7 @@ protected:
     
 private:
     void initWindow(std::string title);   // init window and OpenGL setup
+    void initScene();
     void processEvents();     // poll events
     void shutdown();          // terminate
 
