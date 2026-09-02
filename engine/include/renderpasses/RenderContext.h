@@ -4,6 +4,7 @@
 #include "resources/MeshManager.h"
 #include "resources/MaterialManager.h"
 #include "resources/TextureManager.h"
+#include "resources/ShaderManager.h"
 #include "scene/Scene.h"
 
 #include <memory>
@@ -21,5 +22,7 @@ struct RenderContext
     MaterialManager & matMgr_;
 
     TextureManager & texMgr_;
+
+    ShaderManager & shaderMgr_;
 
 };

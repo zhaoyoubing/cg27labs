@@ -12,6 +12,7 @@
 #include "renderpasses/RenderPipeline.h"
 #include "render/CameraView.h"
 
+#include "resources/ShaderManager.h"
 #include "resources/MeshManager.h"
 #include "resources/MaterialManager.h"
 #include "resources/TextureManager.h"
@@ -53,6 +54,7 @@ protected:
     
     RenderPipeline renderPipe_;
     
+    ShaderManager shaderMgr_;
     MeshManager meshMgr_;
     MaterialManager matMgr_;
     TextureManager texMgr_;

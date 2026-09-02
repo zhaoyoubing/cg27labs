@@ -11,11 +11,15 @@
 
 #include "render/Texture.h"
 
+#include "device/MeshBufferGPU.h"
+
 #include <iostream>
 #include <memory>
 #include <filesystem>
 
-std::unique_ptr<SceneNode> GltfMeshLoader::loadModel(const std::string& filepath, TextureManager& texMgr, MaterialManager& matMgr) {
+std::unique_ptr<SceneNode> GltfMeshLoader::loadModel(const std::string& filepath, 
+    TextureManager& texMgr, MaterialManager& matMgr, ShaderManager & shaderMgr) 
+{
     tinygltf::Model gltfModel;
     tinygltf::TinyGLTF loader;
     std::string err;
@@ -152,6 +156,11 @@ std::unique_ptr<SceneNode> GltfMeshLoader::loadModel(const std::string& filepath
             auto meshRenderable = std::make_shared<MaterialMesh>();
             meshRenderable->geometry_ = geometry;
 
+            // generate gpu buffers, have we considered sharing ?
+            std::shared_ptr<MeshBufferGPU> meshBuf = std::make_shared<MeshBufferGPU>();
+            meshBuf->createAndUploadBuffers(geometry);
+            meshRenderable->geometry_->gpuBuffer = meshBuf;
+
             // 4. Track material index mapping
             unsigned int materialIdx = primitive.material >= 0 ? primitive.material : 0;
             if (materialIdx >= 0)
@@ -162,7 +171,9 @@ std::unique_ptr<SceneNode> GltfMeshLoader::loadModel(const std::string& filepath
                     const auto& pbr = gltfMaterial.pbrMetallicRoughness;
                     std::vector<double> baseColor = pbr.baseColorFactor;
 
-                    std::shared_ptr<Material> material;
+                    std::shared_ptr<GPUPipeline> gpuPipe = shaderMgr.get("texture_plain");
+                    std::shared_ptr<Material> material = std::make_shared<Material>(gpuPipe);
+
                     material->baseColour = glm::vec4(baseColor[0], baseColor[1], baseColor[2], baseColor[3]);
                     material->roughness = pbr.roughnessFactor;
                     material->metallic = pbr.metallicFactor;

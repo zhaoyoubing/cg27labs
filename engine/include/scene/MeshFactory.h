@@ -8,6 +8,8 @@
 
 #include "MeshGeometry.h" // Mesh without materials
 
+#include "resources/ShaderManager.h"
+
 #include "scene/SceneNode.h"
 
 #include <memory>
@@ -16,9 +18,9 @@
 class MeshFactory {
 public:
 
-    static std::unique_ptr<SceneNode> loadGltf(std::string filepath, TextureManager& texMgr, MaterialManager& matMgr) {
+    static std::unique_ptr<SceneNode> loadGltf(std::string filepath, TextureManager& texMgr, MaterialManager& matMgr, ShaderManager & shaderMgr) {
         // Load a glTF model using the GltfMeshLoader
-        std::unique_ptr<SceneNode> mesh = GltfMeshLoader::loadModel(filepath, texMgr, matMgr);
+        std::unique_ptr<SceneNode> mesh = GltfMeshLoader::loadModel(filepath, texMgr, matMgr, shaderMgr);
         return mesh;
     }
 

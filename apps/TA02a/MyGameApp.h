@@ -94,6 +94,7 @@ protected:
             .meshMgr_ = meshMgr_,
             .matMgr_ = matMgr_,
             .texMgr_ = texMgr_,
+            .shaderMgr_ = shaderMgr_
         };
 
         renderPipe_.render(ctx);

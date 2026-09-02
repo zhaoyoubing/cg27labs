@@ -48,7 +48,7 @@ protected:
 
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
-        std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_);
+        std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
        
         std::shared_ptr<MeshBufferGPU> meshBuf = std::make_shared<MeshBufferGPU>();
         meshBuf->createAndUploadBuffers(mesh->renderable->geometry_);
@@ -58,19 +58,22 @@ protected:
 
         // ================ Shaders and Material Setup ================
         // 4. Load individual shader stages from disk
+        shaderMgr_.load("texture_plain", "shaders/vtexture.vert", "shaders/vtexture.frag");
+        /*
         Shader vertShader(ShaderStage::Vertex, "shaders/vtexture.vert");
         Shader fragShader(ShaderStage::Fragment, "shaders/vtexture.frag");
 
         // Group the compiled stages into a Pipeline (Vertex-Fragment pair)
         std::vector<Shader*> shaderStages = { &vertShader, &fragShader };
         std::shared_ptr<GPUPipeline> plainPipeline = std::make_shared<GPUPipeline>(shaderStages);
+        */
 
-        std::shared_ptr<Material> mat = std::make_shared<Material>(plainPipeline);
-        mat->shadingModel = ShadingModel::Plain;
+        //std::shared_ptr<Material> mat = std::make_shared<Material>(plainPipeline);
+        //mat->shadingModel = ShadingModel::Plain;
         // you should add material parameters here
 
-        MaterialHandle hMat = matMgr_.add(mat);
-        scene_->ecsWorld_.addComp<MaterialComp>(objId_, MaterialComp{ hMat });
+        //MaterialHandle hMat = matMgr_.add(mat);
+        //scene_->ecsWorld_.addComp<MaterialComp>(objId_, MaterialComp{ hMat });
 
 
         // ================ Shaders and Pipeline Setup ================
@@ -87,12 +90,12 @@ protected:
         // Clear frame buffers
         mainWin_->clearScreen();
 
-
         RenderContext ctx {
             .scene_ = scene_,
             .meshMgr_ = meshMgr_,
             .matMgr_ = matMgr_,
             .texMgr_ = texMgr_,
+            .shaderMgr_ = shaderMgr_
         };
 
         renderPipe_.render(ctx);

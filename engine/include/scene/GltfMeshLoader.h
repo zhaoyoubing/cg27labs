@@ -3,6 +3,7 @@
 #include "MeshGeometry.h"
 #include "resources/TextureManager.h"
 #include "resources/MaterialManager.h"
+#include "resources/ShaderManager.h"
 
 #include "scene/SceneNode.h"
 
@@ -14,6 +15,7 @@
 class GltfMeshLoader {
 public:
     // Loads a .gltf or .glb file and returns a fully initialized MeshModel
-    static std::unique_ptr<SceneNode> loadModel(const std::string& filepath, TextureManager& texMgr, MaterialManager & matMgr);
+    static std::unique_ptr<SceneNode> loadModel(const std::string& filepath, 
+        TextureManager& texMgr, MaterialManager & matMgr, ShaderManager & shaderMgr);
 
 };
