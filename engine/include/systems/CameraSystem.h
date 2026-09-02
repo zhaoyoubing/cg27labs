@@ -17,7 +17,7 @@
 
 class CameraSystem {
 public:
-    void update(ECSWorldRegistry & world, InputState&  input, float deltaTime) {
+    void tick(ECSWorldRegistry & world, InputState&  input, float deltaTime) {
         auto entities = world.view<CameraComp>();
 
         for (EntityID id : entities) {

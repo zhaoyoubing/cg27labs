@@ -89,8 +89,8 @@ int main() {
         float dt = currentFrameTime - lastFrameTime;
 
         // 3. Run systems using window's delta time directly
-        moveSys.update(ecsWorld, objId, window.getInputState(), dt);
-        camSys.update(ecsWorld, window.getInputState(), dt);
+        moveSys.tick(ecsWorld, objId, window.getInputState(), dt);
+        camSys.tick(ecsWorld, window.getInputState(), dt);
 
         // 4. Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

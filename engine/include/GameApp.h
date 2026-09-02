@@ -35,7 +35,8 @@ protected:
 
     virtual void initResources() = 0;
 
-    virtual void update(float dt) = 0;
+    // update and render are called every frame in the main loop
+    virtual void tick(float dt) = 0;
     virtual void render() = 0;
 
     std::string name_;

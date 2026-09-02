@@ -58,7 +58,7 @@ void GameApp::run() {
         processEvents();
 
         // --- Engine Systems Update (ECS Logic) ---
-        update(dt);
+        tick(dt);
 
         // --- 4. Mesh Rendering Pass ---
         render();
