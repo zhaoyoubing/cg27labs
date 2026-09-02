@@ -18,10 +18,10 @@ cg27Labs/
 │   │   ├── GPUPipeline.cpp  # GLSL Pipeline/program
 │   │   └── Shader.cpp       # GLSL shader file loader
 │   └── include/             # game engine header files
-│       ├──device/
+│       ├── device/
 │       │  ├── GPUPipeline.h
 │       │  └── Shader.h  
-│       ├──entity/          # Combined Entity-Component-System (ECS) architecture and component data structs
+│       ├── entity/          # Combined Entity-Component-System (ECS) architecture and component data structs
 │       │  ├── ECSWorldRegistry.h
 │       │  └── TransformComp.h
 │       ├── render/          # high-level rendering related classes
