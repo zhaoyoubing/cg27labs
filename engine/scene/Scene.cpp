@@ -2,10 +2,11 @@
 
 #include "entity/TransformComp.h"
 #include "entity/MeshComp.h"
-//#include "Utils/ModelLoader.h"
 
-Scene::Scene(const std::string& name) : name_ (name) {}
 
+//Scene::Scene(const std::string& name) : name_ (name) {}
+
+/*
 void Scene::init() {
     // 1. Create a camera entity
     //auto cameraEntity = registry.create();
@@ -14,3 +15,4 @@ void Scene::init() {
     // 2. Load a 3D model and populate entities/components
     //ModelLoader::loadModel(registry, "assets/models/nanosuit.gltf");
 }
+*/

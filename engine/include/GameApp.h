@@ -4,10 +4,12 @@
 
 #include "Clock.h"
 #include "ui/Window.h"
-#include "entity/EcsWorldRegistry.h" 
+#include "entity/EcsWorldRegistry.h"
+
 #include "scene/Scene.h"
+#include "scene/SceneNode.h"
+
 #include "renderpasses/RenderPipeline.h"
-#include "renderpasses/ForwardPass.h"
 #include "render/CameraView.h"
 
 #include "resources/MeshManager.h"
@@ -15,7 +17,6 @@
 #include "resources/TextureManager.h"
 
 #include <memory>
-//#include <chrono>
 
 class GameApp {
 public:
@@ -43,16 +44,15 @@ protected:
 
     // Core engine modules
     std::unique_ptr<Window> mainWin_;
-    
-    ECSWorldRegistry ecsWorld_; // ECS is scene
-    
-    //CameraView camera_;
 
+    // for teaching purposes, we will use both a scene graph and an ECS world registry, 
+    // but in practice you would choose one or the other
+    // The currently active scene instance
+    std::shared_ptr<Scene> scene_;  // Scene graph for hierarchical scene representation 
+    //ECSWorldRegistry ecsWorld_; // ECS scene
+    
     RenderPipeline renderPipe_;
     
-    // The currently active scene instance
-    std::shared_ptr<Scene> activeScene;
-
     MeshManager meshMgr_;
     MaterialManager matMgr_;
     TextureManager texMgr_;

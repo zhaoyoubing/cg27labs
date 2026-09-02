@@ -4,10 +4,17 @@
 #include "resources/MeshManager.h"
 #include "resources/MaterialManager.h"
 #include "resources/TextureManager.h"
+#include "scene/Scene.h"
+
+#include <memory>
 
 struct RenderContext
 {
-    ECSWorldRegistry & registry_;
+    //std::shared_ptr<Node> rootNode_; // Scene graph root for hierarchical scene representation
+
+    std::shared_ptr<Scene> scene_; // Scene graph root for hierarchical scene representation
+
+    //ECSWorldRegistry & registry_;
 
     MeshManager & meshMgr_;
 

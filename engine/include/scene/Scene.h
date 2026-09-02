@@ -1,20 +1,23 @@
 #pragma once
 
 #include "entity/EcsWorldRegistry.h"
+#include "scene/AABB.h"
+#include "scene/SceneNode.h"
 
 #include <string>
+#include <memory>
 
-class Scene {
-public:
-    Scene(const std::string& name);
+struct Scene {
+    std::string name_;
+    ECSWorldRegistry ecsWorld_;
+
+    Scene(const std::string& name) : name_ (name) {}
     ~Scene() = default;
 
-    void init();
-    void update(float deltaTime);
+    //void init();
+    //void update(float deltaTime);
+    AABB updateBBox();
 
-    ECSWorldRegistry & getRegistry() { return registry_; }
-
-private:
-    std::string name_;
-    ECSWorldRegistry registry_;
+    std::unique_ptr<SceneNode> root_;
+    //ECSWorldRegistry & getRegistry() { return registry_; }
 };

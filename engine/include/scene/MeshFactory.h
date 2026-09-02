@@ -6,7 +6,9 @@
 
 #include "GltfMeshLoader.h"
 
-#include "Mesh.h" // Mesh without materials
+#include "MeshGeometry.h" // Mesh without materials
+
+#include "scene/SceneNode.h"
 
 #include <memory>
 #include <vector>
@@ -14,21 +16,21 @@
 class MeshFactory {
 public:
 
-    static std::shared_ptr<Mesh> loadGltf(std::string filepath, TextureManager& texMgr, MaterialManager& matMgr) {
+    static std::unique_ptr<SceneNode> loadGltf(std::string filepath, TextureManager& texMgr, MaterialManager& matMgr) {
         // Load a glTF model using the GltfMeshLoader
-        std::shared_ptr<Mesh> mesh = GltfMeshLoader::loadModel(filepath, texMgr, matMgr);
+        std::unique_ptr<SceneNode> mesh = GltfMeshLoader::loadModel(filepath, texMgr, matMgr);
         return mesh;
     }
 
     // Generate an axis-aligned box (width, height, depth)
-    static std::shared_ptr<Mesh> createBox(float width, float height, float depth) {
-        auto model = std::make_shared<Mesh>();
+    static std::shared_ptr<MeshGeometry> createBox(float width, float height, float depth) {
+        auto model = std::make_shared<MeshGeometry>();
         
         return model;
     }
 
-    static std::shared_ptr<Mesh> createPyramid(float size, float height) {
-        auto model = std::make_shared<Mesh>();
+    static std::shared_ptr<MeshGeometry> createPyramid(float size, float height) {
+        auto model = std::make_shared<MeshGeometry>();
 
         float halfSize = size / 2.0;
 
@@ -59,7 +61,7 @@ public:
             4, 0, 3
         };
 
-        std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>();
+        std::shared_ptr<MeshGeometry> mesh = std::make_shared<MeshGeometry>();
         mesh->vertices = vertices;
         mesh->colours = colours;
         mesh->indices = indices;
@@ -68,18 +70,18 @@ public:
     }
 
     // Convenience wrapper: a Box where width == height == depth
-    static std::shared_ptr<Mesh> createCube(float size) {
+    static std::shared_ptr<MeshGeometry> createCube(float size) {
         return createBox(size, size, size);
     }
 
     // Generate a flat 2D plane (useful for floors/walls)
-    static std::shared_ptr<Mesh> createPlane(float width = 1.0f, float height = 1.0f) {
-        auto model = std::make_shared<Mesh>();
+    static std::shared_ptr<MeshGeometry> createPlane(float width = 1.0f, float height = 1.0f) {
+        auto model = std::make_shared<PlaneMesh>(width, height);
         
         return model;
     }
 
-    static std::shared_ptr<Mesh> createOpenCylinder(
+    static std::shared_ptr<MeshGeometry> createOpenCylinder(
         float radius, float height, unsigned int rSegments, unsigned int hSegments)
     {
         std::shared_ptr<OpenCylinderMesh> cylinder =
@@ -89,7 +91,7 @@ public:
     }
 
     // Generate a smooth sphere
-    static std::shared_ptr<Mesh> createSphere(float radius, unsigned int latSeg, unsigned int longSeg ) {
+    static std::shared_ptr<MeshGeometry> createSphere(float radius, unsigned int latSeg, unsigned int longSeg ) {
          std::shared_ptr<SphereMesh> sphere =
                     std::make_shared<SphereMesh>(radius, latSeg, longSeg);
 

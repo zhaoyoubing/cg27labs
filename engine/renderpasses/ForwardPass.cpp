@@ -10,13 +10,13 @@ void ForwardPass::execute(RenderContext& context)
     //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // read camera data
-    auto viewCam = context.registry_.view<CameraComp>();
+    auto viewCam = context.scene_->ecsWorld_.view<CameraComp>();
 
     // a default camera in case no primary camera is found
     CameraComp camera;
     for (auto entity : viewCam)
     {
-        auto & cam = context.registry_.getComp<CameraComp>(entity);
+        auto & cam = context.scene_->ecsWorld_.getComp<CameraComp>(entity);
         if (cam.isPrimary) {
             camera = cam;
             break;
@@ -30,8 +30,13 @@ void ForwardPass::execute(RenderContext& context)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    auto view = context.registry_.view<
-        TransformComp, MeshComp, MaterialComp>();
+    drawSceneGraph(context.scene_->root_, glm::mat4(1.0), context.matMgr_, camera.getViewMatrix(), camera.getProjMatrix());
+
+    //drawSceneGraph(context.rootNode_, glm::mat4(1.0f), context.matMgr_,
+    //        camera.getViewMatrix(), camera.getProjMatrix());
+
+    /*
+    auto view = context.registry_.view<TransformComp, MeshComp, MaterialComp>();
 
     for (auto entity : view)
     {
@@ -45,7 +50,7 @@ void ForwardPass::execute(RenderContext& context)
            context.registry_.getComp<MaterialComp>(entity);
 
         
-        std::shared_ptr<MeshBufferGPU> meshBuf = context.meshMgr_.get(meshComp.hMesh);
+        std::shared_ptr<MeshBufferGPU> meshBuf = meshComp.meshBuf;
 
         if (! meshBuf)
             continue;
@@ -66,5 +71,53 @@ void ForwardPass::execute(RenderContext& context)
         meshBuf->unbind();
 
         material.gpuPipe->unbind();
+    }
+    */
+}
+
+void ForwardPass::drawSceneGraph(const std::unique_ptr<SceneNode>& node, 
+                         const glm::mat4& parentMatrix, 
+                         const MaterialManager & matMgr,
+                         const glm::mat4& viewMatrix, const glm::mat4& projMatrix)
+{
+    // 1. Calculate this node's world transform
+    glm::mat4 worldMatrix = parentMatrix * node->trans.getLocalMatrix();
+
+    // 2. If this node has geometry, issue the OpenGL draw call
+    std::shared_ptr<MaterialMesh> mesh = node->renderable;
+
+    if (mesh) {
+
+        std::shared_ptr<MeshBufferGPU> meshBuf = mesh->geometry_->gpuBuffer;
+
+        assert(meshBuf != nullptr);
+
+        std::shared_ptr<Material> material = mesh->material_;
+
+        assert(material != nullptr);
+
+        std::shared_ptr<GPUPipeline> gpuPipe = material->gpuPipe;
+
+        assert(gpuPipe != nullptr);
+
+        // Select the material's shader
+        gpuPipe->bind();
+
+        gpuPipe->setMat4("uModel", worldMatrix);
+        gpuPipe->setMat4("uView",  viewMatrix);
+        gpuPipe->setMat4("uProj", projMatrix);
+
+        //material.gpuPipe->setVec3( "uBaseColour",  material.baseColour);
+
+        meshBuf->bind();
+        meshBuf->draw();
+        meshBuf->unbind();
+
+        gpuPipe->unbind();
+    }
+
+    // 3. Recursively process all children, passing down the updated world matrix
+    for (const auto& child : node->children) {
+        drawSceneGraph(child, worldMatrix, matMgr, viewMatrix, projMatrix);
     }
 }

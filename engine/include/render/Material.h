@@ -16,7 +16,7 @@ using MaterialHandle = uint32_t;
 
 enum class ShadingModel
 {
-    Plain, // no lighting needed
+    Plain, // base colour, no lighting needed
     Phong,
     BlinnPhong,
     PBR
@@ -34,20 +34,27 @@ using MaterialValue = std::variant<
 
 class Material {
 public:
-
+    std::string name;
+    
     ShadingModel shadingModel = ShadingModel::BlinnPhong;
 
     // Phong/Blinn-Phong material properties
-    glm::vec3 baseColour = glm::vec3(1.0f);
-    glm::vec3 specularColour = glm::vec3(1.0f);
+    glm::vec4 baseColour = glm::vec4(1.0f);
+
+    glm::vec4 specularColour = glm::vec4(1.0f);
     float shininess = 32.0f;
 
     // PBR models
     float metallic = 0.0f;
     float roughness = 1.0f;
 
-    // Key = Uniform name in shader (e.g., "material.diffuseMap")
+    std::shared_ptr<Texture> baseColorTexture;
+    std::shared_ptr<Texture> normalTexture;
+    // std::shared_ptr<Texture> metallicRoughnessTexture;
+   
+    // additional textures, Key = Uniform name in shader (e.g., "material.metalRoughMap")
     std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
+    // general parameters, Key = Uniform name in shader (e.g., "material.roughness")
     std::unordered_map<std::string, MaterialValue> parameters;
 
     std::shared_ptr<GPUPipeline> gpuPipe;

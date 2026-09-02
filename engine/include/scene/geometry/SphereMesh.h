@@ -1,13 +1,13 @@
 #pragma once
 
 #include "scene/Vertex.h"
-#include "scene/Mesh.h"
+#include "scene/MeshGeometry.h"
 
 #include <glm/glm.hpp>
 
 #include <spdlog/spdlog.h>
 
-class SphereMesh : public Mesh {
+class SphereMesh : public MeshGeometry {
 public:
     float r_ = 1.0;
     unsigned int latSeg_ = 24;

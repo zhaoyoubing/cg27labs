@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 
-#include "scene/Mesh.h"
+#include "scene/MeshGeometry.h"
 
 #include <glm/glm.hpp>
 
@@ -22,10 +22,10 @@ class MeshBufferGPU {
     MeshBufferGPU& operator=(const MeshBufferGPU&) = delete;
 
     // Movable
-    //MeshBufferGPU(MeshBufferGPU&& other) noexcept;
-    //MeshBufferGPU& operator=(MeshBufferGPU&& other) noexcept;
+    MeshBufferGPU(MeshBufferGPU&& other) noexcept = default;
+    MeshBufferGPU& operator=(MeshBufferGPU&& other) noexcept = default;
 
-    void createAndUploadBuffers(std::shared_ptr<Mesh> mesh) {
+    void createAndUploadBuffers(std::shared_ptr<MeshGeometry> mesh) {
         createBufferIds(mesh);
         uploadBuffers2GPU(mesh);
     }
@@ -45,6 +45,6 @@ private:
 
     GLsizei indexCount_ {0};
 
-    void createBufferIds(std::shared_ptr<Mesh>);
-    void uploadBuffers2GPU(std::shared_ptr<Mesh>);
+    void createBufferIds(std::shared_ptr<MeshGeometry>);
+    void uploadBuffers2GPU(std::shared_ptr<MeshGeometry>);
 };

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "scene/Mesh.h"
+#include "scene/MeshGeometry.h"
 
 #include <vector>
 
-class OpenCylinderMesh : public Mesh {
+class OpenCylinderMesh : public MeshGeometry {
 public:
     float r_ = 1.0;
     float h_ = 1.0;

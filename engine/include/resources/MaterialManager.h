@@ -5,8 +5,8 @@
 
 class MaterialManager {
 public:
-    MaterialHandle add(Material material) {
-        MaterialHandle id{
+    MaterialHandle add(std::shared_ptr<Material> material) {
+        MaterialHandle id {
             static_cast<std::uint32_t>(materials_.size())
         };
 
@@ -15,11 +15,11 @@ public:
         return id;
     }
 
-    Material& get(MaterialHandle id) {
+    std::shared_ptr<Material> get(MaterialHandle id) {
         return materials_[id];
     }
 
 private:
-    std::vector<Material> materials_;
+    std::vector<std::shared_ptr<Material> > materials_;
 
 };

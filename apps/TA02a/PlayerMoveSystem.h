@@ -8,7 +8,7 @@
 
 class PlayerMoveSystem {
 public:
-    void update(ECSWorldRegistry & world,  EntityID id, InputState & input, float deltaTime) {
+    void tick(ECSWorldRegistry & world,  EntityID id, InputState & input, float deltaTime) {
 
         if (!world.hasComp<TransformComp>(id)) return;
 

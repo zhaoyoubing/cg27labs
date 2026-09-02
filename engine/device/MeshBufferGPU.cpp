@@ -28,7 +28,7 @@ MeshBufferGPU::~MeshBufferGPU()
 }
 
 // create and upload buffers
-void MeshBufferGPU::createBufferIds(std::shared_ptr<Mesh> mesh)
+void MeshBufferGPU::createBufferIds(std::shared_ptr<MeshGeometry> mesh)
 {
     if ( mesh->vertices.empty() || mesh->indices.empty()) {
         spdlog::error("Mesh empty, quitting createBufferIds.");
@@ -48,7 +48,7 @@ void MeshBufferGPU::createBufferIds(std::shared_ptr<Mesh> mesh)
 
 
 // create and upload buffers
-void MeshBufferGPU::uploadBuffers2GPU(std::shared_ptr<Mesh> mesh)
+void MeshBufferGPU::uploadBuffers2GPU(std::shared_ptr<MeshGeometry> mesh)
 {
     if ( ! vertexVBO_ || ! indexEBO_) {
         spdlog::error("Invalid VBO or EBO , quitting uploadBuffers.");
@@ -167,3 +167,4 @@ void MeshBufferGPU::draw() const
 
     glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indexCount_), GL_UNSIGNED_INT, nullptr);
 }
+

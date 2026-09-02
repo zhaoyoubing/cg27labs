@@ -3,10 +3,10 @@
 
 #include <memory>
 
-#include "scene/Mesh.h"
+#include "device/MeshBufferGPU.h"
 
 
 // the renderable mesh
 struct MeshComp {
-    MeshHandle hMesh;
+    std::shared_ptr<MeshBufferGPU> meshBuf;
 };

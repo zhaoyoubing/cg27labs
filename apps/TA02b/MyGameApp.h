@@ -5,7 +5,7 @@
 #include "PlayerMoveSystem.h"
 
 #include "scene/MeshFactory.h"
-#include "scene/Mesh.h"
+#include "scene/MeshGeometry.h"
 
 #include "device/Shader.h"
 #include "device/GPUPipeline.h"
@@ -13,6 +13,8 @@
 
 #include "entity/MeshComp.h"
 #include "entity/MaterialComp.h"
+
+#include "renderpasses/ForwardPass.h"
 
 #include <string>
 
@@ -28,14 +30,14 @@ protected:
 
         // ================ Create object entity ================
         // 1. Create the mesh object entity id
-        objId_ = ecsWorld_.createEntityID();
-        ecsWorld_.addComp<TransformComp>(objId_, TransformComp{});
+        objId_ = scene_->ecsWorld_.createEntityID();
+        scene_->ecsWorld_.addComp<TransformComp>(objId_, TransformComp{});
 
         // ================ Create camera entity ================
         // 2. Create the camera entity id
-        EntityID camId = ecsWorld_.createEntityID();
+        EntityID camId = scene_->ecsWorld_.createEntityID();
 
-        ecsWorld_.addComp<CameraComp>(camId, CameraComp{
+        scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
             .eye = glm::vec3(0.0f, 0.0f, 2.0f), // also eye position
             .fov = 60.0f,
             .front = glm::vec3(0, 0, -1),
@@ -46,13 +48,13 @@ protected:
 
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
-        std::shared_ptr<Mesh> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_);
+        std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_);
        
         std::shared_ptr<MeshBufferGPU> meshBuf = std::make_shared<MeshBufferGPU>();
-        meshBuf->createAndUploadBuffers(mesh);
-        MeshHandle hMesh = meshMgr_.add(meshBuf);
+        meshBuf->createAndUploadBuffers(mesh->renderable->geometry_);
+        meshMgr_.add(meshBuf);
         
-        ecsWorld_.addComp<MeshComp>(objId_, MeshComp {hMesh});
+        scene_->ecsWorld_.addComp<MeshComp>(objId_, MeshComp {meshBuf});
 
         // ================ Shaders and Material Setup ================
         // 4. Load individual shader stages from disk
@@ -63,12 +65,12 @@ protected:
         std::vector<Shader*> shaderStages = { &vertShader, &fragShader };
         std::shared_ptr<GPUPipeline> plainPipeline = std::make_shared<GPUPipeline>(shaderStages);
 
-        Material mat(plainPipeline);
-        mat.shadingModel = ShadingModel::Plain;
+        std::shared_ptr<Material> mat = std::make_shared<Material>(plainPipeline);
+        mat->shadingModel = ShadingModel::Plain;
         // you should add material parameters here
 
         MaterialHandle hMat = matMgr_.add(mat);
-        ecsWorld_.addComp<MaterialComp>(objId_, MaterialComp{ hMat });
+        scene_->ecsWorld_.addComp<MaterialComp>(objId_, MaterialComp{ hMat });
 
 
         // ================ Shaders and Pipeline Setup ================
@@ -77,8 +79,8 @@ protected:
 
    void tick(float dt) override {
         // 3. Run systems using window's delta time directly
-        playerSys_.tick(ecsWorld_, objId_, mainWin_->getInputState(), dt);
-        camSys_.tick(ecsWorld_, mainWin_->getInputState(), dt);
+        playerSys_.tick(scene_->ecsWorld_, objId_, mainWin_->getInputState(), dt);
+        camSys_.tick(scene_->ecsWorld_, mainWin_->getInputState(), dt);
    }
 
    void render() override {
@@ -87,7 +89,7 @@ protected:
 
 
         RenderContext ctx {
-            .registry_ = ecsWorld_,
+            .scene_ = scene_,
             .meshMgr_ = meshMgr_,
             .matMgr_ = matMgr_,
             .texMgr_ = texMgr_,
@@ -107,5 +109,5 @@ private:
 
     EntityID objId_;
     //EntityID playerId_;
-    std::shared_ptr<Mesh> mesh_;
+    // std::shared_ptr<Mesh> mesh_;
 };

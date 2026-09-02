@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scene/Vertex.h"
-#include "scene/Mesh.h"
+#include "scene/MeshGeometry.h"
 
 #include <spdlog/spdlog.h>
 
@@ -11,7 +11,7 @@ enum class PlaneDirection {
     YZ
 };
 
-class PlaneMesh : public Mesh {
+class PlaneMesh : public MeshGeometry {
 public:
 
     PlaneDirection dir_ = PlaneDirection::XZ;
@@ -25,7 +25,7 @@ public:
     int resLen_ = 5.0;
 
     PlaneMesh(float wid, float len,
-        int res_wid, int res_len,
+        int res_wid = 10, int res_len = 10,
         glm::vec3 orig = glm::vec3(0.0f), PlaneDirection dir = PlaneDirection::XZ )
         : width_(wid), len_(len), resWid_(res_wid), resLen_(res_len), origin_(orig), dir_ (dir)
     {

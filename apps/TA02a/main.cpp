@@ -17,7 +17,7 @@
 #include "ui/Window.h"
 #include "ui/InputState.h"
 
-#include "scene/GltfMeshLoader.h"
+//#include "scene/GltfMeshLoader.h"
 
 #include <spdlog/spdlog.h>
 #include <iostream>
