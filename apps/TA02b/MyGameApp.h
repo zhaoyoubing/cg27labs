@@ -75,10 +75,10 @@ protected:
         renderPipe_.addPass(std::make_unique<ForwardPass>());
     };
 
-   void update(float dt) override {
+   void tick(float dt) override {
         // 3. Run systems using window's delta time directly
-        playerSys_.update(ecsWorld_, objId_, mainWin_->getInputState(), dt);
-        camSys_.update(ecsWorld_, mainWin_->getInputState(), dt);
+        playerSys_.tick(ecsWorld_, objId_, mainWin_->getInputState(), dt);
+        camSys_.tick(ecsWorld_, mainWin_->getInputState(), dt);
    }
 
    void render() override {
