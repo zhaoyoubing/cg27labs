@@ -19,7 +19,7 @@ public:
     void execute(RenderContext& context) override;
 
 private:
-    void drawSceneGraph(const std::unique_ptr<SceneNode>& node, 
+    void drawSceneGraph(std::unique_ptr<SceneNode>& node, 
                          const glm::mat4& parentMatrix, 
                          const MaterialManager & matMgr,
                          const glm::mat4& viewMatrix, const glm::mat4& projMatrix);

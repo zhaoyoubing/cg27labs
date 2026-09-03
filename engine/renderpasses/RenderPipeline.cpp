@@ -9,7 +9,7 @@ void RenderPipeline::addPass(std::unique_ptr<RenderPass> pass)
 
 void RenderPipeline::render(RenderContext& context)
 {
-    for (const auto& pass : passes_)
+    for (auto& pass : passes_)
     {
         pass->execute(context);
     }

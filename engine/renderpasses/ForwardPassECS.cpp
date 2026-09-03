@@ -38,7 +38,7 @@ void ForwardPassECS::execute(RenderContext& context)
 
     for (auto entity : view)
     {
-        const auto& transform =
+        auto& transform =
             context.scene_->ecsWorld_.getComp<TransformComp>(entity);
 
         const auto& meshComp =

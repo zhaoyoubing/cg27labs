@@ -30,52 +30,12 @@ void ForwardPass::execute(RenderContext& context)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    drawSceneGraph(context.scene_->root_, glm::mat4(1.0), context.matMgr_, camera.getViewMatrix(), camera.getProjMatrix());
+    drawSceneGraph(context.scene_->root_, glm::mat4(1.0), 
+                context.matMgr_, camera.getViewMatrix(), camera.getProjMatrix());
 
-    //drawSceneGraph(context.rootNode_, glm::mat4(1.0f), context.matMgr_,
-    //        camera.getViewMatrix(), camera.getProjMatrix());
-
-    /*
-    auto view = context.registry_.view<TransformComp, MeshComp, MaterialComp>();
-
-    for (auto entity : view)
-    {
-        const auto& transform =
-            context.registry_.getComp<TransformComp>(entity);
-
-        const auto& meshComp =
-            context.registry_.getComp<MeshComp>(entity);
-
-        const auto& matComp =
-           context.registry_.getComp<MaterialComp>(entity);
-
-        
-        std::shared_ptr<MeshBufferGPU> meshBuf = meshComp.meshBuf;
-
-        if (! meshBuf)
-            continue;
-
-        Material& material = context.matMgr_.get(matComp.hMat);
-
-        // Select the material's shader
-        material.gpuPipe->bind();
-
-        material.gpuPipe->setMat4("uModel", transform.getLocalMatrix());
-        material.gpuPipe->setMat4("uView",  camera.getViewMatrix());
-        material.gpuPipe->setMat4( "uProj", camera.getProjMatrix());
-
-        //material.gpuPipe->setVec3( "uBaseColour",  material.baseColour);
-
-        meshBuf->bind();
-        meshBuf->draw();
-        meshBuf->unbind();
-
-        material.gpuPipe->unbind();
-    }
-    */
 }
 
-void ForwardPass::drawSceneGraph(const std::unique_ptr<SceneNode>& node, 
+void ForwardPass::drawSceneGraph(std::unique_ptr<SceneNode>& node, 
                          const glm::mat4& parentMatrix, 
                          const MaterialManager & matMgr,
                          const glm::mat4& viewMatrix, const glm::mat4& projMatrix)
@@ -84,10 +44,10 @@ void ForwardPass::drawSceneGraph(const std::unique_ptr<SceneNode>& node,
     glm::mat4 worldMatrix = parentMatrix * node->trans.getLocalMatrix();
 
     // 2. If this node has geometry, issue the OpenGL draw call
-    std::shared_ptr<MaterialMesh> mesh = node->renderable;
+    //std::shared_ptr<MaterialMesh> mesh = node->meshList;
 
-    if (mesh) {
-
+    for (auto & mesh : node->meshList)
+    {
         std::shared_ptr<MeshBufferGPU> meshBuf = mesh->geometry_->gpuBuffer;
 
         assert(meshBuf != nullptr);
@@ -117,7 +77,7 @@ void ForwardPass::drawSceneGraph(const std::unique_ptr<SceneNode>& node,
     }
 
     // 3. Recursively process all children, passing down the updated world matrix
-    for (const auto& child : node->children) {
+    for (auto& child : node->children) {
         drawSceneGraph(child, worldMatrix, matMgr, viewMatrix, projMatrix);
     }
 }

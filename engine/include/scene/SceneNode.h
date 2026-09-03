@@ -15,7 +15,7 @@ struct SceneNode {
     AABB bbox;
     
     // Optional: Only present if this node actually draws something
-    std::shared_ptr<MaterialMesh> renderable; 
+    std::vector<std::shared_ptr<MaterialMesh> > meshList; 
 
     std::vector<std::unique_ptr<SceneNode>> children;
 
@@ -23,7 +23,7 @@ struct SceneNode {
         auto result = std::make_unique<SceneNode>();
 
         result->trans = trans;
-        result->renderable = renderable;
+        result->meshList = meshList;
 
         for (const auto& child : children)
         {

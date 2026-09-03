@@ -50,12 +50,16 @@ protected:
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
         std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
+        scene_->root_ = std::move(mesh);
        
-        std::shared_ptr<MeshBufferGPU> meshBuf = std::make_shared<MeshBufferGPU>();
-        meshBuf->createAndUploadBuffers(mesh->renderable->geometry_);
-        meshMgr_.add(meshBuf);
+        //std::shared_ptr<MeshBufferGPU> meshBuf = std::make_shared<MeshBufferGPU>();
+        //for (auto & materialMesh : mesh->meshList) {
+        //    meshBuf->createAndUploadBuffers(mesh->renderable->geometry_);
+        //    meshMgr_.add(meshBuf);
+        //    scene_->ecsWorld_.addComp<MeshComp>(objId_, MeshComp {meshBuf});
+        //}
         
-        scene_->ecsWorld_.addComp<MeshComp>(objId_, MeshComp {meshBuf});
+        
 
         // ================ Shaders and Material Setup ================
         // 4. Load individual shader stages from disk
