@@ -37,6 +37,9 @@ public:
     std::vector<glm::vec3> tangents;
     std::vector<glm::vec3> colours;
 
+    bool bNormal = true;
+    bool bTexture = true;
+
     AABB bbox;
 
     bool bBoxDirty = true;

@@ -62,7 +62,7 @@ void ForwardPass::drawSceneGraph(std::unique_ptr<SceneNode>& node,
 
         assert(gpuPipe != nullptr);
 
-        std::shared_ptr<Texture> texture = material->baseColorTexture;
+        std::shared_ptr<Texture> texture = material->baseColourTex;
 
         assert(texture != nullptr);
 

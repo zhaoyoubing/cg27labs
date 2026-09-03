@@ -247,7 +247,7 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
 
                         spdlog::debug("Set material {} texture {}", materialIdx, textureIndex);
 
-                        material->baseColorTexture = loadedTextures[texGltf.source];
+                        material->baseColourTex = loadedTextures[texGltf.source];
 
                 }
                 loadedMaterials[materialIdx] = material;

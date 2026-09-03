@@ -48,8 +48,8 @@ public:
     float metallic = 0.0f;
     float roughness = 1.0f;
 
-    std::shared_ptr<Texture> baseColorTexture;
-    std::shared_ptr<Texture> normalTexture;
+    std::shared_ptr<Texture> baseColourTex;
+    std::shared_ptr<Texture> normalTex;
     // std::shared_ptr<Texture> metallicRoughnessTexture;
    
     // additional textures, Key = Uniform name in shader (e.g., "material.metalRoughMap")
