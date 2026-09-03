@@ -40,27 +40,32 @@ TransformComp GltfMeshLoader::loadTransform(tinygltf::Node & gltfNode) {
     }
     else
     {
-        trans.pos = glm::vec3(
-            static_cast<float>(gltfNode.translation[0]),
-            static_cast<float>(gltfNode.translation[1]),
-            static_cast<float>(gltfNode.translation[2])
-        );
+        if (gltfNode.translation.size() == 3 ) {
+            trans.pos = glm::vec3(
+                static_cast<float>(gltfNode.translation[0]),
+                static_cast<float>(gltfNode.translation[1]),
+                static_cast<float>(gltfNode.translation[2])
+            );
+        }
 
-        trans.quat = glm::quat(
-            static_cast<float>(gltfNode.rotation[3]),
-            static_cast<float>(gltfNode.rotation[0]),
-            static_cast<float>(gltfNode.rotation[1]),
-            static_cast<float>(gltfNode.rotation[2])
-        );
+        if (gltfNode.rotation.size() == 4 ) {
+            trans.quat = glm::quat(
+                static_cast<float>(gltfNode.rotation[3]),
+                static_cast<float>(gltfNode.rotation[0]),
+                static_cast<float>(gltfNode.rotation[1]),
+                static_cast<float>(gltfNode.rotation[2])
+            );
+            // convert quaternion to euler angles
+            trans.rot = glm::eulerAngles(trans.quat);
+        }
 
-        // convert quaternion to euler angles
-        trans.rot = glm::eulerAngles(trans.quat);
-
-        trans.scale = glm::vec3(
-            static_cast<float>(gltfNode.scale[0]),
-            static_cast<float>(gltfNode.scale[1]),
-            static_cast<float>(gltfNode.scale[2])
-        );
+        if (gltfNode.scale.size() == 3 ) {
+            trans.scale = glm::vec3(
+                static_cast<float>(gltfNode.scale[0]),
+                static_cast<float>(gltfNode.scale[1]),
+                static_cast<float>(gltfNode.scale[2])
+            );
+        }
 
         trans.type = TransformType::QUATERNION;
     }
@@ -250,7 +255,6 @@ std::unique_ptr<SceneNode> GltfMeshLoader::loadModel(const std::string& filepath
 
     loadedMaterials.clear();
     loadedTextures.clear();
-    auto meshRoot = std::make_unique<SceneNode>();
 
     // 1. Load Textures from glTF
     
@@ -285,7 +289,7 @@ std::unique_ptr<SceneNode> GltfMeshLoader::loadModel(const std::string& filepath
         return nullptr;
     }
 
-    std::shared_ptr<SceneNode> modelRoot = std::make_shared<SceneNode>();
+    std::unique_ptr<SceneNode> meshRoot = std::make_unique<SceneNode>();
 
     // only loading the default scene
     const tinygltf::Scene& scene = gltfModel.scenes[gltfModel.defaultScene > -1 ? gltfModel.defaultScene : 0];

@@ -32,8 +32,5 @@ public:
     }
 
 private:
-    std::unordered_map<
-        std::string,
-        std::shared_ptr<GPUPipeline>
-    > pipelines_;
+    std::unordered_map< std::string, std::shared_ptr<GPUPipeline> > pipelines_;
 };

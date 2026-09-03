@@ -47,8 +47,12 @@ protected:
             .viewport = Viewport(0, 0, mainWin_->getWidth(), mainWin_->getHeight())
         });
 
+        // ================ Shaders and Material Setup ================
+        // 3. Load individual shader stages from disk
+        shaderMgr_.load("texture_plain", "shaders/vtexture.vert", "shaders/vtexture.frag");
+
         // ================ Model Setup ================
-        // 3. set up data and vertex buffers
+        // 4. set up data and vertex buffers
         std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
         scene_->root_ = std::move(mesh);
        
@@ -59,11 +63,7 @@ protected:
         //    scene_->ecsWorld_.addComp<MeshComp>(objId_, MeshComp {meshBuf});
         //}
         
-        
 
-        // ================ Shaders and Material Setup ================
-        // 4. Load individual shader stages from disk
-        shaderMgr_.load("texture_plain", "shaders/vtexture.vert", "shaders/vtexture.frag");
         /*
         Shader vertShader(ShaderStage::Vertex, "shaders/vtexture.vert");
         Shader fragShader(ShaderStage::Fragment, "shaders/vtexture.frag");
