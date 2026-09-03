@@ -39,9 +39,9 @@ protected:
         EntityID camId = scene_->ecsWorld_.createEntityID();
 
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
-            .eye = glm::vec3(0.0f, 0.0f, 5.0f), // also eye position
-            .fov = 60.0f,
-            .far = 100.f,
+            .eye = glm::vec3(0.0f, 0.0f, 10.0f), // also eye position
+            .fov = 45.0f,
+            .far = 1500.f,
             .front = glm::vec3(0, 0, -1),
             .yaw = -90.0f,
             .pitch = 0.0f,
@@ -54,7 +54,7 @@ protected:
 
         // ================ Model Setup ================
         // 4. set up data and vertex buffers
-        std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
+         std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
         //std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF-Binary/BoxTextured.glb", texMgr_,  matMgr_, shaderMgr_);
         //std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/bunny_tex.gltf", texMgr_,  matMgr_, shaderMgr_);
         scene_->root_ = std::move(mesh);

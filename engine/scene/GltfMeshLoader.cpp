@@ -85,17 +85,35 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
 
+        // 4 is triangle
+        spdlog::debug(
+            "primitive mode = {}, material = {}, indices = {}",
+            primitive.mode,
+            primitive.material,
+            primitive.indices
+        );
+
         // --- EXTRACT POSITIONS ---
-        const float* posBuf = nullptr;
+        //const float* posBuf = nullptr;
         if (primitive.attributes.find("POSITION") != primitive.attributes.end()) {
+
             const auto& accessor = gltfModel.accessors[primitive.attributes.find("POSITION")->second];
             const auto& bufferView = gltfModel.bufferViews[accessor.bufferView];
             const auto& buffer = gltfModel.buffers[bufferView.buffer];
-            posBuf = reinterpret_cast<const float*>(&(buffer.data[bufferView.byteOffset + accessor.byteOffset]));
-            
+
+            const unsigned char * buf = buffer.data.data() + bufferView.byteOffset + accessor.byteOffset;
+            size_t stride = accessor.ByteStride(bufferView);
+
+            spdlog::debug("Vertex: count =  {}, stride = {}", accessor.count, stride);
+
             vertices.resize(accessor.count);
             for (size_t i = 0; i < accessor.count; i++) {
-                vertices[i].pos = glm::vec3( posBuf[i * 3 ], posBuf[i * 3 + 1], posBuf[i * 3 + 2] );
+
+                const float* posBuf = reinterpret_cast<const float*>(buf + i * stride);
+                vertices[i].pos = glm::vec3( posBuf[0], posBuf[1], posBuf[2] );
+
+                if (i % 1000 == 0)
+                    spdlog::trace("Vertex {} {} {}", vertices[i].pos.x, vertices[i].pos.y, vertices[i].pos.z);
             }
         }
 
@@ -104,37 +122,31 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
             const auto& accessor = gltfModel.accessors[primitive.attributes.find("NORMAL")->second];
             const auto& bufferView = gltfModel.bufferViews[accessor.bufferView];
             const auto& buffer = gltfModel.buffers[bufferView.buffer];
-            const float* normalBuf = reinterpret_cast<const float*>(&(buffer.data[bufferView.byteOffset + accessor.byteOffset]));
+
+            const unsigned char * buf = buffer.data.data() + bufferView.byteOffset + accessor.byteOffset;
+
+            size_t stride = accessor.ByteStride(bufferView);
 
             for (size_t i = 0; i < accessor.count; i++) {
-                vertices[i].normal = glm::vec3( normalBuf[i * 3], normalBuf[i * 3 + 1], normalBuf[i * 3 + 2] );
+                const float* normalBuf = reinterpret_cast<const float*>(buf + i * stride);
+                vertices[i].normal = glm::vec3( normalBuf[0], normalBuf[1], normalBuf[2] );
             }
         }
 
         // --- EXTRACT UVs (TEXCOORD_0) ---
         if (primitive.attributes.find("TEXCOORD_0") != primitive.attributes.end()) {
             const auto& accessor = gltfModel.accessors[primitive.attributes.find("TEXCOORD_0")->second];
+            const auto& bufferView = gltfModel.bufferViews[accessor.bufferView];
 
             spdlog::debug(
-                "UV count = {}, componentType = {}, type = {}, bufferView = {}, "
-                "byteOffset = {}, normalized = {}",
+                "UV count = {}, componentType = {}, type = {}, bufferView = {}, byteOffset = {}, normalized = {}, stride = {}",
                 accessor.count,
                 accessor.componentType,
                 accessor.type,
                 accessor.bufferView,
                 accessor.byteOffset,
-                accessor.normalized
-            );
-
-            const auto& bufferView = gltfModel.bufferViews[accessor.bufferView];
-
-            spdlog::debug(
-                "componentType = {}, type = {}, count = {}, stride = {}, bufferView offset = {}",
-                accessor.componentType,
-                accessor.type,
-                accessor.count,
-                accessor.ByteStride(bufferView),
-                bufferView.byteOffset
+                accessor.normalized,
+                accessor.ByteStride(bufferView)
             );
 
             spdlog::debug(
@@ -152,32 +164,40 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
                 stride = sizeof(float) * 2;
 
             const auto& buffer = gltfModel.buffers[bufferView.buffer];
-            //const float* uvBuf = reinterpret_cast<const float*>(&(buffer.data[bufferView.byteOffset + accessor.byteOffset]));
 
-            const unsigned char* data = buffer.data.data()
-                        + bufferView.byteOffset + accessor.byteOffset;
+            const unsigned char* data = buffer.data.data() + bufferView.byteOffset + accessor.byteOffset;
 
 
             for (size_t i = 0; i < accessor.count; ++i) {
                 const float* uv =  reinterpret_cast<const float*>(data + i * stride);
                 vertices[i].uv = glm::vec2(uv[0], uv[1]);
-                spdlog::trace("Texture u {}, v {}", uv[0], uv[1]);
+                if (i % 1000 == 0)
+                    spdlog::trace("Texture u {}, v {}", uv[0], uv[1]);
             }
         }
 
         // --- EXTRACT INDICES ---
         // model not empty
+
         if (primitive.indices >= 0) {
+
+
             const auto& accessor = gltfModel.accessors[primitive.indices];
             const auto& bufferView = gltfModel.bufferViews[accessor.bufferView];
             const auto& buffer = gltfModel.buffers[bufferView.buffer];
 
             indices.resize(accessor.count);
 
+            spdlog::debug("index component type: {}", accessor.componentType);
+
             // glTF indices can be unsigned byte, unsigned short, or unsigned int
             if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT) {
                 const uint16_t* buf = reinterpret_cast<const uint16_t*>(&(buffer.data[bufferView.byteOffset + accessor.byteOffset]));
-                for (size_t i = 0; i < accessor.count; ++i) indices[i] = buf[i];
+                for (size_t i = 0; i < accessor.count; ++i) {
+                    indices[i] = buf[i];
+                    if (i % 1000 == 0)
+                        spdlog::trace("Index {}", indices[i]);
+                }
             } 
             else if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT) {
                 const uint32_t* buf = reinterpret_cast<const uint32_t*>(&buffer.data[bufferView.byteOffset + accessor.byteOffset]);
