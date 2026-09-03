@@ -13,11 +13,36 @@ struct SceneNode {
     std::string name;
     TransformComp trans;  // local transform relative to parent
     AABB bbox;
+
+    bool bBoxDirty = true;
     
     // Optional: Only present if this node actually draws something
     std::vector<std::shared_ptr<MaterialMesh> > meshList; 
 
     std::vector<std::unique_ptr<SceneNode>> children;
+
+    void updateBBox() {
+        AABB box;
+
+        for (auto & mesh : meshList) {
+            box = box.unite(mesh->geometry_->getBBox());
+        }
+
+        for (auto & node : children) {
+            box = box.unite(node->getBBox());
+        }
+
+        bbox = box;
+    }
+
+    AABB getBBox() {
+        if (bBoxDirty) {
+            updateBBox();
+            bBoxDirty = false;
+        }
+
+        return bbox;
+    }
 
     std::unique_ptr<SceneNode> clone() const {
         auto result = std::make_unique<SceneNode>();

@@ -17,6 +17,8 @@
 
 #include "renderpasses/ForwardPass.h"
 
+#include <algorithm>
+
 #include <string>
 
 class MyGameApp : public GameApp {
@@ -34,30 +36,38 @@ protected:
         objId_ = scene_->ecsWorld_.createEntityID();
         scene_->ecsWorld_.addComp<TransformComp>(objId_, TransformComp{});
 
+        // ================ Shaders and Material Setup ================
+        // 2. Load individual shader stages from disk
+        shaderMgr_.load("texture_plain", "shaders/vtexture.vert", "shaders/vtexture.frag");
+
+        // ================ Model Setup ================
+        // 3. set up data and vertex buffers
+        std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
+        //std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/bunny_tex.gltf", texMgr_,  matMgr_, shaderMgr_);
+        scene_->root_ = std::move(mesh);
+
+        AABB bbox = scene_->getBBox();
+        spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox.min.x, bbox.min.y, bbox.min.z, 
+                                                                    bbox.max.x, bbox.max.y, bbox.max.z);
+        glm::vec3 dim = bbox.getDimension();
+        glm::vec3 center = bbox.getCenter();
+        float maxSize = std::max(dim.x, std::max(dim.y, dim.z) );
+
         // ================ Create camera entity ================
-        // 2. Create the camera entity id
+        // 4. Create the camera entity id
         EntityID camId = scene_->ecsWorld_.createEntityID();
 
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
-            .eye = glm::vec3(0.0f, 0.0f, 10.0f), // also eye position
+            .eye = center + glm::vec3(0.0f, 0.0f, 2.0f) * maxSize, 
             .fov = 45.0f,
-            .far = 1500.f,
+            .far = maxSize * 2,
             .front = glm::vec3(0, 0, -1),
             .yaw = -90.0f,
             .pitch = 0.0f,
             .viewport = Viewport(0, 0, mainWin_->getWidth(), mainWin_->getHeight())
         });
 
-        // ================ Shaders and Material Setup ================
-        // 3. Load individual shader stages from disk
-        shaderMgr_.load("texture_plain", "shaders/vtexture.vert", "shaders/vtexture.frag");
 
-        // ================ Model Setup ================
-        // 4. set up data and vertex buffers
-         std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
-        //std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF-Binary/BoxTextured.glb", texMgr_,  matMgr_, shaderMgr_);
-        //std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/bunny_tex.gltf", texMgr_,  matMgr_, shaderMgr_);
-        scene_->root_ = std::move(mesh);
        
         // ================ Shaders and Pipeline Setup ================
         // 5. render pipline init

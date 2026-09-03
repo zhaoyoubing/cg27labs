@@ -9,6 +9,11 @@ struct AABB
     glm::vec3 min;
     glm::vec3 max;
 
+    AABB() {
+        min = glm::vec3(0.0f);
+        max = glm::vec3(0.0f);
+    }
+
     glm::vec3 getDimension() const { 
         return max - min;
     }

@@ -39,6 +39,8 @@ public:
 
     AABB bbox;
 
+    bool bBoxDirty = true;
+
     // VAO, VBO, EBO handles for GPU rendering
     std::shared_ptr<MeshBufferGPU> gpuBuffer; // GPU buffer for rendering
 
@@ -48,8 +50,13 @@ public:
 
     }
 
-    void draw() {
-
+    AABB getBBox() {
+        if (bBoxDirty) {
+            updateBBox();
+            bBoxDirty = false;
+        }
+        
+        return bbox;
     }
 
     void updateBBox() {

@@ -16,7 +16,9 @@ struct Scene {
 
     //void init();
     //void update(float deltaTime);
-    AABB updateBBox();
+    AABB getBBox() {
+        return root_->getBBox();
+    }
 
     std::unique_ptr<SceneNode> root_;
     //ECSWorldRegistry & getRegistry() { return registry_; }

@@ -366,11 +366,15 @@ std::unique_ptr<SceneNode> GltfMeshLoader::loadModel(const std::string& filepath
     for (size_t nodeIdx : scene.nodes) {
         tinygltf::Node& node = gltfModel.nodes[nodeIdx];
 
-        std::shared_ptr<SceneNode> meshNode = loadNode(gltfModel, node, texMgr, matMgr, shaderMgr);
+        std::unique_ptr<SceneNode> meshNode = loadNode(gltfModel, node, texMgr, matMgr, shaderMgr);
 
-        //const tinygltf::Mesh& mesh = gltfModel.meshes[node.mesh];
-        // 5. Push sub-mesh into the container model
-        meshRoot->children.push_back(meshNode->clone());
+        if (scene.nodes.size() == 1) {
+            meshRoot = std::move(meshNode);
+            break;
+        } else {
+            // Push sub-mesh into the container model
+            meshRoot->children.push_back(meshNode->clone());
+        }
     }
 
     return meshRoot;
