@@ -30,8 +30,6 @@ struct Texture {
     int height = 0;
     TextureFormat format;
 
-    //std::string path;
-
     Texture(int w, int h, TextureFormat fmt, const unsigned char * data);
 
     ~Texture();
@@ -39,6 +37,10 @@ struct Texture {
     void bind(unsigned int unit = 0) const {
         glActiveTexture(GL_TEXTURE0 + unit);
         glBindTexture(GL_TEXTURE_2D, id);
+    }
+
+    void unbind() const {
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     GLuint getId() const { return id; }

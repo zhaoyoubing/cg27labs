@@ -60,6 +60,10 @@ void ForwardPass::drawSceneGraph(std::unique_ptr<SceneNode>& node,
 
         assert(gpuPipe != nullptr);
 
+        std::shared_ptr<Texture> texture = material->baseColorTexture;
+
+        assert(texture != nullptr);
+
         // Select the material's shader
         gpuPipe->bind();
 
@@ -67,12 +71,16 @@ void ForwardPass::drawSceneGraph(std::unique_ptr<SceneNode>& node,
         gpuPipe->setMat4("uView",  viewMatrix);
         gpuPipe->setMat4("uProj", projMatrix);
 
+        texture->bind(0);
+        gpuPipe->setInt("baseColourMap", 0);
+        
         //material.gpuPipe->setVec3( "uBaseColour",  material.baseColour);
 
         meshBuf->bind();
         meshBuf->draw();
         meshBuf->unbind();
 
+        texture->unbind();
         gpuPipe->unbind();
     }
 

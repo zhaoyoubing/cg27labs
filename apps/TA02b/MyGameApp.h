@@ -54,34 +54,11 @@ protected:
         // ================ Model Setup ================
         // 4. set up data and vertex buffers
         std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
+        //std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/bunny_tex.gltf", texMgr_,  matMgr_, shaderMgr_);
         scene_->root_ = std::move(mesh);
        
-        //std::shared_ptr<MeshBufferGPU> meshBuf = std::make_shared<MeshBufferGPU>();
-        //for (auto & materialMesh : mesh->meshList) {
-        //    meshBuf->createAndUploadBuffers(mesh->renderable->geometry_);
-        //    meshMgr_.add(meshBuf);
-        //    scene_->ecsWorld_.addComp<MeshComp>(objId_, MeshComp {meshBuf});
-        //}
-        
-
-        /*
-        Shader vertShader(ShaderStage::Vertex, "shaders/vtexture.vert");
-        Shader fragShader(ShaderStage::Fragment, "shaders/vtexture.frag");
-
-        // Group the compiled stages into a Pipeline (Vertex-Fragment pair)
-        std::vector<Shader*> shaderStages = { &vertShader, &fragShader };
-        std::shared_ptr<GPUPipeline> plainPipeline = std::make_shared<GPUPipeline>(shaderStages);
-        */
-
-        //std::shared_ptr<Material> mat = std::make_shared<Material>(plainPipeline);
-        //mat->shadingModel = ShadingModel::Plain;
-        // you should add material parameters here
-
-        //MaterialHandle hMat = matMgr_.add(mat);
-        //scene_->ecsWorld_.addComp<MaterialComp>(objId_, MaterialComp{ hMat });
-
-
         // ================ Shaders and Pipeline Setup ================
+        // 5. render pipline init
         renderPipe_.addPass(std::make_unique<ForwardPass>());
     };
 
@@ -117,5 +94,5 @@ private:
 
     EntityID objId_;
     //EntityID playerId_;
-    // std::shared_ptr<Mesh> mesh_;
+
 };

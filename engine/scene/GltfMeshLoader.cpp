@@ -15,6 +15,8 @@
 
 #include "glm/gtc/quaternion.hpp"
 
+#include <spdlog/spdlog.h>
+
 #include <iostream>
 #include <memory>
 #include <filesystem>
@@ -181,6 +183,8 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
                         int textureIndex = pbr.baseColorTexture.index;
                         const tinygltf::Texture& texGltf = gltfModel.textures[textureIndex];
 
+                        spdlog::debug("Set material {} texture {}", materialIdx, textureIndex);
+
                         material->baseColorTexture = loadedTextures[texGltf.source];
 
                 }
@@ -271,6 +275,9 @@ std::unique_ptr<SceneNode> GltfMeshLoader::loadModel(const std::string& filepath
         } else if (!img.name.empty()) {
             key = filepath + "_image_" + std::to_string(i);
         }
+
+       spdlog::debug("Loading glTF texture image {}: {}, width = {}, height = {}, components = {}, bits = {}", 
+                i, img.name, img.width, img.height, img.component, img.bits);
 
         auto texture = texMgr.loadFromMemory(
             key, img.image.data(), img.width, img.height, img.component
