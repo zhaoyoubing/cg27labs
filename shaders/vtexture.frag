@@ -12,6 +12,6 @@ void main()
 {
     // RGBA
     vec3 colour = texture(baseColourMap, uv).rgb;
+    //vec3 colour = texture(baseColourMap, vec2(0.5, 0.8)).rgb;
     out_colour = vec4(colour, 1.0);
-    //out_colour = vec4(1.0, 0.0, 1.0 , 1.0);
 }

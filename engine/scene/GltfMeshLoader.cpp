@@ -114,12 +114,54 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
         // --- EXTRACT UVs (TEXCOORD_0) ---
         if (primitive.attributes.find("TEXCOORD_0") != primitive.attributes.end()) {
             const auto& accessor = gltfModel.accessors[primitive.attributes.find("TEXCOORD_0")->second];
+
+            spdlog::debug(
+                "UV count = {}, componentType = {}, type = {}, bufferView = {}, "
+                "byteOffset = {}, normalized = {}",
+                accessor.count,
+                accessor.componentType,
+                accessor.type,
+                accessor.bufferView,
+                accessor.byteOffset,
+                accessor.normalized
+            );
+
             const auto& bufferView = gltfModel.bufferViews[accessor.bufferView];
+
+            spdlog::debug(
+                "componentType = {}, type = {}, count = {}, stride = {}, bufferView offset = {}",
+                accessor.componentType,
+                accessor.type,
+                accessor.count,
+                accessor.ByteStride(bufferView),
+                bufferView.byteOffset
+            );
+
+            spdlog::debug(
+                "bufferView.byteOffse = {}, accessor.byteOffset = {}, bufferView.byteStride = {}, accessor.count = {}",
+                bufferView.byteOffset,
+                accessor.byteOffset,
+                bufferView.byteStride,
+                accessor.count
+            );
+
+            size_t stride = accessor.ByteStride(bufferView);
+            spdlog::debug("Texture buffer stride {}", stride);
+
+            if (stride == 0)
+                stride = sizeof(float) * 2;
+
             const auto& buffer = gltfModel.buffers[bufferView.buffer];
-            const float* uvBuf = reinterpret_cast<const float*>(&(buffer.data[bufferView.byteOffset + accessor.byteOffset]));
+            //const float* uvBuf = reinterpret_cast<const float*>(&(buffer.data[bufferView.byteOffset + accessor.byteOffset]));
+
+            const unsigned char* data = buffer.data.data()
+                        + bufferView.byteOffset + accessor.byteOffset;
+
 
             for (size_t i = 0; i < accessor.count; ++i) {
-                vertices[i].uv = glm::vec2(uvBuf[i * 2 ], uvBuf[i * 2 + 1]);
+                const float* uv =  reinterpret_cast<const float*>(data + i * stride);
+                vertices[i].uv = glm::vec2(uv[0], uv[1]);
+                spdlog::trace("Texture u {}, v {}", uv[0], uv[1]);
             }
         }
 

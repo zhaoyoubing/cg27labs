@@ -4,6 +4,8 @@
 #include <glad/glad.h>
 #include <string>
 
+#include <spdlog/spdlog.h>
+
 //using TextureHandle = uint32_t;
 
 enum class TextureFormat {
@@ -37,6 +39,16 @@ struct Texture {
     void bind(unsigned int unit = 0) const {
         glActiveTexture(GL_TEXTURE0 + unit);
         glBindTexture(GL_TEXTURE_2D, id);
+
+        GLint boundTexture = 0;
+
+        //glGetIntegerv(GL_TEXTURE_BINDING_2D, &boundTexture);
+
+        //if (boundTexture != 0)
+        //    spdlog::debug("Texture bound: {}", boundTexture);
+        //else
+        //   spdlog::warn("No Texture bound");
+            
     }
 
     void unbind() const {

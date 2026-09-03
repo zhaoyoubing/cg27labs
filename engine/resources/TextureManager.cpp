@@ -29,10 +29,10 @@ std::shared_ptr<Texture> TextureManager::loadTextureFromFile(const std::string& 
         TextureFormat format = TextureFormat::RGB8;
 
         switch (channels) {
-            case 1: format = TextureFormat::RGB8; break;
+            case 1: format = TextureFormat::R8; break;
             case 2: format = TextureFormat::RG8; break;
-            case 3: format = TextureFormat::RGB32F; break;
-            case 4: format = TextureFormat::RGBA32F; break;
+            case 3: format = TextureFormat::RGB8; break;
+            case 4: format = TextureFormat::RGBA8; break;
             default:
                 spdlog::error("Unsupported number of channels ({}) in texture {}", channels, filename);
                 stbi_image_free(data);
@@ -62,10 +62,10 @@ std::shared_ptr<Texture> TextureManager::loadFromMemory(const std::string& cache
     TextureFormat format = TextureFormat::RGB8;
 
     switch (channels) {
-        case 1: format = TextureFormat::RGB8; break;
+        case 1: format = TextureFormat::R8; break;
         case 2: format = TextureFormat::RG8; break;
-        case 3: format = TextureFormat::RGB32F; break;
-        case 4: format = TextureFormat::RGBA32F; break;
+        case 3: format = TextureFormat::RGB8; break;
+        case 4: format = TextureFormat::RGBA8; break;
         default:
             spdlog::error("Unsupported number of channels ({}) in texture {}", channels, cacheKey);
             //(data);

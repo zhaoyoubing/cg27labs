@@ -75,11 +75,13 @@ void MeshBufferGPU::uploadBuffers2GPU(std::shared_ptr<MeshGeometry> mesh)
         sizeof(Vertex),
         reinterpret_cast<void*>(offsetof(Vertex, pos)));
 
+    glEnableVertexAttribArray(1);
     glVertexAttribPointer(
         1, 3, GL_FLOAT, GL_FALSE,
         sizeof(Vertex),
         reinterpret_cast<void*>(offsetof(Vertex, normal)));
 
+    glEnableVertexAttribArray(2);
     glVertexAttribPointer(
         2, 2, GL_FLOAT, GL_FALSE,
         sizeof(Vertex),
