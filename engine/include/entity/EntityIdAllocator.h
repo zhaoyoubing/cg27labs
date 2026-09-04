@@ -7,14 +7,9 @@
 #include <bitset>
 #include <cstdint>
 
-<<<<<<<< HEAD:engine/include/entity/EntityIdAllocator.h
+
+#include "EcsTypes.h"
 // defined in entity/EcsTypes.h :
-========
-
-#include "entity/EcsTypes.h"
-
-// Assuming types are defined globally:
->>>>>>>> cab3626 (rename ecs to entity for TA01):include/entity/EntityIdAllocator.h
 // using EntityID = std::uint32_t;
 // using Signature = std::bitset<32>;
 

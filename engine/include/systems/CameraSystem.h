@@ -11,10 +11,7 @@
 #include "entity/EcsWorldRegistry.h"
 #include "entity/TransformComp.h"
 #include "entity/CameraComp.h"
-<<<<<<< HEAD:engine/include/systems/CameraSystem.h
 #include "render/CameraView.h"
-=======
->>>>>>> cab3626 (rename ecs to entity for TA01):include/systems/CameraSystem.h
 
 
 

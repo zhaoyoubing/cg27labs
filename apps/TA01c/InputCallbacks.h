@@ -3,10 +3,7 @@
 #include <glfw/glfw3.h>
 
 #include "entity/EcsWorldRegistry.h"
-<<<<<<< HEAD
 #include "entity/TransformComp.h"
-=======
->>>>>>> cab3626 (rename ecs to entity for TA01)
 
 extern ECSWorldRegistry gEcsWorld;
 extern TransformComp gTrans;

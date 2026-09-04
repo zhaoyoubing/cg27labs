@@ -1,17 +1,9 @@
-<<<<<<<< HEAD:engine/include/entity/EcsWorldRegistry.h
 // engine/include/entity/EcsWorldRegistry.h
 #pragma once
 
 #include "EcsTypes.h"
 #include "EntityIdAllocator.h"
 
-========
-// include/entity/EcsWorldRegistry.h
-#pragma once
-
-#include "entity/EcsTypes.h"
-#include "entity/EntityIdAllocator.h"
->>>>>>>> cab3626 (rename ecs to entity for TA01):include/entity/EcsWorldRegistry.h
 #include <memory>
 #include <unordered_map>
 #include <vector>

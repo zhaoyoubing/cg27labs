@@ -14,11 +14,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <spdlog/spdlog.h>
-
-<<<<<<< HEAD
-#include <iostream>
-=======
 #include "device/GPUPipeline.h"
 #include "drawColourVertex.h"
 
@@ -30,7 +25,10 @@
 #include "ui/Window.h"
 #include "ui/InputState.h"
 #include "PlayerMoveSystem.h"
->>>>>>> cab3626 (rename ecs to entity for TA01)
+
+#include <spdlog/spdlog.h>
+
+#include <iostream>
 
 
 int main() {

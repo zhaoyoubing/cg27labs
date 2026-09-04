@@ -14,15 +14,13 @@
 
 #include <iostream>
 
-<<<<<<< HEAD
-=======
 #include "device/GPUPipeline.h"
 #include "drawColourVertex.h"
 
 #include "entity/TransformComp.h"
 
 #include "InputCallbacks.h"
->>>>>>> cab3626 (rename ecs to entity for TA01)
+
 
 ECSWorldRegistry gEcsWorld;
 TransformComp gTrans;
