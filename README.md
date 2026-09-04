@@ -14,7 +14,7 @@ cg27Labs/
 ├── engine/                  # a mini game engine for teaching
 │   ├── CMakeLists.txt
 │   ├── GameApp.cpp          # The top-level Game app class
-│   └── device/              # low-leve render-hardware interface (rhi)
+│   └── device/              # low-level render-hardware interface (rhi)
 │   │   ├── GPUPipeline.cpp  # GLSL Pipeline/program
 │   │   └── Shader.cpp       # GLSL shader file loader
 │   └── include/             # game engine header files
