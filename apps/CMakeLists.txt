@@ -12,7 +12,7 @@ if (ALL_APP_FOLDERS)
     # Recursively find all CMakeLists.txt files underneath the 'src' directory
     file(GLOB_RECURSE CHILD_CMAKE_FILES 
         "${CMAKE_CURRENT_SOURCE_DIR}/*/CMakeLists.txt"
-)
+    ) 
 else()
     message("Compiling user specifid subfolders under apps/")
     add_subdirectory(TA00)

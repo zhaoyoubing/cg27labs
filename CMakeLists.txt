@@ -22,14 +22,6 @@ add_subdirectory(submodules/glm)
 # 3. GLAD (Static library)
 add_subdirectory(submodules/glad)
 
-
-# 4. stb_image (Header-only) as an interface target
-add_library(stb_image INTERFACE)
-
-target_include_directories(stb_image INTERFACE 
-    ${CMAKE_SOURCE_DIR}/submodules/stb  # Point to the folder containing stb_image.h
-)
-
 # 4. tinygltf (Header-only) as an interface target
 add_library(tinygltf INTERFACE)
 
