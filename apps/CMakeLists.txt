@@ -12,7 +12,7 @@ if (ALL_APP_FOLDERS)
     # Recursively find all CMakeLists.txt files underneath the 'src' directory
     file(GLOB_RECURSE CHILD_CMAKE_FILES 
         "${CMAKE_CURRENT_SOURCE_DIR}/*/CMakeLists.txt"
-    
+    )
     # Loop through each found file and extract its parent directory
     foreach(CHILD_CMAKE_FILE ${CHILD_CMAKE_FILES})
         get_filename_component(SUBDIR_PATH "${CHILD_CMAKE_FILE}" DIRECTORY)
@@ -23,7 +23,6 @@ if (ALL_APP_FOLDERS)
         # Register it with CMake
         add_subdirectory(${SUBDIR_PATH})
     endforeach()
-)
 else()
     message("Compiling user specifid subfolders under apps/")
     # add_subdirectory(TA01a)
