@@ -1,12 +1,19 @@
-add_library(engine STATIC
-    device/Shader.cpp
-    device/GPUPipeline.cpp
+add_library(engine STATIC)
+
+file(GLOB_RECURSE ENGINE_SOURCES
+    "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
 )
 
-# Point to the include directory)
+# source file
+target_sources(engine
+    PRIVATE
+    ${ENGINE_SOURCES}
+)
+
+# the include directory
 target_include_directories(engine PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-target_link_libraries(engine PUBLIC glfw glm glad tinygltf spdlog::spdlog
-    Tracy::TracyClient)
+# external libraries
+target_link_libraries(engine PUBLIC glfw glm glad tinygltf spdlog::spdlog)
