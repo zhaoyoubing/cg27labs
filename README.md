@@ -1,11 +1,28 @@
 # 5CM507 Graphics Labs University of Derby 26/27
 
-## Example Folder Structure
+## Functionalities (to be implemented)
+### Forward Rendering (TA01-TA05)
+### Deferred Rendering (TA06)
+### Environmental Lighting (TA07)
+### Screen-space Lighting (TA08)
+### Proedural Generation (TA09)
+### Particle Systems (TA10)
+### Atomospheric Effects (TA11)
+### Post-processing (TA12)
+### Ray Tracing (TB01-TB04)
+### Animation (TB05-TB06)
+### Physical Simulation (TB07-TB18)
+### Advanced Rendering (TB09-TB12)
+
+
+
+## Project Folder Structure
 ```
 cg27Labs/
 ├── CMakeLists.txt
 └── apps/                    # our tutorial labs
 │   ├── CMakeLists.txt
+│   └── README.md            # Lab tutorial topics  
 │   └── TA00/                # Demo lab folder
 │   │    ├── CMakeLists.txt
 │   │    └── main.cpp
@@ -24,7 +41,7 @@ cg27Labs/
 │       ├── entity/          # Combined Entity-Component-System (ECS) architecture and component data structs
 │       │  ├── ECSWorldRegistry.h
 │       │  └── TransformComp.h
-│       ├── render/          # high-level rendering related classes
+│       ├── render/          # high-level rendering classes
 │       │  ├── Material.h
 │       │  └── Texture.h
 │       ├── renderpasses/    # middle-level render pipelines and render passes
