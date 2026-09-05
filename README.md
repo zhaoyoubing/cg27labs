@@ -49,6 +49,10 @@ cg27Labs/
 │       │  ├── RenderPass.h
 │       │  ├── ForwardPass.h
 │       │  └── GBufferPass.h
+│       ├── resources/       # resource managers
+│       │  ├── MaterialManager.h
+│       │  ├── ShaderManager.h
+│       │  └── TextureManager.h
 │       └── scene/           # scene and mesh related classess
 │       │   ├── MeshModel.h
 │       │   ├── MeshNode.h
