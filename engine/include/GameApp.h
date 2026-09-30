@@ -52,8 +52,10 @@ protected:
     std::shared_ptr<Scene> scene_;  // Scene graph for hierarchical scene representation 
     //ECSWorldRegistry ecsWorld_; // ECS scene
     
+    // the render pipeline
     RenderPipeline renderPipe_;
     
+    // resource managers
     ShaderManager shaderMgr_;
     MeshManager meshMgr_;
     MaterialManager matMgr_;
@@ -62,7 +64,9 @@ protected:
 private:
     void initWindow(std::string title);   // init window and OpenGL setup
     void initScene();
+
     void processEvents();     // poll events
+    
     void shutdown();          // terminate
 
     bool bInitialised_{false};
