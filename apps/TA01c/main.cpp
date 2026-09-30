@@ -36,7 +36,8 @@ int main() {
     }
 
     // ================ Keyboard Setup ================
-    glfwSetKeyCallback(window, key_callback);
+    // [TODO] Tc1 register function key_callback in glfw
+    // using glfwSetKeyCallback(...)
 
     // ================ Shaders and Pipeline Setup ================
     // Load individual shader stages from disk
@@ -46,24 +47,7 @@ int main() {
     // Group the compiled stages into a Pipeline (Vertex-Fragment pair)
     std::vector<Shader*> shaderStages = { &vertShader, &fragShader };
     GPUPipeline basicPipeline(shaderStages);
-    
-    /*
-    // manually set up the position, orientation and scale of the object 
-    glm::mat4 mat_scale = glm::scale(glm::vec3(1.2f, 1.2f, 1.2f));
-    glm::mat4 mat_rot_x = glm::rotate(glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    glm::mat4 mat_rot_y = glm::rotate(glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 mat_trans = glm::translate(glm::vec3(0.2f, -0.3f, 0.0f));
-    
-    // set up the view matrix for the camera
-    glm::mat4 view = glm::lookAt(
-        glm::vec3(0.f, 0.f, 5.f), // Camera position in world space
-        glm::vec3(0.0f, 0.0f, 0.0f), // Look at the origin
-        glm::vec3(0.0f, 1.0f, 0.0f)  // Up vector
-    );
 
-    //glm::mat4 proj = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
-    glm::mat4 proj = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
-    */
 
     // ================ Model Setup ================
     // set up data and vertex buffers
@@ -83,16 +67,11 @@ int main() {
         // bind the pipeline (shader program) for rendering
         basicPipeline.bind();
 
-        // update the model matrix uniform in the shader
-        // the order is always TRS (translate, rotate, scale) for the modelview matrix
-        // for rotation we choose to rotate around the local x-axis first, then the y-axis
-        glm::mat4 mat_model = gTrans.getLocalMatrix();        
+        // update the model matrix uniform in the shader 
+        // [TODO] tc2 set mat_model to gTrans.getLocalMatrix() in the following
+        glm::mat4 mat_model = glm::mat4(1.0);   
+
         basicPipeline.setMat4("uModel", mat_model);
-
-
-        // update the view matrix uniform in the shader
-        // basicPipeline.setMat4("uView", view);
-        // basicPipeline.setMat4("uProj", proj);
 
         drawColourVertex();
 

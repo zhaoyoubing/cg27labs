@@ -9,5 +9,5 @@ out vec4 out_colour;
 void main()
 {
     // RGBA
-    out_colour = vec4(vcolour, 1.0);
+    // [TODO] Tb5 set out_colour to vec4(vcolour, 1.0)
 }

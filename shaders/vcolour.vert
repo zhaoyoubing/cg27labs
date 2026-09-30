@@ -16,5 +16,5 @@ void main()
     // convert to homogeneous coordinate
     gl_Position = vec4(aPos, 1.0); 
 
-    vcolour = in_colour;
+    // [TODO] Tb4 set vcolour to in_colour
 }
