@@ -99,26 +99,18 @@ int main() {
         basicPipeline.bind();
 
         // update the model matrix uniform in the shader
-        // the order is always TRS (translate, rotate, scale) for the modelview matrix
-        // the rotation is around the local axes (intrinsic) : x-axis first, then y-axis and z-axis
         TransformComp& trans = ecsWorld.getComp<TransformComp>(objId);
-      
         basicPipeline.setMat4("uModel", trans.getLocalMatrix());
-
 
         TransformComp & transPlayer = ecsWorld.getComp<TransformComp>(player);
         CameraComp & camera = ecsWorld.getComp<CameraComp>(player);
 
-        // set up the view matrix for the camera
-        //glm::mat4 view = camera.getViewMatrix();
-        //glm::mat4 proj = camera.getProjMatrix();
 
         // update the view matrix uniform in the shader
         basicPipeline.setMat4("uView",  camera.getViewMatrix());
         basicPipeline.setMat4("uProj", camera.getProjMatrix());
 
         drawColourVertex();
-
 
         window.swapBuffers();
 
