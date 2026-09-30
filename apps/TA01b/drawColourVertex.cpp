@@ -23,11 +23,12 @@ void initColourVertex() {
     // set buffer data to triangle vertex and setting vertex attributes
     glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
-
-    // adding a second attribute
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(sizeof(GLfloat) * 3));
+    
+    // [TODO] Tb1 specifiy the vertex position attribute 
+    // using glVertexAttribPointer(...)
+    
+    // [TODO] Tb2 adding a second attribute using glEnableVertexAttribArray(1)
+    // and specifiy the colour attribute using glVertexAttribPointer(...)
 
     // create index buffer
     GLuint idxBufID;
@@ -39,6 +40,6 @@ void initColourVertex() {
 }
 
 void drawColourVertex() {
-    // draw triangle using indices
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    // [TODO] Tb3 draw indexed triangle using glDrawElements(GL_TRIANGLES, ...)
+
 }

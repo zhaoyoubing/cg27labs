@@ -12,11 +12,11 @@ void initQuadRawTriangles() {
         -0.5f, 0.5f, 0.f,  // v0
     };
 
-    // T1a create the vertex buffer id using glGenBuffers(...)
+    // [TODO] Ta1 create the vertex buffer id using glGenBuffers(...)
     // and bind the vertex buffer using glBindBuffer(...)
 
 
-    // T1b set the vertex buffer datta to verts using glBufferData(...)
+    // [TODO] Ta2 set the vertex buffer datta to verts using glBufferData(...)
     // specify vertex attributes using glEnableVertexAttribArray(0)
     // and glVertexAttribPointer(...)
  
@@ -24,7 +24,7 @@ void initQuadRawTriangles() {
 }
 
 void drawQuadRawTriangles() {
-    // T1c draw raw triangles using glDrawArrays(GL_TRIANGLES, ...)
+    // [TODO] Ta3 draw raw triangles using glDrawArrays(GL_TRIANGLES, ...)
 
 }
 
@@ -40,25 +40,25 @@ void initQuadIndexedTriangles() {
     // indices of two triangles
     GLuint indices[] = { 0, 1, 2, 2, 3, 0};
 
-    // T2a create the vertex buffer id using glGenBuffers(...)
+    // [TODO] Ta4 create the vertex buffer id using glGenBuffers(...)
     // and bind the vertex buffer using glBindBuffer(GL_ARRAY_BUFFER, ...)
 
 
-    // T2b set the vertex buffer datta to verts using glBufferData(GL_ARRAY_BUFFER, ...)
+    // [TODO] Ta5 set the vertex buffer datta to verts using glBufferData(GL_ARRAY_BUFFER, ...)
     // specify vertex attributes using glEnableVertexAttribArray(0)
     // and glVertexAttribPointer(...)
 
 
-    // T2c create and bind the index buffer using 
+    // [TODO] Ta6 create and bind the index buffer using 
     // glGenBuffers and glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ...)
 
-    // T2d set the triangle index buffer using
+    // [TODO] Ta7 set the triangle index buffer using
     // glBufferData(GL_ELEMENT_ARRAY_BUFFER, ...)
 
 
 }
 
 void drawQuadIndexedTriangles() {
-    // T2e draw indexed triangle using glDrawElements(GL_TRIANGLES, ...)
-    
+    // [TODO] Ta8 draw indexed triangle using glDrawElements(GL_TRIANGLES, ...)
+
 }
