@@ -4,18 +4,13 @@
 #include "device/GPUPipeline.h"
 #include "entity/TransformComp.h"
 
-//#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtx/transform.hpp>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <iostream>
 
-
-ECSWorldRegistry gEcsWorld;
 TransformComp gTrans;
 
 int main() {
