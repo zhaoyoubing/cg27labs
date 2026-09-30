@@ -1,6 +1,6 @@
 #pragma once
 
-#include "inputState.h"
+#include "InputState.h"
 #include "InputCallbackRegister.h"
 
 #include <glad/glad.h> // Include if you use GLAD for OpenGL loading (or your preferred loader)
