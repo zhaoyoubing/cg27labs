@@ -46,14 +46,18 @@ int main() {
     // Group the compiled stages into a Pipeline (Vertex-Fragment pair)
     std::vector<Shader*> shaderStages = { &vertShader, &fragShader };
     GPUPipeline basicPipeline(shaderStages);
-    
+
+    // manually set up the position, orientation and scale of the object
+    // shrinked by a factor of 0.8,
+    // then rotate around its X by 120 degree so that you can see its base,
+    // then around its Z axis by 45 degrees so that the yellow corner points to you
+    // and then translate.
+    glm::mat4 mat_scale = glm::scale(glm::vec3(0.8f, 0.8f, 0.8f));
+    glm::mat4 mat_rot_x = glm::rotate(glm::radians(120.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    glm::mat4 mat_rot_z = glm::rotate(glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::mat4 mat_trans = glm::translate(glm::vec3(0.2f, -0.5f, -0.2f));
+
     /*
-    // manually set up the position, orientation and scale of the object 
-    glm::mat4 mat_scale = glm::scale(glm::vec3(1.2f, 1.2f, 1.2f));
-    glm::mat4 mat_rot_x = glm::rotate(glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    glm::mat4 mat_rot_y = glm::rotate(glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 mat_trans = glm::translate(glm::vec3(0.2f, -0.3f, 0.0f));
-    
     // set up the view matrix for the camera
     glm::mat4 view = glm::lookAt(
         glm::vec3(0.f, 0.f, 5.f), // Camera position in world space
@@ -83,10 +87,11 @@ int main() {
         // bind the pipeline (shader program) for rendering
         basicPipeline.bind();
 
-        // update the model matrix uniform in the shader
+        // manually update the model matrix uniform in the shader
         // the order is always TRS (translate, rotate, scale) for the modelview matrix
         // for rotation we choose to rotate around the local x-axis first, then the y-axis
-        glm::mat4 mat_model = gTrans.getLocalMatrix();        
+        // glm::mat4 mat_model = gTrans.getLocalMatrix();   
+        glm::mat4 mat_model = mat_trans * mat_rot_x * mat_rot_z * mat_scale;     
         basicPipeline.setMat4("uModel", mat_model);
 
 
