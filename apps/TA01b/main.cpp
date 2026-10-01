@@ -48,6 +48,8 @@ int main() {
 
     // setting the main render and event loop
     while (!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
+
         // clear the background colour
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -57,8 +59,7 @@ int main() {
         drawColourVertex();
 
         // swap buffers
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        glfwSwapBuffers(window);   
     }
 
     glfwDestroyWindow(window);
