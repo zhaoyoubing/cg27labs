@@ -36,8 +36,8 @@ int main() {
     }
 
     // ================ Keyboard Setup ================
-    // [TODO] Tc1 register function key_callback in glfw
-    // using glfwSetKeyCallback(...)
+    // [TODO] Tc3.1 register function key_callback in glfw
+    // using glfwSetKeyCallback(GLFWwindow* window, GLFWkeyfun callback)
 
     // ================ Shaders and Pipeline Setup ================
     // Load individual shader stages from disk
@@ -83,7 +83,7 @@ int main() {
         // update the model matrix uniform in the shader 
         // glm::mat4 mat_model = mat_trans * mat_rot_x * mat_rot_z * mat_scale;   
 
-        // [TODO] tc2 set mat_model to gTrans.getLocalMatrix() in the following
+        // [TODO] tc3.2 set mat_model to gTrans.getLocalMatrix() in the following
         glm::mat4 mat_model = glm::mat4(1.0);   
 
         basicPipeline.setMat4("uModel", mat_model);

@@ -12,7 +12,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (action == GLFW_PRESS) {
 
         if (key == GLFW_KEY_LEFT ) {
-            // [TODO] tc3.a 
+            // [TODO] tc2.1 
             // subtract gTrans.rot.y by 5.0 on the LEFT arrow key
             
         } else if (key == GLFW_KEY_RIGHT) {
@@ -24,7 +24,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         }
 
         if (key == GLFW_KEY_A ) {
-            // [TODO] tc3.b 
+            // [TODO] tc2.2 
             // subtract gTrans.pos.x by 0.05 when press A
 
         } else if (key == GLFW_KEY_D ) {
