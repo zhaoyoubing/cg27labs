@@ -10,7 +10,7 @@ void initColourVertex() {
         0.f, 0.f, 1.f,      // Blue
         0.5f, 0.5f, -1.f,    // v3
         1.f, 1.f, 0.f,      // Yellow
-        0.0f, 0.0f, -0.5f,   // v4
+        0.0f, 0.0f, 0.f,   // v4
         1.f, 1.f, 1.f,      // White
     };
 
