@@ -12,7 +12,7 @@ void initColourVertex() {
         1.f, 1.f, 0.f,      // Yellow
     };
 
-        // indices of two triangles
+    // indices of two triangles
     GLuint indices[] = { 0, 1, 2, 2, 3, 0};
 
     // create vertex buffer
@@ -24,10 +24,10 @@ void initColourVertex() {
     glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     
-    // [TODO] Tb1 specifiy the vertex position attribute 
+    // [TODO] Tb1.1 specifiy the vertex position attribute 
     // using glVertexAttribPointer(...)
     
-    // [TODO] Tb2 adding a second attribute using glEnableVertexAttribArray(1)
+    // [TODO] Tb1.2 adding a second attribute using glEnableVertexAttribArray(1)
     // and specifiy the colour attribute using glVertexAttribPointer(...)
 
     // create index buffer
@@ -40,6 +40,6 @@ void initColourVertex() {
 }
 
 void drawColourVertex() {
-    // [TODO] Tb3 draw indexed triangle using glDrawElements(GL_TRIANGLES, ...)
-
+    // draw indexed triangles of a quad
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
