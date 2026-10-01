@@ -52,5 +52,6 @@ void initColourVertex() {
 void drawColourVertex() {
     // draw triangle using indices
     // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
+    // [TODO] Tc1.1 draw the pyramid using 18 indices
+    
 }

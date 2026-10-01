@@ -57,7 +57,10 @@ int main() {
     glPolygonMode(GL_FRONT, GL_FILL);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK); 
-    glEnable(GL_DEPTH_TEST);
+
+    // [TODO] Tc1.2 enable depth testing using glEnable(GL_DEPTH_TEST)
+
+    
 
     // ================ Main Render and Event Loop ================
     while (!glfwWindowShouldClose(window)) {
