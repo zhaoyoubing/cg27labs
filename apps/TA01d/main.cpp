@@ -26,10 +26,10 @@ int main() {
     spdlog::set_level(spdlog::level::debug);
 
     // ================ GLFW and Glad Setup ================
-    // 1. Initialize GLFW Window and Input Context
+    // 1 Initialize GLFW Window and Input Context
     Window window(800, 800, "TA01d");
 
-    // 2. Initialize ECS World Pool
+    // 2 Initialize ECS World Registry
     ECSWorldRegistry ecsWorld;
     PlayerMoveSystem moveSys;
     CameraSystem camSys;
@@ -42,7 +42,7 @@ int main() {
     // 1. Create the player entity id
     EntityID player = ecsWorld.createEntityID();
 
-    // 2. Attach a single TransformCompto it
+    // 2. Attach a single TransformComp to the object
     ecsWorld.addComp<TransformComp>(player, TransformComp{
         .pos = glm::vec3(0.0f, 0.0f, 2.0f) // also eye position
     });
@@ -104,7 +104,6 @@ int main() {
 
         TransformComp & transPlayer = ecsWorld.getComp<TransformComp>(player);
         CameraComp & camera = ecsWorld.getComp<CameraComp>(player);
-
 
         // update the view matrix uniform in the shader
         basicPipeline.setMat4("uView",  camera.getViewMatrix());

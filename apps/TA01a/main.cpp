@@ -27,8 +27,8 @@ int main() {
     }
 
     // set up data and vertex buffers
-    // initQuadRawTriangles();
-    initQuadIndexedTriangles();
+    // [TODO] Ta3.1 call initQuadRawTriangles() or initQuadIndexedTriangles() here
+
 
     // drawing mode and colour
     // wireframe
@@ -44,8 +44,7 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         // real drawing of the quad
-        // drawQuadRawTriangles();
-        drawQuadIndexedTriangles();
+        // [TODO] Ta3.2 call drawQuadRawTriangles() or drawQuadIndexedTriangles() here
 
         // swap buffers
         glfwSwapBuffers(window);
