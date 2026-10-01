@@ -1,13 +1,13 @@
 #version 410
 
 // the interpolated fragment colour
-in vec3 vcolour;
+in vec3 fragColour;
 
 // the output pixel colour
-out vec4 out_colour;
+out vec4 outColour;
 
 void main()
 {
-    // RGBA
-    out_colour = vec4(vcolour, 1.0);
+    // Tb2.2 convert RGB to RGBA
+    outColour = vec4(fragColour, 1.0);
 }
