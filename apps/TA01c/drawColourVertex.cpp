@@ -16,8 +16,9 @@ void initColourVertex() {
 
     // indices of six triangles
     GLuint indices[] = { 
-        // the original two triangles form the base
-        0, 2, 1, 3, 2, 0,
+        // the two triangles of the base
+        0, 2, 1, 
+        3, 2, 0,
         // four new triangles
         4, 0, 1,
         4, 1, 2,
