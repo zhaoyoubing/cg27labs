@@ -48,6 +48,14 @@ int main() {
     std::vector<Shader*> shaderStages = { &vertShader, &fragShader };
     GPUPipeline basicPipeline(shaderStages);
 
+    // manually update the model matrix uniform in the shader
+    // the order is always TRS (translate, rotate, scale) for the modelview matrix
+    // for rotation we choose to rotate around the local x-axis first, then the y-axis
+    // glm::mat4 mat_model = gTrans.getLocalMatrix();
+    glm::mat4 mat_scale = glm::scale(glm::vec3(0.8f, 0.8f, 0.8f));
+    glm::mat4 mat_rot_x = glm::rotate(glm::radians(120.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    glm::mat4 mat_rot_z = glm::rotate(glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::mat4 mat_trans = glm::translate(glm::vec3(0.2f, -0.5f, -0.2f));
 
     // ================ Model Setup ================
     // set up data and vertex buffers
@@ -60,7 +68,7 @@ int main() {
 
     // [TODO] Tc1.2 enable depth testing using glEnable(GL_DEPTH_TEST)
 
-    
+
 
     // ================ Main Render and Event Loop ================
     while (!glfwWindowShouldClose(window)) {
@@ -73,6 +81,8 @@ int main() {
         basicPipeline.bind();
 
         // update the model matrix uniform in the shader 
+        // glm::mat4 mat_model = mat_trans * mat_rot_x * mat_rot_z * mat_scale;   
+
         // [TODO] tc2 set mat_model to gTrans.getLocalMatrix() in the following
         glm::mat4 mat_model = glm::mat4(1.0);   
 
