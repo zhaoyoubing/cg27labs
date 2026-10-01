@@ -2,27 +2,27 @@
 
 void initColourVertex() {
     GLfloat verts[] = {
-        -0.5f, 0.5f, 0.f,   // v0
+        -0.5f, 0.5f, -1.f,   // v0
         1.f, 0.f, 0.f,      // Red
-        -0.5f, -0.5f, 0.f,  // v1
+        -0.5f, -0.5f, -1.f,  // v1
         0.f, 1.f, 0.f,      // Green
-        0.5f, -0.5f, 0.f,   // v2
+        0.5f, -0.5f, -1.f,   // v2
         0.f, 0.f, 1.f,      // Blue
-        0.5f, 0.5f, 0.f,    // v3
+        0.5f, 0.5f, -1.f,    // v3
         1.f, 1.f, 0.f,      // Yellow
-        0.0f, 0.0f, -1.0f,   // v4
+        0.0f, 0.0f, -0.5f,   // v4
         1.f, 1.f, 1.f,      // White
     };
 
     // indices of six triangles
     GLuint indices[] = { 
         // the original two triangles form the base
-        0, 1, 2, 2, 3, 0,
+        0, 2, 1, 3, 2, 0,
         // four new triangles
-        4, 1, 0,
-        4, 2, 1,
-        4, 3, 2,
-        4, 0, 3
+        4, 0, 1,
+        4, 1, 2,
+        4, 2, 3,
+        4, 3, 0
     };
 
     // create vertex buffer
