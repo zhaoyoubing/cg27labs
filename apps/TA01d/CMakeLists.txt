@@ -1,8 +1,12 @@
 cmake_minimum_required(VERSION 3.15)
 project(TA01d LANGUAGES CXX)
 
-# 1. Define the executable target and its source files
-add_executable(TA01d
+# 1. the target executable
+add_executable(TA01d)
+
+# 2. source files
+target_sources(TA01d
+    PRIVATE
     main.cpp
     drawColourVertex.cpp
 )

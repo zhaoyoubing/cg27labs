@@ -1,13 +1,17 @@
 cmake_minimum_required(VERSION 3.15)
 project(TA01b LANGUAGES CXX)
 
-# 1. Define the executable target and its source files
-add_executable(TA01b
+# 1. the target executable
+add_executable(TA01b)
+
+# 2. source file
+target_sources(TA01b
+    PRIVATE
     main.cpp
     drawColourVertex.cpp
 )
 
-# 2. Link the global third-party libraries defined in the root CMakeLists.txt
+# 3. Link the global third-party libraries defined in the root CMakeLists.txt
 target_link_libraries(TA01b PRIVATE
     glfw
     glad
