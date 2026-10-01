@@ -90,8 +90,9 @@ int main() {
         // manually update the model matrix uniform in the shader
         // the order is always TRS (translate, rotate, scale) for the modelview matrix
         // for rotation we choose to rotate around the local x-axis first, then the y-axis
-        // glm::mat4 mat_model = gTrans.getLocalMatrix();   
-        glm::mat4 mat_model = mat_trans * mat_rot_x * mat_rot_z * mat_scale;     
+        // glm::mat4 mat_model = mat_trans * mat_rot_x * mat_rot_z * mat_scale;  
+
+        glm::mat4 mat_model = gTrans.getLocalMatrix();      
         basicPipeline.setMat4("uModel", mat_model);
 
 
