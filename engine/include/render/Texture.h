@@ -39,17 +39,11 @@ struct Texture {
 
     // bind the current texture to a specific texture unit (default is 0)
     void bind(unsigned int unit = 0) const {
-        glActiveTexture(GL_TEXTURE0 + unit);
-        glBindTexture(GL_TEXTURE_2D, id);
+        // [TODO] T2.1 Implement the bind() method to bind the current texture to a specific texture unit.
+        // Hint: Use glActiveTexture() and glBindTexture().
+        // Hint: The default texture unit is GL_TEXTURE0, and you can add the unit index to it to bind to different texture units.
+        // Hint: The current texture has an OpenGL texture ID stored in the 'id' member variable.
 
-        GLint boundTexture = 0;
-
-        //glGetIntegerv(GL_TEXTURE_BINDING_2D, &boundTexture);
-
-        //if (boundTexture != 0)
-        //    spdlog::debug("Texture bound: {}", boundTexture);
-        //else
-        //   spdlog::warn("No Texture bound");
             
     }
 
