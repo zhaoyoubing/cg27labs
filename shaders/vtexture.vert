@@ -2,8 +2,8 @@
 
 // vertex attributes
 in layout(location=0) vec3 aPos;
-in layout(location=1) vec3 normal;
-in layout(location=2) vec2 uv_in;
+in layout(location=1) vec3 aNormal;
+in layout(location=2) vec2 a_uv;
 
 // uniforms
 uniform mat4 uModel;
@@ -18,5 +18,5 @@ void main()
     // convert to homogeneous coordinate
     gl_Position = uProj * uView * uModel * vec4(aPos, 1.0); 
 
-    uv = uv_in;
+    uv = a_uv;
 }
