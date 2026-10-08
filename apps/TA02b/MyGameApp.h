@@ -60,7 +60,7 @@ protected:
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
             .eye = center + glm::vec3(0.0f, 0.0f, 2.0f) * maxSize, 
             .fov = 45.0f,
-            .far = maxSize * 2,
+            .far = maxSize * 3.0f,
             .front = glm::vec3(0, 0, -1),
             .yaw = -90.0f,
             .pitch = 0.0f,
