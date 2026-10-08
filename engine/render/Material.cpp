@@ -1,3 +1,4 @@
+// engine/render/Material.cpp
 #include <render/Material.h>
 
 Material::Material(std::shared_ptr<GPUPipeline> pipe) : gpuPipe(pipe) {}
@@ -20,13 +21,7 @@ void Material::bind() const {
     // 1. Activate the shader program
     gpuPipe->bind();
 
-
-    // 2. Pass material color/property uniforms
-    //gpuPipe->setVec3("material.baseColor", baseColour);
-    //gpuPipe->setVec3("material.specularColor", specularColour);
-    //gpuPipe->setFloat("material.shininess", shininess);
-
-
+    // 2. Set all associated uniform parameters dynamically
     for (const auto& [name, value] : parameters)
     {
         std::visit(
