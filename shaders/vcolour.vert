@@ -16,6 +16,6 @@ void main()
     // convert position to homogeneous coordinate
     gl_Position = vec4(aPos, 1.0); 
 
-    // Tb2.1 pass input colour to the fragment shader
+    // pass input colour to the fragment shader
     fragColour = aColour;
 }
