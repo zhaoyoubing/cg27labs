@@ -1,17 +1,21 @@
-#version 460
+#version 410
 
 // texture coordinates
 in vec2 uv;
 
-uniform sampler2D baseColourMap;
+// [TODO] T3.2 define a uniform baseColourMap
+// the type is sampler2D
+
 
 // the output pixel colour
 out vec4 out_colour;
 
 void main()
 {
-    // RGBA
-    vec3 colour = texture(baseColourMap, uv).rgb;
-    //vec3 colour = texture(baseColourMap, vec2(0.5, 0.8)).rgb;
+    // [TODO] T3.3 retrieve RGB colour from the baseColourMap
+    // Hint: use texture() with uv and take the rgb components
+    // to generate a vec3 colour variable
+    
+    
     out_colour = vec4(colour, 1.0);
 }

@@ -46,6 +46,7 @@ std::shared_ptr<Texture> TextureManager::loadTextureFromFile(const std::string& 
 
         stbi_image_free(data);
 
+        // Cache the texture
         textures.emplace(key, texture);
 
         return texture;

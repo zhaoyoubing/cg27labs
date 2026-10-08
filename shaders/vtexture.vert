@@ -1,4 +1,4 @@
-#version 460
+#version 410
 
 // vertex attributes
 in layout(location=0) vec3 aPos;
@@ -18,5 +18,6 @@ void main()
     // convert to homogeneous coordinate
     gl_Position = uProj * uView * uModel * vec4(aPos, 1.0); 
 
-    uv = a_uv;
+    // [TODO] 3.1 Passing a_uv to the fragment shader
+    
 }
