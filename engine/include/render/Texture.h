@@ -27,7 +27,8 @@ enum class TextureFormat {
 };
 
 struct Texture {
-    GLuint id = 0;
+    GLuint id = 0; // OpenGL texture ID
+
     int width = 0;
     int height = 0;
     TextureFormat format;
@@ -36,6 +37,7 @@ struct Texture {
 
     ~Texture();
 
+    // bind the current texture to a specific texture unit (default is 0)
     void bind(unsigned int unit = 0) const {
         glActiveTexture(GL_TEXTURE0 + unit);
         glBindTexture(GL_TEXTURE_2D, id);
@@ -51,9 +53,11 @@ struct Texture {
             
     }
 
+    // unbind the current texture
     void unbind() const {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
+    // return the OpenGL texture ID
     GLuint getId() const { return id; }
 };
