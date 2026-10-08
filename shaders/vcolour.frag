@@ -8,6 +8,6 @@ out vec4 outColour;
 
 void main()
 {
-    // Tb2.2 convert RGB to RGBA
+    // convert RGB to RGBA
     outColour = vec4(fragColour, 1.0);
 }
