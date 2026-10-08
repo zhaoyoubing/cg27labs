@@ -35,9 +35,9 @@ void MeshBufferGPU::createBufferIds(std::shared_ptr<MeshGeometry> mesh)
         return;
     }
 
-    glGenVertexArrays(1, &vao_);
-    glGenBuffers(1, &vertexVBO_);
-    glGenBuffers(1, &indexEBO_);
+    // [TODO] T1.1 Create the VAO, VBO, and EBO for the mesh geometry.
+    // Hint: Use glGenVertexArrays, glGenBuffers, and store the handles in vao_, vertexVBO_, and indexEBO_.
+
 
     if (!mesh->tangents.empty())
         glGenBuffers(1, &tangentVBO_);
@@ -62,18 +62,16 @@ void MeshBufferGPU::uploadBuffers2GPU(std::shared_ptr<MeshGeometry> mesh)
     // --------------------------------------------------
     glBindBuffer(GL_ARRAY_BUFFER, vertexVBO_);
 
-    glBufferData(
-        GL_ARRAY_BUFFER,
-        mesh->vertices.size() * sizeof(Vertex),
-        mesh->vertices.data(),
-        GL_STATIC_DRAW);
+    // [TODO] T1.2 Upload the vertex data to the GPU using glBufferData().
+    // Hint: Use GL_ARRAY_BUFFER as the target, mesh->vertices.size() * sizeof(Vertex) as the size, 
+    // mesh->vertices.data() as the data, and GL_STATIC_DRAW as the usage.
+
 
     glEnableVertexAttribArray(0);
+    // [TODO] T1.3 Set up the vertex attribute pointers for position.
+    // Hint: Use glVertexAttribPointer().
+    // Use offsetof(Vertex, pos) to get the offset of the position attribute within the Vertex struct.
 
-    glVertexAttribPointer(
-        0, 3, GL_FLOAT, GL_FALSE,
-        sizeof(Vertex),
-        reinterpret_cast<void*>(offsetof(Vertex, pos)));
 
     if (mesh->bNormal) {
         glEnableVertexAttribArray(1);
@@ -85,10 +83,10 @@ void MeshBufferGPU::uploadBuffers2GPU(std::shared_ptr<MeshGeometry> mesh)
 
     if (mesh->bTexture) {
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(
-            2, 2, GL_FLOAT, GL_FALSE,
-            sizeof(Vertex),
-            reinterpret_cast<void*>(offsetof(Vertex, uv)));
+        // [TODO] T1.4 Set up the vertex attribute pointers for texture coordinates.
+        // Hint: Use glVertexAttribPointer() with the appropriate parameters for the uv attribute.
+        // Use offsetof(Vertex, uv) to get the offset of the uv attribute within the Vertex struct.
+
     }
 
     
@@ -134,15 +132,9 @@ void MeshBufferGPU::uploadBuffers2GPU(std::shared_ptr<MeshGeometry> mesh)
     // Indices
     // --------------------------------------------------
     glGenBuffers(1, &indexEBO_);
-
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexEBO_);
 
-    glBufferData(
-        GL_ELEMENT_ARRAY_BUFFER,
-        mesh->indices.size() * sizeof(uint32_t),
-        mesh->indices.data(),
-        GL_STATIC_DRAW);
-
+    // [TODO] T1.5 Generate and upload the index data to the GPU using glBufferData().
     
     indexCount_ = static_cast<GLsizei>(mesh->indices.size());
 
