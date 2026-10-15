@@ -11,7 +11,7 @@ uniform mat4 uView;
 uniform mat4 uProj;
 
 out vec3 fragPos;
-out fragNormal;  // the normal to the fragment shader
+out vec3 fragNormal;  // the normal to the fragment shader
 out vec2 uv;    // the colour to the fragment shader
 
 
@@ -21,7 +21,7 @@ void main()
     gl_Position = uProj * uView * uModel * vec4(aPos, 1.0); 
 
     // 3d position after modelling transform
-    fragPos = vec3(model * vec4(aPos, 1.0));
+    fragPos = vec3(uModel * vec4(aPos, 1.0));
 
     // surface normal after modelling transform
     fragNormal = mat3(transpose(inverse(uModel))) * aNormal;  

@@ -1,6 +1,12 @@
 #version 410
 
-// 2. Point Light (e.g., Lightbulb)
+struct DirectionalLight {
+    vec3 dir;
+    vec3 colour;
+    float intensity;
+};
+
+// Point Light (e.g., Lightbulb)
 struct PointLight {
     vec3 pos;
     vec3 colour;
@@ -13,9 +19,13 @@ struct PointLight {
 };
 
 uniform sampler2D baseColourMap;
-
 uniform bool bUseBlinn = true;
+uniform vec3 uViewPos;
 
+uniform PointLight uLight;
+
+
+in vec3 fragPos;
 in vec3 fragNormal; // interpolated surface normal
 in vec2 uv; // texture coordinates
 
@@ -32,7 +42,7 @@ void main()
     vec3 norm = normalize(fragNormal);
 
     // light direction
-    vec3 lightDir = normalize(lightPos - fragPos);
+    vec3 lightDir = normalize(uLight.pos - fragPos);
 
     // 1. ambient
     vec3 ambient = 0.05 * colour;
@@ -42,7 +52,7 @@ void main()
     vec3 diffuse = diff * colour;
     
     // vectors for specular reflection
-    vec3 viewDir = normalize(viewPos - fragPos);
+    vec3 viewDir = normalize(uViewPos - fragPos);
 
     vec3 halfvecDir = normalize(lightDir + viewDir);  // used by blinn-phong
 
@@ -52,10 +62,10 @@ void main()
     
     // 3. specular
     // the shininess coefficient beta = 32.0 
-    float spec 0.0; 
+    float spec = 0.0f; 
     if (bUseBlinn) {
-        spec = pow(max(dot(norm, halfwayDir), 0.0), 32.0);
-    } eles {
+        spec = pow(max(dot(norm, halfvecDir), 0.0), 32.0);
+    } else {
         spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
     }
 

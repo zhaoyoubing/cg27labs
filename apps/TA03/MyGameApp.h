@@ -14,8 +14,9 @@
 
 #include "entity/MeshComp.h"
 #include "entity/MaterialComp.h"
+#include "entity/LightComp.h"
 
-#include "renderpasses/ForwardPass.h"
+#include "renderpasses/ForwardPassLight.h"
 
 #include <algorithm>
 
@@ -67,11 +68,23 @@ protected:
             .viewport = Viewport(0, 0, mainWin_->getWidth(), mainWin_->getHeight())
         });
 
+        // ================ Light Setup ================
+        // 5. Create a directional light
+        EntityID lightId = scene_->ecsWorld_.createEntityID();
+        scene_->ecsWorld_.addComp<LightComp>(lightId, LightComp{
+            .type = POINT,
+            .pos = bbox.max,
+            .dir = glm::vec3(0.0f, -1.0f, 0.0f),
+            .colour = glm::vec3(1.0f, 0.0f, 1.0f),
+            .intensity = 1.0f,
+            .a = 1.0f,
+            .b = 0.09f,
+            .c = 0.032f 
+        });
 
-       
         // ================ Shaders and Pipeline Setup ================
-        // 5. render pipline init
-        renderPipe_.addPass(std::make_unique<ForwardPass>());
+        // 6. render pipeline init
+        renderPipe_.addPass(std::make_unique<ForwardPassLight>());
     };
 
    void tick(float dt) override {
