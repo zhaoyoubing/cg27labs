@@ -1,4 +1,4 @@
-#version 460
+#version 410
 
 // vertex attributes
 in layout(location=0) vec3 aPos;

@@ -1,4 +1,4 @@
-#version 460
+#version 410
 
 // texture coordinates
 in vec2 uv;
