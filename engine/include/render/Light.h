@@ -14,11 +14,14 @@ struct Light {
     LightType  type; // 0 = Directional, 1 = Point, 2 = Spot
     glm::vec3 position; // for point and spot lights
     glm::vec3 direction; // for directional and spot lights
-    glm::vec3 color;
+    glm::vec3 colour;
     float intensity;
-    //float constant;
-    //float linear;
-    //float quadratic;
-    float cutOff;
-    float outerCutOff;
+
+    // attenuation a + b x + c x^2
+    float constant; // a
+    float linear;   // b
+    float quadratic;// c
+
+    // float cutOff;   // for spot lights
+    // float outerCutOff;  // for spot lights
 };
