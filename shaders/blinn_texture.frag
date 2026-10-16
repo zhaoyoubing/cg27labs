@@ -22,6 +22,7 @@ uniform sampler2D baseColourMap;
 uniform bool bUseBlinn = true;
 uniform vec3 uViewPos;
 
+// hardcoded light
 uniform PointLight uLight;
 
 
@@ -47,9 +48,9 @@ void main()
     // 1. ambient
     vec3 ambient = 0.05 * colour;
 
-    // 2. diffuse
-    float diff = max(dot(lightDir, norm), 0.0);
-    vec3 diffuse = diff * colour;
+    // 2. Lambertian diffuse
+    float cos_theta = max(dot(lightDir, norm), 0.0);
+    vec3 diffuse = cos_theta * colour;
     
     // vectors for specular reflection
     vec3 viewDir = normalize(uViewPos - fragPos);
@@ -74,5 +75,7 @@ void main()
 
     // The final output fragment colour 
     // combination of ambient, diffuse and specular
+    // warning: colour value can be greater than 1 here
+    // needs gamma correction 
     out_colour = vec4(ambient + diffuse + specular, 1.0);
 }
