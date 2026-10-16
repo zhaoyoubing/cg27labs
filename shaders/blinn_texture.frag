@@ -22,7 +22,6 @@ uniform sampler2D baseColourMap;
 uniform bool bUseBlinn = true;
 uniform vec3 uViewPos;
 
-// hardcoded light
 uniform PointLight uLight;
 
 
@@ -75,7 +74,5 @@ void main()
 
     // The final output fragment colour 
     // combination of ambient, diffuse and specular
-    // warning: colour value can be greater than 1 here
-    // needs gamma correction 
     out_colour = vec4(ambient + diffuse + specular, 1.0);
 }
