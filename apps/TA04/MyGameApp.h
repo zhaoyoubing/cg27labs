@@ -39,12 +39,13 @@ protected:
 
         // ================ Shaders and Material Setup ================
         // 2. Load individual shader stages from disk
-        shaderMgr_.load("texture_plain", "shaders/blinn_texture.vert", "shaders/blinn_texture.frag");
+        shaderMgr_.load("texture_plain", "shaders/texblinn_normal.vert", "shaders/texblinn_normal.frag");
 
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
         // std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
-        std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/box_normal/box_normal.gltf", 
+        std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf(//"assets/barrel/scene.gltf", 
+                                                             "assets/box_normal/box_normal.gltf",
                                                                 texMgr_,  matMgr_, shaderMgr_);
         scene_->root_ = std::move(mesh);
 
@@ -74,7 +75,7 @@ protected:
         EntityID lightId = scene_->ecsWorld_.createEntityID();
         scene_->ecsWorld_.addComp<LightComp>(lightId, LightComp{
             .type = POINT,
-            .pos = bbox.max,
+            .pos = bbox.max * 3.0f,
             .dir = glm::vec3(0.0f, -1.0f, 0.0f),
             .colour = glm::vec3(1.0f, 0.0f, 1.0f),
             .intensity = 1.0f,

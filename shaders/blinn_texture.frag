@@ -58,6 +58,7 @@ void main()
 
     // reflectDir = -lightDir + 2 * dot (lightDir, norm) * norm;
     // reflectDir needs to be normalised if it has not been
+    // GLSL thinks the light direction towards the surface
     vec3 reflectDir = reflect(-lightDir, norm); // for phong 
     
     // 3. specular

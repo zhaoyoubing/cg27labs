@@ -130,6 +130,9 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
             for (size_t i = 0; i < accessor.count; i++) {
                 const float* normalBuf = reinterpret_cast<const float*>(buf + i * stride);
                 vertices[i].normal = glm::vec3( normalBuf[0], normalBuf[1], normalBuf[2] );
+
+                if (i % 10 == 0)
+                    spdlog::trace("Normal nx {}, ny {}, nz {}", normalBuf[0], normalBuf[1], normalBuf[2] );
             }
         }
 

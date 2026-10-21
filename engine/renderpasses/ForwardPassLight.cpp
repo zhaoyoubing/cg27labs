@@ -85,13 +85,13 @@ void ForwardPassLight::drawSceneGraph(std::unique_ptr<SceneNode>& node,
         
         gpuPipe->setVec3("uViewPos", camera_.eye);
 
+        //gpuPipe->setVec3("uLight.dir", lightDefault_.dir);
         gpuPipe->setVec3("uLight.pos", lightDefault_.pos);
-        gpuPipe->setVec3("uLight.dir", lightDefault_.dir);
-        gpuPipe->setVec3("uLight.colour", lightDefault_.colour);
-        gpuPipe->setFloat("uLight.intensity", lightDefault_.intensity);
-        gpuPipe->setFloat("uLight.a", lightDefault_.a);
-        gpuPipe->setFloat("uLight.b", lightDefault_.b);
-        gpuPipe->setFloat("uLight.c", lightDefault_.c);
+        //gpuPipe->setVec3("uLight.colour", lightDefault_.colour);
+        //gpuPipe->setFloat("uLight.intensity", lightDefault_.intensity);
+        //gpuPipe->setFloat("uLight.a", lightDefault_.a);
+        //gpuPipe->setFloat("uLight.b", lightDefault_.b);
+        //gpuPipe->setFloat("uLight.c", lightDefault_.c);
 
         texture->bind(0);
         gpuPipe->setInt("baseColourMap", 0);
