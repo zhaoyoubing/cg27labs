@@ -9,5 +9,5 @@ ke 0 0 0
 d 1
 Ns 2000
 illum 2
-map_Kd Box_BaseColor.png
-map_Bump Box_Normal.png
+map_Kd box_basecolour.png
+map_Bump box_normal.png
