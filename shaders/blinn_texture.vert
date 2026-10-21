@@ -24,8 +24,9 @@ void main()
     fragPos = vec3(uModel * vec4(aPos, 1.0));
 
     // surface normal after modelling transform
-    //fragNormal = mat3(transpose(inverse(uModel))) * aNormal;  
-    fragNormal = uModel * aNormal;  
+    //fragNormal = mat3(transpose(inverse(uModel))) * aNormal;
+    // use simple uModel for rigid body transform  
+    fragNormal = mat3(uModel) * aNormal;  
 
     uv = a_uv;
 }
