@@ -25,8 +25,8 @@ add_custom_command(
         TARGET TA04 POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
 		"${CMAKE_SOURCE_DIR}/shaders"
-                $<TARGET_FILE_DIR:TA03>/shaders
+                $<TARGET_FILE_DIR:TA04>/shaders
         COMMAND ${CMAKE_COMMAND} -E copy_directory
 		"${CMAKE_SOURCE_DIR}/assets"
-                $<TARGET_FILE_DIR:TA03>/assets
+                $<TARGET_FILE_DIR:TA04>/assets
         )

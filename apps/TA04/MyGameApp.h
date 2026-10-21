@@ -44,7 +44,8 @@ protected:
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
         // std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
-        std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/bunny_tex.gltf", texMgr_,  matMgr_, shaderMgr_);
+        std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/box_normal/box_normal.gltf", 
+                                                                texMgr_,  matMgr_, shaderMgr_);
         scene_->root_ = std::move(mesh);
 
         AABB bbox = scene_->getBBox();
