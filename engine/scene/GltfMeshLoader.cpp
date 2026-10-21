@@ -179,11 +179,43 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
             }
         }
 
+        // read tangents for normal mapping
+        std::vector<glm::vec4> tangents;
+        if (primitive.attributes.find("TANGENT") != primitive.attributes.end()) {
+            const auto& accessor = gltfModel.accessors[primitive.attributes.find("TANGENT")->second];
+
+                // glTF tangents must be VEC4 FLOAT.
+                if (accessor.type == TINYGLTF_TYPE_VEC4 || accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT) {
+                    tangents.reserve(accessor.count);
+                    
+                    const auto& bufferView = gltfModel.bufferViews[accessor.bufferView];
+                    size_t stride = accessor.ByteStride(bufferView);
+                    spdlog::debug("Tangent buffer stride {}", stride);
+
+                    if (stride == 0)
+                        stride = sizeof(float) * 4;
+                    
+                    const auto& buffer = gltfModel.buffers[bufferView.buffer];
+
+                    const unsigned char* data = buffer.data.data() + bufferView.byteOffset + accessor.byteOffset;
+
+
+                    for (size_t i = 0; i < accessor.count; ++i) {
+                        const float* tangent =  reinterpret_cast<const float*>(data + i * stride);
+                        tangents.emplace_back(glm::vec4(tangent[0], tangent[1], tangent[2], tangent[3]));
+                        if (i % 10 == 0)
+                            spdlog::trace("Tangent tx {}, ty {}, tz {}, tw {}", tangent[0], tangent[1], tangent[2], tangent[3]);
+                    }
+
+                } else {
+                    spdlog::error("Invalid TANGENT accessor");
+                }
+        }
+
         // --- EXTRACT INDICES ---
         // model not empty
 
         if (primitive.indices >= 0) {
-
 
             const auto& accessor = gltfModel.accessors[primitive.indices];
             const auto& bufferView = gltfModel.bufferViews[accessor.bufferView];
@@ -214,7 +246,9 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
 
         // 3. Build low-level MeshGeometry
         auto geometry = std::make_shared<MeshGeometry>(vertices, indices);
-        //geometry->setupMesh(vertices, indices);
+
+        if ( ! tangents.empty())
+            geometry->setTangents(tangents);
         
         // add geometry
         auto materialMesh = std::make_shared<MaterialMesh>();

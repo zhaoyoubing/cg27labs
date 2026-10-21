@@ -45,7 +45,7 @@ protected:
         // 3. set up data and vertex buffers
         // std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
         std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf(//"assets/barrel/scene.gltf", 
-                                                             "assets/box_normal/box_normal.gltf",
+                                                             "assets/box_normal/box_normal_tangent.gltf",
                                                                 texMgr_,  matMgr_, shaderMgr_);
         scene_->root_ = std::move(mesh);
 

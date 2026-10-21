@@ -35,7 +35,7 @@ public:
     std::vector<uint32_t> indices;
 
     // Additional vertex attribtues
-    std::vector<glm::vec3> tangents;
+    std::vector<glm::vec4> tangents;
     std::vector<glm::vec3> colours;
 
     bool bNormal = true;
@@ -52,6 +52,10 @@ public:
     MeshGeometry(std::vector<Vertex> vList, std::vector<uint32_t> idxList)
         : vertices(std::move(vList)), indices(std::move(idxList)) {
 
+    }
+
+    void setTangents(std::vector<glm::vec4> & tangent_list) {
+        tangents = std::move(tangent_list);
     }
 
     AABB getBBox() {
