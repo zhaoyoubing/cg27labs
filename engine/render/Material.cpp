@@ -14,19 +14,32 @@ std::shared_ptr<Texture> Material::getTexture(const std::string& uniformName) co
     return nullptr;
 }
 
-void Material::bind() const {
-    if (!gpuPipe) return;
+void Material::bind(const std::shared_ptr<GPUPipeline> pipe) {
+
+    if (nullptr != pipe)
+        gpuPipe = pipe;
+
+    if (!gpuPipe) {
+        spdlog::error("gpuPipe null in Material::bind()");
+        return;
+    }
 
     // 1. Activate the shader program
     gpuPipe->bind();
 
+    // temporarily
+    // bind base colour and normal map texture
+    if (nullptr != baseColourTex) {
+        baseColourTex->bind(0);
+        gpuPipe->setInt("baseColourMap", 0);
+    }
 
-    // 2. Pass material color/property uniforms
-    //gpuPipe->setVec3("material.baseColor", baseColour);
-    //gpuPipe->setVec3("material.specularColor", specularColour);
-    //gpuPipe->setFloat("material.shininess", shininess);
-
-
+    if (nullptr != normalTex) {
+        normalTex->bind(1);
+        gpuPipe->setInt("normalMap", 1);
+    }
+ 
+    // 2. Pass material property uniforms
     for (const auto& [name, value] : parameters)
     {
         std::visit(
@@ -62,5 +75,20 @@ void Material::bind() const {
             gpuPipe->setInt(uniformName, textureUnit); // Tell shader which sampler corresponds to this unit
             textureUnit++;
         }
+    }
+}
+
+void Material::unbind() {
+
+    if (nullptr != baseColourTex) {
+        baseColourTex->unbind();
+    }
+
+    if (nullptr != normalTex) {
+        normalTex->unbind();
+    }
+
+    if (nullptr != gpuPipe) {
+        gpuPipe->unbind();
     }
 }

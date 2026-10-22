@@ -10,7 +10,8 @@ Texture::Texture( int w, int h, TextureFormat fmt, const unsigned char * data)
     //GLuint textureID;
     
     // Create OpenGL texture
-    glActiveTexture(GL_TEXTURE0);
+    // glActiveTexture(GL_TEXTURE0);
+
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_2D, id);
 

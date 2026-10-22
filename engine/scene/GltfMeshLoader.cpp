@@ -80,6 +80,10 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
 {
     std::vector<std::shared_ptr<MaterialMesh> > meshList;
 
+    bool bNormal = false;
+    bool bTex = false;
+    bool bTangent = false;
+
     for (const auto& primitive : mesh.primitives) 
     {
         std::vector<Vertex> vertices;
@@ -119,6 +123,7 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
 
         // --- EXTRACT NORMALS ---
         if (primitive.attributes.find("NORMAL") != primitive.attributes.end()) {
+            bNormal = true;
             const auto& accessor = gltfModel.accessors[primitive.attributes.find("NORMAL")->second];
             const auto& bufferView = gltfModel.bufferViews[accessor.bufferView];
             const auto& buffer = gltfModel.buffers[bufferView.buffer];
@@ -138,6 +143,7 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
 
         // --- EXTRACT UVs (TEXCOORD_0) ---
         if (primitive.attributes.find("TEXCOORD_0") != primitive.attributes.end()) {
+            bTex = true;
             const auto& accessor = gltfModel.accessors[primitive.attributes.find("TEXCOORD_0")->second];
             const auto& bufferView = gltfModel.bufferViews[accessor.bufferView];
 
@@ -186,6 +192,8 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
 
                 // glTF tangents must be VEC4 FLOAT.
                 if (accessor.type == TINYGLTF_TYPE_VEC4 || accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT) {
+                    bTangent = true;
+
                     tangents.reserve(accessor.count);
                     
                     const auto& bufferView = gltfModel.bufferViews[accessor.bufferView];
@@ -259,6 +267,17 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
         meshBuf->createAndUploadBuffers(geometry);
         materialMesh->geometry_->gpuBuffer = meshBuf;
 
+        std::string shaderKey = "plain";
+        
+        // hard coded here, to be changed
+        ShadingModel shadeModel = ShadingModel::TexBlinn;
+        if (bTangent)
+            shadeModel = ShadingModel::TexBlinnNormal;
+        else if ( bNormal && bTex) 
+            shadeModel = ShadingModel::TexBlinn;
+        else if (bTex)
+            shadeModel = ShadingModel::TexPlain;
+
         // 4. Track material index mapping
         unsigned int materialIdx = primitive.material >= 0 ? primitive.material : 0;
         if (materialIdx >= 0)
@@ -269,24 +288,41 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
                 const auto& pbr = gltfMaterial.pbrMetallicRoughness;
                 std::vector<double> baseColor = pbr.baseColorFactor;
 
-                std::shared_ptr<GPUPipeline> gpuPipe = shaderMgr.get("texture_plain");
-                std::shared_ptr<Material> material = std::make_shared<Material>(gpuPipe);
+                // bind materials to shaders
+                // std::shared_ptr<GPUPipeline> gpuPipe = shaderMgr.get(shaderKey);
+                std::shared_ptr<Material> material = std::make_shared<Material>(shadeModel);
 
                 material->baseColour = glm::vec4(baseColor[0], baseColor[1], baseColor[2], baseColor[3]);
                 material->roughness = pbr.roughnessFactor;
                 material->metallic = pbr.metallicFactor;
 
+                // base colour texture
                 std::shared_ptr<Texture> baseColorTexture = nullptr;
                 if (pbr.baseColorTexture.index >= 0) {
-                        // Use base color texture
-                        int textureIndex = pbr.baseColorTexture.index;
-                        const tinygltf::Texture& texGltf = gltfModel.textures[textureIndex];
+                    // Use base color texture
+                    int textureIndex = pbr.baseColorTexture.index;
+                    const tinygltf::Texture& texGltf = gltfModel.textures[textureIndex];
 
-                        spdlog::debug("Set material {} texture {}", materialIdx, textureIndex);
+                    spdlog::debug("Set material {} base colour texture {}", materialIdx, textureIndex);
 
-                        material->baseColourTex = loadedTextures[texGltf.source];
-
+                    material->baseColourTex = loadedTextures[texGltf.source];
                 }
+
+                // normal map
+                std::shared_ptr<Texture> normalmap = nullptr;
+                if (gltfMaterial.normalTexture.index >= 0) {
+                    // Use normal texture
+                    int textureIndex = gltfMaterial.normalTexture.index;
+                    const tinygltf::Texture& texGltf = gltfModel.textures[textureIndex];
+
+                    spdlog::debug("Set material {} normal texture {}", materialIdx, textureIndex);
+
+                    material->normalTex = loadedTextures[texGltf.source];
+                }
+
+                // [TODO] metallic roughness
+
+
                 loadedMaterials[materialIdx] = material;
                 matMgr.add(material);
             }
