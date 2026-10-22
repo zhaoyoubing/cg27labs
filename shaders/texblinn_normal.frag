@@ -19,15 +19,17 @@ struct PointLight {
 };
 
 uniform sampler2D baseColourMap;
+uniform sampler2D normalMap;
+
 uniform bool bUseBlinn = true;
-uniform vec3 uViewPos;
 
 uniform PointLight uLight;
 
-
-in vec3 fragPos;
-in vec3 fragNormal; // interpolated surface normal
 in vec2 uv; // texture coordinates
+
+in vec3 tanFragPos;
+in vec3 tanLightPos;
+in vec3 tanViewPos;
 
 
 // the output pixel colour
@@ -38,11 +40,15 @@ void main()
     // RGBA from texture
     vec3 colour = texture(baseColourMap, uv).rgb;
     
-    // normalised fragNormal
-    vec3 norm = normalize(fragNormal);
+    // obtain normal from normal map in range [0,1]
+    vec3 normal = texture(normalMap, uv).rgb;
+
+    // transform normal vector to range [-1,1]
+    vec3 norm = normalize(normal * 2.0 - 1.0); 
+
 
     // light direction
-    vec3 lightDir = normalize(uLight.pos - fragPos);
+    vec3 lightDir = normalize(tanLightPos - tanFragPos);
 
     // 1. ambient
     vec3 ambient = 0.05 * colour;
@@ -52,7 +58,7 @@ void main()
     vec3 diffuse = cos_theta * colour;
     
     // vectors for specular reflection
-    vec3 viewDir = normalize(uViewPos - fragPos);
+    vec3 viewDir = normalize(tanViewPos - tanFragPos);
 
     vec3 halfvecDir = normalize(lightDir + viewDir);  // used by blinn-phong
 
@@ -70,7 +76,7 @@ void main()
     }
 
     // assuming a light source with a bright white colour
-    vec3 specular = vec3(0.3) * spec;
+    vec3 specular = uLight.colour * spec;
 
     // The final output fragment colour 
     // combination of ambient, diffuse and specular
