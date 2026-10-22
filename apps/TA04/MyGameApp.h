@@ -16,7 +16,7 @@
 #include "entity/MaterialComp.h"
 #include "entity/LightComp.h"
 
-#include "renderpasses/ForwardPassLight.h"
+#include "renderpasses/ForwardPassLightNormal.h"
 
 #include <algorithm>
 
@@ -38,8 +38,11 @@ protected:
         scene_->ecsWorld_.addComp<TransformComp>(objId_, TransformComp{});
 
         // ================ Shaders and Material Setup ================
-        // 2. Load individual shader stages from disk
-        shaderMgr_.load("texture_plain", "shaders/texblinn_normal.vert", "shaders/texblinn_normal.frag");
+        // 2. Load default shader stages from disk
+        shaderMgr_.load("plain", "shaders/vcolour.vert", "shaders/vcolour.frag");
+        shaderMgr_.load("texplain", "shaders/vtexture.vert", "shaders/vtexture.frag");
+        shaderMgr_.load("texblinn", "shaders/blinn_texture.vert", "shaders/blinn_texture.frag");
+        shaderMgr_.load("texblinn_normal", "shaders/texblinn_normal.vert", "shaders/texblinn_normal.frag");
 
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
@@ -86,7 +89,7 @@ protected:
 
         // ================ Shaders and Pipeline Setup ================
         // 6. render pipeline init
-        renderPipe_.addPass(std::make_unique<ForwardPassLight>());
+        renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
     };
 
    void tick(float dt) override {

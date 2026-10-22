@@ -8,7 +8,7 @@ public:
     virtual ~RenderPass() = default;
 
     // Called once during renderer initialisation.
-    bool init() { };
+    virtual bool init(RenderContext& context) { return true; };
 
     // Called once per frame.
     virtual void execute(RenderContext& context) = 0;
