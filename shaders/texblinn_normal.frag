@@ -81,5 +81,5 @@ void main()
     // The final output fragment colour 
     // combination of ambient, diffuse and specular
     out_colour = vec4(ambient + diffuse + specular, 1.0);
-    //out_colour = vec4(colour, 1.0);
+    //out_colour = vec4(normal, 1.0);
 }

@@ -37,6 +37,7 @@ void ForwardPassLightNormal::execute(RenderContext& context)
     glViewport(0, 0, camera_.viewport.w, camera_.viewport.h);
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);

@@ -47,7 +47,7 @@ protected:
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
         // std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
-        std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf(//"assets/barrel/scene.gltf", 
+        std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf( //"assets/barrel/scene.gltf", 
                                                              "assets/box_normal/box_normal_tangent.gltf",
                                                                 texMgr_,  matMgr_, shaderMgr_);
         scene_->root_ = std::move(mesh);
@@ -64,9 +64,9 @@ protected:
         EntityID camId = scene_->ecsWorld_.createEntityID();
 
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
-            .eye = center + glm::vec3(0.0f, 0.0f, 2.0f) * maxSize, 
+            .eye = center + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, // + glm::vec3(-200.0, 5.0, 0) for barrel testing
             .fov = 45.0f,
-            .far = maxSize * 3.0f,
+            .far = maxSize * 5.0f,
             .front = glm::vec3(0, 0, -1),
             .yaw = -90.0f,
             .pitch = 0.0f,
@@ -80,7 +80,7 @@ protected:
             .type = POINT,
             .pos = bbox.max * 3.0f,
             .dir = glm::vec3(0.0f, -1.0f, 0.0f),
-            .colour = glm::vec3(1.0f, 0.0f, 1.0f),
+            .colour = glm::vec3(1.0f, 1.0f, 1.0f),
             .intensity = 1.0f,
             .a = 1.0f,
             .b = 0.09f,

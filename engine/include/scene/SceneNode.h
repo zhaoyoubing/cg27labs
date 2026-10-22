@@ -21,6 +21,7 @@ struct SceneNode {
 
     std::vector<std::unique_ptr<SceneNode>> children;
 
+    // [TODO] need to take transform into account
     void updateBBox() {
         AABB box;
 
