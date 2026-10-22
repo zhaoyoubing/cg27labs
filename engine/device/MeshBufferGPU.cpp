@@ -102,13 +102,13 @@ void MeshBufferGPU::uploadBuffers2GPU(std::shared_ptr<MeshGeometry> mesh)
 
         glBufferData(
             GL_ARRAY_BUFFER,
-            mesh->tangents.size() * sizeof(glm::vec3),
+            mesh->tangents.size() * sizeof(glm::vec4),
             mesh->tangents.data(),
             GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(3);
 
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
+        glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), nullptr);
     }
 
     // --------------------------------------------------
