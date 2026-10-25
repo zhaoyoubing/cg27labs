@@ -28,6 +28,15 @@ public:
             if (camera.isPrimary == false) {
                 continue; // skip non-primary cameras
             }
+
+            // window resize
+            if (input.bWinResized) {
+                spdlog::debug("window resizing: {} {}", input.winWidth, input.winHeight);
+                
+                camera.viewport.w = input.winWidth;
+                camera.viewport.h = input.winHeight;
+                input.bWinResized = false;
+            }
             
             // left button pressed
             // comment it if you want Unreal style camera control

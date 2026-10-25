@@ -62,10 +62,39 @@ public:
         // glfwSetWindowUserPointer(window_, this);
 
         // Setup resize callback
+        /*
         glfwSetFramebufferSizeCallback(window_, [](GLFWwindow* window, int width, int height) {
+            //width_ = width;
+            //height_ = height;
             glViewport(0, 0, width, height);
         });
+        */
+
+        //glfwSetFramebufferSizeCallback(window_, framebufferSizeCallback);
     }
+
+    /*
+    void resize(int width, int height) {
+        spdlog::debug("window resize callback");
+
+        width_ = width;
+        height_ = height;
+
+        inputState_.winWidth = width;
+        inputState_.winHeight = height;
+        inputState_.bWinResized = true;
+    }
+    
+
+    static void framebufferSizeCallback(
+        GLFWwindow* window, int width, int height)
+    {
+        auto* self = static_cast<Window*>(
+            glfwGetWindowUserPointer(window));
+        
+        self->resize(width, height);
+    }
+    */
 
     ~Window() {
         if (window_) {

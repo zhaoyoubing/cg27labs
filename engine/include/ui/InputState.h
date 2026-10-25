@@ -39,4 +39,8 @@ public:
     double mouseOffsetX = 0.0, mouseOffsetY = 0.0;
     double scrollX = 0.0, scrollY = 0.0;
     bool bFirstMouse = true;
+
+    int winWidth;
+    int winHeight;
+    bool bWinResized = false;
 };

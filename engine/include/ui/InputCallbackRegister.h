@@ -19,6 +19,8 @@ public:
         glfwSetCursorPosCallback(window, mouseCallback);
         glfwSetMouseButtonCallback(window, mouseButtonCallback);
         glfwSetScrollCallback(window, scrollCallback);
+
+        glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
     }
 
 private:
@@ -31,6 +33,16 @@ private:
         return instance;
     }
     */
+
+    static void framebufferSizeCallback(
+        GLFWwindow* window, int width, int height)
+    {
+        auto* input = static_cast<InputState*>(glfwGetWindowUserPointer(window));
+        
+        input->winWidth = width;
+        input->winHeight = height;
+        input->bWinResized = true;
+    }
 
     // --- GLFW Callback Trampolines ---
     // GLFW callbacks must be static
