@@ -14,3 +14,11 @@ void RenderPipeline::render(RenderContext& context)
         pass->execute(context);
     }
 }
+
+void RenderPipeline::init(RenderContext& context)
+{
+    for (auto& pass : passes_)
+    {
+        pass->init(context);
+    }
+}

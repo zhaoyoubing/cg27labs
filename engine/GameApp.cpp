@@ -37,7 +37,7 @@ void GameApp::initWindow(std::string title) {
     spdlog::info("Initialising the main window ...");
     
     // 1. Initialize primary window (GLFW context, user pointers, callbacks)
-    mainWin_ = std::make_unique<Window>(800, 600, title);
+    mainWin_ = std::make_unique<Window>(1024, 1024, title);
     
 }
 
