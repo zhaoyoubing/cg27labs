@@ -21,24 +21,38 @@ struct SceneNode {
 
     std::vector<std::unique_ptr<SceneNode>> children;
 
-    // [TODO] need to take transform into account
-    void updateBBox() {
+    // need to take transform into account
+    void updateBBox(glm::mat4 mat = glm::mat4(1.0)) {
+
         AABB box;
 
+        //bool bBoxInit = false;
+
         for (auto & mesh : meshList) {
-            box = box.unite(mesh->geometry_->getBBox());
+            //if (! bBoxInit)
+            //    box = mesh->geometry_->getBBox(mat * trans.getLocalMatrix());
+            //else {
+                box = box.unite(mesh->geometry_->getBBox(mat * trans.getLocalMatrix()));
+            //    bBoxInit = true;
+            //}
+            
         }
 
         for (auto & node : children) {
-            box = box.unite(node->getBBox());
+            //if (! bBoxInit) {
+            //    box = node->getBBox(mat * trans.getLocalMatrix());
+            //} else {
+                box = box.unite(node->getBBox(mat * trans.getLocalMatrix()));
+            //}
+            
         }
 
         bbox = box;
     }
 
-    AABB getBBox() {
+    AABB getBBox(glm::mat4 mat = glm::mat4(1.0)) {
         if (bBoxDirty) {
-            updateBBox();
+            updateBBox(mat);
             bBoxDirty = false;
         }
 

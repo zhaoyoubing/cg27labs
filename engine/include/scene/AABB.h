@@ -9,6 +9,8 @@ struct AABB
     glm::vec3 min;
     glm::vec3 max;
 
+    bool bValid = false;
+
     AABB() {
         min = glm::vec3(0.0f);
         max = glm::vec3(0.0f);
@@ -24,8 +26,17 @@ struct AABB
 
     AABB unite(const AABB & other) const {
         AABB result;
-        result.min = glm::min(min, other.min);
-        result.max = glm::max(max, other.max);
+
+        if (bValid && other.bValid) {
+            result.min = glm::min(min, other.min);
+            result.max = glm::max(max, other.max);
+            result.bValid = true;
+        } else if (other.bValid) {
+            result.min = other.min;
+            result.max = other.max;
+            result.bValid = true;
+        }
+        
         return result;
     }
 

@@ -58,27 +58,33 @@ public:
         tangents = std::move(tangent_list);
     }
 
-    AABB getBBox() {
+    AABB getBBox(glm::mat4 mat = glm::mat4(1.0)) {
         if (bBoxDirty) {
-            updateBBox();
+            updateBBox(mat);
             bBoxDirty = false;
         }
         
         return bbox;
     }
 
-    void updateBBox() {
+    void updateBBox(glm::mat4 mat = glm::mat4(1.0)) {
         if (vertices.empty()) {
-            bbox.min = glm::vec3(0.0f);
-            bbox.max = glm::vec3(0.0f);
+            bbox.min = glm::vec3(mat * glm::vec4(glm::vec3(0.0f), 1.0));
+            bbox.max = bbox.min;
+            bbox.bValid = false;
+            return;
         }
 
-        bbox.min = vertices[0].pos;
-        bbox.max = vertices[0].pos;
+        bbox.min = glm::vec3(mat * glm::vec4(vertices[0].pos, 1.0));
+        bbox.max = bbox.min;
 
         for (const auto& vertex : vertices) {
-            bbox.min = glm::min(bbox.min, vertex.pos);
-            bbox.max = glm::max(bbox.max, vertex.pos);
+
+            glm::vec3 pos =  glm::vec3(mat * glm::vec4(vertex.pos, 1.0));
+
+            bbox.min = glm::min(bbox.min, pos);
+            bbox.max = glm::max(bbox.max, pos);
         }
+        bbox.bValid = true;
     }
 };
