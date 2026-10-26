@@ -441,13 +441,13 @@ std::unique_ptr<SceneNode> GltfMeshLoader::loadModel(const std::string& filepath
 
         std::unique_ptr<SceneNode> meshNode = loadNode(gltfModel, node, texMgr, matMgr, shaderMgr);
 
-        if (scene.nodes.size() == 1) {
-            meshRoot = std::move(meshNode);
-            break;
-        } else {
+        //if (scene.nodes.size() == 1) {
+        //    meshRoot = std::move(meshNode);
+        //    break;
+        //} else {
             // Push sub-mesh into the container model
             meshRoot->children.push_back(meshNode->clone());
-        }
+        //}
     }
 
     return meshRoot;

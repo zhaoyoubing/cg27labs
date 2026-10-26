@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include "glm/glm.hpp"
 
 // Axis-Aligned Bounding Box (AABB) structure for 3D space, 
@@ -24,6 +25,11 @@ struct AABB
         return (max + min) * 0.5f;
     }
 
+    float getMaxDimLen() const {
+        glm::vec3 dim = getDimension();
+        return std::max(dim.x, std::max(dim.y, dim.z));
+    }
+
     AABB unite(const AABB & other) const {
         AABB result;
 
@@ -36,7 +42,7 @@ struct AABB
             result.max = other.max;
             result.bValid = true;
         }
-        
+
         return result;
     }
 

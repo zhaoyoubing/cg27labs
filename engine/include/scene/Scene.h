@@ -11,7 +11,10 @@ struct Scene {
     std::string name_;
     ECSWorldRegistry ecsWorld_;
 
-    Scene(const std::string& name = "default") : name_ (name) {}
+    Scene(const std::string& name = "default") : name_ (name) {
+       root_ = std::make_unique<SceneNode>(); 
+    }
+    
     ~Scene() = default;
 
     //void init();

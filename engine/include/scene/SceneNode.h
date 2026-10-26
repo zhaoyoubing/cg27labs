@@ -12,8 +12,9 @@
 struct SceneNode {
     std::string name;
     TransformComp trans;  // local transform relative to parent
-    AABB bbox;
+    //bool bMeshRoot = false;
 
+    AABB bbox;
     bool bBoxDirty = true;
     
     // Optional: Only present if this node actually draws something
@@ -21,42 +22,47 @@ struct SceneNode {
 
     std::vector<std::unique_ptr<SceneNode>> children;
 
+    // scale to fit for a model's root node
+    void scaleToFitBBox(float d) {
+        updateBBox();
+        float len = bbox.getMaxDimLen();
+        float scale = d / len;
+        trans.scale = glm::vec3(scale, scale, scale);
+        trans.bMatrixDirty = true;
+        bBoxDirty = true;
+    }
+
     // need to take transform into account
-    void updateBBox(glm::mat4 mat = glm::mat4(1.0)) {
+    void updateBBox() {
 
         AABB box;
 
-        //bool bBoxInit = false;
-
         for (auto & mesh : meshList) {
-            //if (! bBoxInit)
-            //    box = mesh->geometry_->getBBox(mat * trans.getLocalMatrix());
-            //else {
-                box = box.unite(mesh->geometry_->getBBox(mat * trans.getLocalMatrix()));
-            //    bBoxInit = true;
-            //}
-            
+            //box = box.unite(mesh->geometry_->getBBox(mat * trans.getLocalMatrix()));   
+            box = box.unite(mesh->geometry_->getBBox());           
         }
 
         for (auto & node : children) {
-            //if (! bBoxInit) {
-            //    box = node->getBBox(mat * trans.getLocalMatrix());
-            //} else {
-                box = box.unite(node->getBBox(mat * trans.getLocalMatrix()));
-            //}
-            
+            //box = box.unite(node->getBBox(mat * trans.getLocalMatrix()));
+            box = box.unite(node->getBBox());
         }
 
         bbox = box;
     }
 
-    AABB getBBox(glm::mat4 mat = glm::mat4(1.0)) {
+    AABB getBBox() {
         if (bBoxDirty) {
-            updateBBox(mat);
+            updateBBox();
             bBoxDirty = false;
         }
 
-        return bbox;
+        // need to apply matrix
+        AABB box;
+        box.min = glm::vec3(trans.getLocalMatrix() * glm::vec4(bbox.min, 1.0));
+        box.max = glm::vec3(trans.getLocalMatrix() * glm::vec4(bbox.max, 1.0));
+        box.bValid = bbox.bValid;
+
+        return box;
     }
 
     std::unique_ptr<SceneNode> clone() const {
