@@ -28,9 +28,19 @@ struct SceneNode {
         float len = bbox.getMaxDimLen();
         float scale = d / len;
         trans.scale = glm::vec3(scale, scale, scale);
+
         trans.bMatrixDirty = true;
-        bBoxDirty = true;
+        //bBoxDirty = true;
     }
+
+    void center() {
+        glm::vec center = bbox.getCenter();
+        trans.pos = glm::vec3(- center.x * trans.scale.x,
+                            - center.y * trans.scale.y,
+                            - center.z * trans.scale.z );
+        trans.bMatrixDirty = true;
+    }
+
 
     // need to take transform into account
     void updateBBox() {
