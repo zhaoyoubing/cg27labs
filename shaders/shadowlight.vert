@@ -8,7 +8,7 @@ uniform mat4 uModel;
 uniform mat4 uView;
 uniform mat4 uProj;
 
-uniform mat4 lightSpaceMatrix;
+uniform mat4 matLightSpace;
 
 out vec3 fragNormal;
 out vec3 fragPos;
@@ -20,12 +20,12 @@ void main()
 {   
     gl_Position = uProj * uView * uModel * vec4(aPos, 1.0);
 
-    fragPos = vec3(model * vec4(aPos, 1.0));
+    fragPos = vec3(uModel * vec4(aPos, 1.0));
     
-    mat3 normalMatrix = mat3(model);
-    fragNormal = transpose(inverse(mat3(model))) * aNormal;
+    //mat3 normalMatrix = mat3(model);
+    fragNormal = transpose(inverse(mat3(uModel))) * aNormal;
 
     uv = a_uv;
     
-    fragPosLightSpace = lightSpaceMatrix * vec4(fragPos, 1.0);
+    fragPosLightSpace = matLightSpace * vec4(fragPos, 1.0);
 }

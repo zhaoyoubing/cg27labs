@@ -16,9 +16,10 @@
 #include "entity/MaterialComp.h"
 #include "entity/LightComp.h"
 
-#include "renderpasses/ShadowDepthPass.h"
 #include "renderpasses/ForwardPassLightNormal.h"
 #include "renderpasses/ForwardPassLight.h"
+#include "renderpasses/ShadowDepthPass.h"
+#include "renderpasses/ShadowLightPass.h"
 
 #include <algorithm>
 
@@ -46,18 +47,17 @@ protected:
         shaderMgr_.load("texblinn", "shaders/blinn_texture.vert", "shaders/blinn_texture.frag");
         shaderMgr_.load("texblinn_normal", "shaders/texblinn_normal.vert", "shaders/texblinn_normal.frag");
         shaderMgr_.load("shadowdepth", "shaders/shadowdepth.vert", "shaders/shadowdepth.frag");
-        //shaderMgr_.load("shadowlight", "shaders/shadowlight.vert", "shaders/shadowlight.frag");
+        shaderMgr_.load("shadowlight", "shaders/shadowlight.vert", "shaders/shadowlight.frag");
 
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
         //std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
-        std::unique_ptr<SceneNode> bunny = MeshFactory::loadGltf(//"assets/barrel/scene.gltf", 
-                                                             //"assets/box_normal/box_normal_tangent.gltf",
+        std::unique_ptr<SceneNode> bunny = MeshFactory::loadGltf(//"assets/box_normal/box_normal_tangent.gltf",
                                                              "assets/bunny_tex.gltf", 
                                                              texMgr_,  matMgr_, shaderMgr_);
         //scene_->root_ = std::move(mesh);
         bunny->scaleToFitBBox(0.5);
-        bunny->trans.pos += glm::vec3(0.0, 0.2, 0.0);
+        bunny->trans.pos += glm::vec3(0.0, 0.2, 0.3);
         
         AABB bbox1 = bunny->getBBox();
         spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox1.min.x, bbox1.min.y, bbox1.min.z, 
@@ -80,7 +80,7 @@ protected:
         
         teapot->scaleToFitBBox(0.3);
         teapot->center();
-        teapot->trans.pos += glm::vec3(0.5, 0.4, 0.2);
+        teapot->trans.pos += glm::vec3(0.5, 0.4, 0.6);
         scene_->root_->children.push_back(std::move(teapot));
 
 
@@ -99,7 +99,7 @@ protected:
             .eye = center + glm::vec3(0.0f, 0.0f, 1.5f) * maxSize,
             .fov = 45.0f,
             .far = maxSize * 3.0f,
-            .front = glm::vec3(0, 0, -1),
+            .front = glm::vec3(0.0, 0, -1),
             .yaw = -90.0f,
             .pitch = 0.0f,
             .viewport = Viewport(0, 0, mainWin_->getWidth(), mainWin_->getHeight())
@@ -122,7 +122,11 @@ protected:
         // ================ Shaders and Pipeline Setup ================
         // 6. render pipeline init
         std::unique_ptr<ShadowDepthPass> shadowDepthPass = std::make_unique<ShadowDepthPass>();
+        std::unique_ptr<ShadowLightPass> shadowLightPass = std::make_unique<ShadowLightPass>();
+        ShadowDepthPass * depthPass = shadowDepthPass.get();
+        ShadowLightPass * lightPass = shadowLightPass.get();
         renderPipe_.addPass(std::move(shadowDepthPass));
+        //renderPipe_.addPass(std::move(shadowLightPass));
         //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
 
         RenderContext ctx {
@@ -133,11 +137,15 @@ protected:
             .shaderMgr_ = shaderMgr_
         };
 
+        // init render passes in the render pipeline
         renderPipe_.init(ctx);
+        // chain two passes
+        //lightPass->setShadowMap(depthPass->getShadowMap());
     };
 
    void tick(float dt) override {
         // 3. Run systems using window's delta time directly
+        // where is the best place to update viewports ? at the moment it is in Camera System
         playerSys_.tick(scene_->ecsWorld_, objId_, mainWin_->getInputState(), dt);
         camSys_.tick(scene_->ecsWorld_, mainWin_->getInputState(), dt);
    }

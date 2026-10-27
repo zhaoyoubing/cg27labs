@@ -17,10 +17,9 @@ class ShadowDepthPass : public RenderPass
 {
 public:
     explicit ShadowDepthPass() { }
-    // explicit ForwardPass(std::shared_ptr<GPUPipeline> gpuPipe) { }
+
 
     bool init(RenderContext& context) override;
-    
     // Called once per frame.
     void execute(RenderContext& context) override;
 
@@ -28,7 +27,13 @@ public:
     const int SHADOW_HEIGHT = 1024;
 
     GLuint shadowFBO;  // the framebuffer 
-    GLuint depthTex;   // the depth map texture
+    
+    GLuint depthMap;   // the depth map
+    glm::mat4 matLightSpace {1.0f};
+
+    GLuint getShadowMap() { 
+        return depthMap; 
+    }
 
 private:
 
@@ -36,6 +41,10 @@ private:
     LightComp lightDefault_;
 
     std::shared_ptr<GPUPipeline> depthShader;
+
+   
+
+    
 
     void drawSceneGraph(const RenderContext & ctx, std::unique_ptr<SceneNode>& node, 
                         const glm::mat4& parentMatrix = glm::mat4(1.0), 

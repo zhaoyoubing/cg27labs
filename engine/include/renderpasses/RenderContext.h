@@ -9,6 +9,12 @@
 
 #include <memory>
 
+// for shadow mapping
+struct ShadowData {
+    GLuint depthMap = 0;
+    glm::mat4 matLightSpace{1.0f};
+};
+
 struct RenderContext
 {
     //std::shared_ptr<Node> rootNode_; // Scene graph root for hierarchical scene representation
@@ -24,5 +30,7 @@ struct RenderContext
     TextureManager & texMgr_;
 
     ShaderManager & shaderMgr_;
+
+    ShadowData shadow_;
 
 };

@@ -9,9 +9,12 @@ void RenderPipeline::addPass(std::unique_ptr<RenderPass> pass)
 
 void RenderPipeline::render(RenderContext& context)
 {
+    int i = 0;
     for (auto& pass : passes_)
     {
+        spdlog::trace("execute pass {}", i++); 
         pass->execute(context);
+        spdlog::trace("shadow map id {}", context.shadow_.depthMap);
     }
 }
 

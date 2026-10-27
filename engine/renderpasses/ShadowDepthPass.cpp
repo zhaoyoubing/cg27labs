@@ -8,24 +8,28 @@ bool ShadowDepthPass::init(RenderContext& context) {
 
     if (!depthShader) return false;
 
-    /*
     // 2. Allocate FBO and Texture memory
     glGenFramebuffers(1, & shadowFBO);
-    glGenTextures(1, &depthTex);
-    glBindTexture(GL_TEXTURE_2D, depthTex);
+    glGenTextures(1, &depthMap);
+    glBindTexture(GL_TEXTURE_2D, depthMap);
     
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 
-                 SHADOW_WIDTH, SHADOW_HEIGHT, 0, 
-                 GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    // set texture size and format, high resolution 24bit for depth
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH_COMPONENT24, SHADOW_WIDTH, SHADOW_HEIGHT);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, SHADOW_WIDTH, SHADOW_HEIGHT, 0, 
+    //              GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
                  
-    // Set texture parameters (filtering, wrapping)...
+    // set Interpolation and Out-of-range texture parameters (filtering, wrapping)...
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);  
     
     // 3. Attach to FBO
     glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTex, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
     
     // disable drawing the colour buffer
-    // glDrawBuffer(GL_NONE);
+    glDrawBuffer(GL_NONE);
     // glReadBuffer(GL_NONE);
 
     // 4. Validate FBO
@@ -36,7 +40,7 @@ bool ShadowDepthPass::init(RenderContext& context) {
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    */
+    
 
     return true; // Everything is built and ready for the render loop!
 }
@@ -44,21 +48,8 @@ bool ShadowDepthPass::init(RenderContext& context) {
 void ShadowDepthPass::execute(RenderContext & ctx) {
 
     //spdlog::debug("ShadowDepthPass::execute()");
-
-    /*
-    // read camera data
-    auto viewCam = ctx.scene_->ecsWorld_.view<CameraComp>();
-
-    // a default camera in case no primary camera is found
-    for (auto entity : viewCam)
-    {
-        auto & cam = ctx.scene_->ecsWorld_.getComp<CameraComp>(entity);
-        if (cam.isPrimary) {
-            camera_ = cam;
-            break;
-        }
-    }
-    */
+    // share depth map between two passes
+    ctx.shadow_.depthMap = depthMap;
 
     // get the default single light from the scene
     // need to pack into light data structure in the future
@@ -71,14 +62,16 @@ void ShadowDepthPass::execute(RenderContext & ctx) {
     }
 
     glm::mat4 matLightView = glm::lookAt(lightDefault_.pos, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)); 
-    glm::mat4 matLightProj = glm::perspective(glm::radians(60.0f), 1.0f, 1.0f, 1500.0f);
-    //glm::mat4 matLightProj = glm::ortho(-80.0f,80.0f,-80.0f,80.0f, 0.0f, 300.0f);
-    // glm::mat4 matLightViewProj = matLightProj * matLightView;
+    glm::mat4 matLightProj = glm::perspective(glm::radians(40.0f), 1.0f, 1.0f, 10.0f);
+    //glm::mat4 matLightProj = glm::ortho(-2.0f,2.0f,-2.0f,2.0f, 0.0f, 20.0f);
+    //glm::mat4 matLightSpace = matLightProj * matLightView;
+    ctx.shadow_.matLightSpace = matLightProj * matLightView;
 
 
     glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 
-    //glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     //glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
     
@@ -90,12 +83,14 @@ void ShadowDepthPass::execute(RenderContext & ctx) {
     glEnable(GL_DEPTH_TEST);
     glCullFace(GL_FRONT); // Cull front faces for shadow bias adjustment
 
-    depthShader->bind();
+    //depthShader->bind();
     
     // Use light space matrices
     drawSceneGraph(ctx, ctx.scene_->root_, glm::mat4(1.0), matLightView, matLightProj);
 
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    //depthShader->unbind();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void ShadowDepthPass::drawSceneGraph(const RenderContext & ctx, std::unique_ptr<SceneNode>& node, 
