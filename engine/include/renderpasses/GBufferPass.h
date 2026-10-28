@@ -37,8 +37,10 @@ private:
     GLuint gMat = 0;   // Metallic-Roughness
     GLuint gDepth = 0;
 
+    // GBuffer dimensions
     int width_ = 0;
     int height_ = 0;
+
 
     std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 

@@ -56,7 +56,13 @@ bool GBufferPass::init(RenderContext & ctx) {
 
 
 void GBufferPass::execute(RenderContext & ctx) {
+    glBindFramebuffer(GL_FRAMEBUFFER, gBuf);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    drawSceneGraph(context.scene_->root_, glm::mat4(1.0), 
+            context, camera_.getViewMatrix(), camera_.getProjMatrix());
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void GBufferPass::drawSceneGraph(std::unique_ptr<SceneNode>& node, 
