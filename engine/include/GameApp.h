@@ -60,6 +60,13 @@ protected:
     MeshManager meshMgr_;
     MaterialManager matMgr_;
     TextureManager texMgr_;
+
+    RenderContext context_ = {
+        .meshMgr_ = meshMgr_,
+        .matMgr_ = matMgr_,
+        .texMgr_ = texMgr_,
+        .shaderMgr_ = shaderMgr_
+    };
     
 private:
     void initWindow(std::string title);   // init window and OpenGL setup
