@@ -27,6 +27,8 @@ void GameApp::init() {
     
     initResources();
 
+    context_.scene_ = scene_;
+
     bInitialised_ = true;
 
     spdlog::info("GameApp initialisation complete.");
