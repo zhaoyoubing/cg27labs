@@ -1,22 +1,25 @@
 #version 450
-out vec4 fragColor;
 
-in vec2 uv;
+layout(binding = 0) uniform sampler2D gAlbedo;
+layout(binding = 1) uniform sampler2D gNormal;
+layout(binding = 2) uniform sampler2D gMaterial;
+layout(binding = 3) uniform sampler2D gDepth;
 
-uniform sampler2D gPos;
-uniform sampler2D gNormal;
-uniform sampler2D gAlbedo;
+//out vec4 fragColor;
+
 
 // for lighting
-in vec3 fragPos;
-in vec3 fragNormal;
+//in vec3 fragPos;
+//in vec3 fragNormal;
+
 in vec2 uv;
 
-uniform vec3 uLightPos;
-uniform vec3 uViewPos;
+//uniform vec3 uLightPos;
+//uniform vec3 uViewPos;
 
-uniform sampler2D baseColourMap;
+//uniform sampler2D baseColourMap;
 
+/*
 struct Light
 {
     vec4 pos;   // xyz: position, w: light type
@@ -32,20 +35,37 @@ layout(std430, binding = 0) readonly buffer LightBuffer
     Light uLights[];
 };
 
-uniform int uLightCount;
+*/
 
+struct PointLight {
+    vec3 pos;
+    vec3 colour;
+    float intensity;
+    
+    // Distance attenuation coefficients
+    float a; // constant
+    float b; // linear
+    float c; // quadratic
+};
+
+uniform PointLight uLights[10];
+
+uniform int uLightCount = 1;
 
 out vec4 colour_out;
 
 void main()
 {             
     // retrieve data from gbuffer
-    vec3 fragPos = texture(gPos, uv).rgb;
+    // vec3 fragPos = texture(gPos, uv).rgb;
+    
     vec3 normal = texture(gNormal, uv).rgb;
     vec3 diffuse = texture(gAlbedo, uv).rgb;
-    float specular = texture(gAlbedo, uv).a;
+
+    //float specular = texture(gAlbedo, uv).a;
     
     // then calculate lighting as usual
+    /*
     vec3 lighting  = diffuse * 0.1; // hard-coded ambient component
     vec3 viewDir  = normalize(viewPos - FragPos);
     for(int i = 0; i < uLightCount; ++i)
@@ -64,6 +84,11 @@ void main()
         //specular *= attenuation;
         lighting += diffuse + specular;        
     }
+    */
 
-    colour_out = vec4(lighting, 1.0);
+    //colour_out = vec4(lighting, 1.0);
+    colour_out = vec4(diffuse, 1.0);
+    //colour_out = vec4(normal * 0.5 + 0.5, 1.0);
+    //colour_out = vec4(1.0, 0.0, 0.0, 1.0);
+    //colour_out = vec4(uv.x, uv.y, 0.0, 1.0);
 }
