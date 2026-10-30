@@ -129,6 +129,7 @@ protected:
         //renderPipe_.addPass(std::move(shadowLightPass));
         //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
 
+        /*
         RenderContext ctx {
             .scene_ = scene_,
             .meshMgr_ = meshMgr_,
@@ -136,9 +137,10 @@ protected:
             .texMgr_ = texMgr_,
             .shaderMgr_ = shaderMgr_
         };
+        */
 
         // init render passes in the render pipeline
-        renderPipe_.init(ctx);
+        renderPipe_.init(context_);
         // chain two passes
         //lightPass->setShadowMap(depthPass->getShadowMap());
     };
@@ -154,6 +156,7 @@ protected:
         // Clear frame buffers
         mainWin_->clearScreen();
 
+        /*
         RenderContext ctx {
             .scene_ = scene_,
             .meshMgr_ = meshMgr_,
@@ -161,8 +164,9 @@ protected:
             .texMgr_ = texMgr_,
             .shaderMgr_ = shaderMgr_
         };
+        */
 
-        renderPipe_.render(ctx);
+        renderPipe_.render(context_);
 
         // Swap front and back buffers
         mainWin_->swapBuffers();
