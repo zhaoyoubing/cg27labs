@@ -131,8 +131,6 @@ protected:
 
         // init render passes in the render pipeline
         renderPipe_.init(context_);
-        // chain two passes
-        //lightPass->setShadowMap(depthPass->getShadowMap());
     };
 
    void tick(float dt) override {
