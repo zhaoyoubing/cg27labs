@@ -129,16 +129,6 @@ protected:
         renderPipe_.addPass(std::move(shadowLightPass));
         //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
 
-        /*
-        RenderContext ctx {
-            .scene_ = scene_,
-            .meshMgr_ = meshMgr_,
-            .matMgr_ = matMgr_,
-            .texMgr_ = texMgr_,
-            .shaderMgr_ = shaderMgr_
-        };
-        */
-
         // init render passes in the render pipeline
         renderPipe_.init(context_);
         // chain two passes
@@ -155,16 +145,6 @@ protected:
    void render() override {
         // Clear frame buffers
         mainWin_->clearScreen();
-
-        /*
-        RenderContext ctx {
-            .scene_ = scene_,
-            .meshMgr_ = meshMgr_,
-            .matMgr_ = matMgr_,
-            .texMgr_ = texMgr_,
-            .shaderMgr_ = shaderMgr_
-        };
-        */
 
         renderPipe_.render(context_);
 
