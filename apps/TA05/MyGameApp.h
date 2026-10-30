@@ -126,7 +126,7 @@ protected:
         ShadowDepthPass * depthPass = shadowDepthPass.get();
         ShadowLightPass * lightPass = shadowLightPass.get();
         renderPipe_.addPass(std::move(shadowDepthPass));
-        //renderPipe_.addPass(std::move(shadowLightPass));
+        renderPipe_.addPass(std::move(shadowLightPass));
         //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
 
         RenderContext ctx {

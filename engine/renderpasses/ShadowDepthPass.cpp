@@ -71,7 +71,7 @@ void ShadowDepthPass::execute(RenderContext & ctx) {
     glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 
     glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     //glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
     
