@@ -68,7 +68,7 @@ bool GBufferPass::init(RenderContext & ctx) {
     glNamedFramebufferTexture(gBufFBO, GL_COLOR_ATTACHMENT2, gMat, 0);
 
     // tell OpenGL which colour attachments we'll use (of this framebuffer) for rendering 
-    unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+    unsigned int attachments[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
     //unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
     glNamedFramebufferDrawBuffers(gBufFBO, 3, attachments);
 
@@ -118,7 +118,6 @@ void GBufferPass::execute(RenderContext & ctx) {
         }
     }
 
-    
 
     //glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, gBufFBO);
@@ -127,7 +126,6 @@ void GBufferPass::execute(RenderContext & ctx) {
 
     glViewport(0, 0, width_, height_);
 
-    
     glEnable(GL_DEPTH_TEST);
     //glDepthMask(GL_TRUE);
     //glDisable(GL_BLEND);
