@@ -30,23 +30,23 @@ private:
     
     bool bInited;
 
-    GLuint gBuf = 0;
-    GLuint gPos = 0;
-    GLuint gNormal = 0;
-    GLuint gAlbedo = 0;
-    GLuint gMat = 0;   // Metallic-Roughness
-    GLuint gDepth = 0;
+    std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 
     // GBuffer dimensions
     int width_ = 0;
     int height_ = 0;
 
+    GLuint gBufFBO = 0;  // frame buffer object
+    //GLuint gPos = 0;
+    GLuint gAlbedo = 0;  // diffuse colour
+    GLuint gNormal = 0;
+    GLuint gMat = 0;   // Metallic-Roughness
+    GLuint gDepth = 0;
 
-    std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 
-    void drawSceneGraph(std::unique_ptr<SceneNode>& node, 
+
+    void drawSceneGraph(RenderContext& context, std::unique_ptr<SceneNode>& node, 
                          const glm::mat4& parentMatrix, 
-                         RenderContext& context,
                          const glm::mat4& viewMatrix, const glm::mat4& projMatrix);
     
 };

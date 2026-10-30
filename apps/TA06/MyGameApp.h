@@ -20,6 +20,8 @@
 #include "renderpasses/ForwardPassLight.h"
 #include "renderpasses/ShadowDepthPass.h"
 #include "renderpasses/ShadowLightPass.h"
+#include "renderpasses/GBufferPass.h"
+#include "renderpasses/DeferredLightPass.h"
 
 #include <algorithm>
 
@@ -48,41 +50,46 @@ protected:
         shaderMgr_.load("texblinn_normal", "shaders/texblinn_normal.vert", "shaders/texblinn_normal.frag");
         shaderMgr_.load("shadowdepth", "shaders/shadowdepth.vert", "shaders/shadowdepth.frag");
         shaderMgr_.load("shadowlight", "shaders/shadowlight.vert", "shaders/shadowlight.frag");
+        shaderMgr_.load("deferred_gbuffer", "shaders/deferred_gbuffer.vert", "shaders/deferred_gbuffer.frag");
+        shaderMgr_.load("deferred_lighting", "shaders/deferred_lighting.vert", "shaders/deferred_lighting.frag");
 
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
         //std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
+        /*
         std::unique_ptr<SceneNode> bunny = MeshFactory::loadGltf(//"assets/box_normal/box_normal_tangent.gltf",
                                                              "assets/bunny_tex.gltf", 
                                                              texMgr_,  matMgr_, shaderMgr_);
         //scene_->root_ = std::move(mesh);
         bunny->scaleToFitBBox(0.5);
-        bunny->trans.pos += glm::vec3(0.0, 0.2, 0.3);
+        //bunny->trans.pos += glm::vec3(0.0, 0.2, 0.3);
         
         AABB bbox1 = bunny->getBBox();
         spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox1.min.x, bbox1.min.y, bbox1.min.z, 
                                                                     bbox1.max.x, bbox1.max.y, bbox1.max.z);
         scene_->root_->children.push_back(std::move(bunny));
+        */
 
+        /*
         std::unique_ptr<SceneNode> barrel = MeshFactory::loadGltf("assets/barrel/scene.gltf", 
                                                              texMgr_,  matMgr_, shaderMgr_);
-        bbox1 = barrel->getBBox();
+        AABB bbox1 = barrel->getBBox();
         spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox1.min.x, bbox1.min.y, bbox1.min.z, 
                                                                     bbox1.max.x, bbox1.max.y, bbox1.max.z);
         barrel->scaleToFitBBox(0.8);
         barrel->center();
         barrel->trans.pos = barrel->trans.pos + glm::vec3(-0.7, 0.0, 0.0);
         scene_->root_->children.push_back(std::move(barrel));
-
-
+       */
+        
         std::unique_ptr<SceneNode> teapot = MeshFactory::loadGltf( "assets/teapot_texblue/scene.gltf", 
                                                         texMgr_,  matMgr_, shaderMgr_);
         
         teapot->scaleToFitBBox(0.3);
         teapot->center();
-        teapot->trans.pos += glm::vec3(0.5, 0.4, 0.6);
+        //teapot->trans.pos += glm::vec3(0.5, 0.4, 0.6);
         scene_->root_->children.push_back(std::move(teapot));
-
+         
 
         AABB bbox = scene_->getBBox();
         spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox.min.x, bbox.min.y, bbox.min.z, 
@@ -121,27 +128,61 @@ protected:
 
         // ================ Shaders and Pipeline Setup ================
         // 6. render pipeline init
-        std::unique_ptr<ShadowDepthPass> shadowDepthPass = std::make_unique<ShadowDepthPass>();
-        std::unique_ptr<ShadowLightPass> shadowLightPass = std::make_unique<ShadowLightPass>();
-        ShadowDepthPass * depthPass = shadowDepthPass.get();
-        ShadowLightPass * lightPass = shadowLightPass.get();
-        renderPipe_.addPass(std::move(shadowDepthPass));
+        //std::unique_ptr<ShadowDepthPass> shadowDepthPass = std::make_unique<ShadowDepthPass>();
+        //std::unique_ptr<ShadowLightPass> shadowLightPass = std::make_unique<ShadowLightPass>();
+        //renderPipe_.addPass(std::move(shadowDepthPass));
         //renderPipe_.addPass(std::move(shadowLightPass));
         //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
 
-        RenderContext ctx {
-            .scene_ = scene_,
-            .meshMgr_ = meshMgr_,
-            .matMgr_ = matMgr_,
-            .texMgr_ = texMgr_,
-            .shaderMgr_ = shaderMgr_
-        };
+        std::unique_ptr<GBufferPass> gBufferPass = std::make_unique<GBufferPass>();
+        std::unique_ptr<DeferredLightPass> deferredLightPass = std::make_unique<DeferredLightPass>();
+        renderPipe_.addPass(std::move(gBufferPass));
+        renderPipe_.addPass(std::move(deferredLightPass));
+        //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
+
 
         // init render passes in the render pipeline
-        renderPipe_.init(ctx);
+        renderPipe_.init(context_);
         // chain two passes
         //lightPass->setShadowMap(depthPass->getShadowMap());
     };
+
+    void initLights(float radius, int nLights = 20) {
+
+        radius = radius * 1.5f;
+
+        for (unsigned int i = 0; i < nLights; i++)
+        {
+            LightComp light {
+                .type = POINT,
+                .pos = glm::vec3(radius, radius, radius),
+                .dir = glm::vec3(0.0f, 0.0f, -1.0f),
+                .colour = glm::vec3(1.0f, 1.0f, 1.0f),
+                .intensity = 1.0f,
+                .a = 1.0f,
+                .b = 0.09f,
+                .c = 0.032f 
+            };
+
+            // calculate slightly random offsets
+            float theta = static_cast<float>(((rand() % 360) / 360.0) * 3.1415926 * 2);
+
+            float x = radius * cos(theta);
+            float z = radius * sin(theta);
+
+            float y = static_cast<float>( ( ((rand() % 100) / 50.0) - 1.0) * radius );
+
+            light.pos = glm::vec3(x, y, z);
+            
+            // also calculate random color
+            float r = static_cast<float>(((rand() % 100) / 200.0f) + 0.5); // between 0.5 and 1.0
+            float g = static_cast<float>(((rand() % 100) / 200.0f) + 0.5); // between 0.5 and 1.0
+            float b = static_cast<float>(((rand() % 100) / 200.0f) + 0.5); // between 0.5 and 1.0
+            light.colour = glm::vec3(r, g, b);
+
+            scene_->lightList.push_back(light);
+        }
+    }
 
    void tick(float dt) override {
         // 3. Run systems using window's delta time directly
@@ -154,15 +195,7 @@ protected:
         // Clear frame buffers
         mainWin_->clearScreen();
 
-        RenderContext ctx {
-            .scene_ = scene_,
-            .meshMgr_ = meshMgr_,
-            .matMgr_ = matMgr_,
-            .texMgr_ = texMgr_,
-            .shaderMgr_ = shaderMgr_
-        };
-
-        renderPipe_.render(ctx);
+        renderPipe_.render(context_);
 
         // Swap front and back buffers
         mainWin_->swapBuffers();

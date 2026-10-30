@@ -25,7 +25,7 @@ public:
     // Called once per frame.
     void execute(RenderContext& context) override;
 
-    const MAX_LIGHTS = 128;
+    const int MAX_LIGHTS = 128;
 
 private:
 
@@ -49,9 +49,10 @@ private:
     GLuint lightSSBO = 0;
     std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 
-    GLuint quadVAO = 0;
-    GLuint quadVBO = 0;
-    void drawQuad(RenderContext& context);
+    GLuint screenVAO = 0;
+    //GLuint quadVAO = 0;
+    //GLuint quadVBO = 0;
+    //void drawQuad(RenderContext& context);
 
     void setLights(const std::vector<GPULight> & lights);
     

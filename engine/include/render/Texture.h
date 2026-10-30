@@ -54,7 +54,8 @@ struct Texture {
     }
 
     // unbind the current texture
-    void unbind() const {
+    void unbind(unsigned int unit = 0) const {
+        glActiveTexture(GL_TEXTURE0 + unit);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 

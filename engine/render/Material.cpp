@@ -81,11 +81,11 @@ void Material::bind(const std::shared_ptr<GPUPipeline> pipe) {
 void Material::unbind() {
 
     if (nullptr != baseColourTex) {
-        baseColourTex->unbind();
+        baseColourTex->unbind(0);
     }
 
     if (nullptr != normalTex) {
-        normalTex->unbind();
+        normalTex->unbind(1);
     }
 
     if (nullptr != gpuPipe) {

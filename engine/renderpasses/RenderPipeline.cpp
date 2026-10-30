@@ -20,6 +20,8 @@ void RenderPipeline::render(RenderContext& context)
 
 void RenderPipeline::init(RenderContext& context)
 {
+    spdlog::debug("Init RenderPipeline");
+    
     for (auto& pass : passes_)
     {
         pass->init(context);

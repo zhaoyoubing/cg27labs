@@ -15,13 +15,18 @@ struct ShadowData {
     glm::mat4 matLightSpace{1.0f};
 };
 
+struct GBufferData {
+    //GLuint gBufFBO = 0;
+    GLuint gAlbedo = 0;
+    GLuint gNormal = 0;
+    GLuint gMat = 0;   // Metallic-Roughness
+    GLuint gDepth = 0;
+};
+
 struct RenderContext
 {
-    //std::shared_ptr<Node> rootNode_; // Scene graph root for hierarchical scene representation
-
+ 
     std::shared_ptr<Scene> scene_; // Scene graph root for hierarchical scene representation
-
-    //ECSWorldRegistry & registry_;
 
     MeshManager & meshMgr_;
 
@@ -32,5 +37,7 @@ struct RenderContext
     ShaderManager & shaderMgr_;
 
     ShadowData shadow_;
+
+    GBufferData gbuf_;
 
 };
