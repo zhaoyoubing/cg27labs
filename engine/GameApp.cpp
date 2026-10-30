@@ -24,10 +24,20 @@ void GameApp::init() {
     initWindow(name_);
 
     initScene();
-    
+
+    /*
+    context_ = {
+        .scene_ = scene_,
+        .meshMgr_ = & meshMgr_,
+        .matMgr_ = & matMgr_,
+        .texMgr_ = & texMgr_,
+        .shaderMgr_ = & shaderMgr_
+    };
+    */
+
     initResources();
 
-    context_.scene_ = scene_;
+
 
     bInitialised_ = true;
 
@@ -45,6 +55,7 @@ void GameApp::initWindow(std::string title) {
 
 void GameApp::initScene() {
     scene_ = std::make_shared<Scene>();
+    context_.scene_ = scene_;
 }
 
 void GameApp::run() {

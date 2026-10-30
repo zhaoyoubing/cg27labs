@@ -84,6 +84,7 @@ protected:
         // Clear frame buffers
         mainWin_->clearScreen();
 
+        /*
         RenderContext ctx {
             .scene_ = scene_,
             .meshMgr_ = meshMgr_,
@@ -91,8 +92,9 @@ protected:
             .texMgr_ = texMgr_,
             .shaderMgr_ = shaderMgr_
         };
+        */
 
-        renderPipe_.render(ctx);
+        renderPipe_.render(context_);
 
         // Swap front and back buffers
         mainWin_->swapBuffers();
