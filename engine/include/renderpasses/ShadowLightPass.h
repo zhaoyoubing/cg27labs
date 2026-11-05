@@ -23,13 +23,6 @@ public:
     // Called once per frame.
     void execute(RenderContext& context) override;
 
-    /*
-    void setShadowMap(GLuint map) { 
-        shadowMap = map;
-        bUseShadow = glIsTexture(shadowMap);
-    }
-    */
-
 private:
 
     CameraComp camera_;
@@ -37,8 +30,6 @@ private:
     
     bool bInited;
 
-    //bool bUseShadow = false;
-    //GLuint shadowMap;
     std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 
     void drawSceneGraph(std::unique_ptr<SceneNode>& node, 
