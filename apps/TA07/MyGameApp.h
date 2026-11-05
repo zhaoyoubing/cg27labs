@@ -18,6 +18,7 @@
 
 #include "renderpasses/ForwardPassLightNormal.h"
 #include "renderpasses/SkyBoxPass.h"
+#include "renderpasses/CubeMapReflectionPass.h"
 
 #include <algorithm>
 
@@ -45,14 +46,25 @@ protected:
         shaderMgr_.load("texblinn", "shaders/blinn_texture.vert", "shaders/blinn_texture.frag");
         shaderMgr_.load("texblinn_normal", "shaders/texblinn_normal.vert", "shaders/texblinn_normal.frag");
         shaderMgr_.load("skybox", "shaders/skybox.vert", "shaders/skybox.frag");
+        shaderMgr_.load("cubemap_reflect", "shaders/cubemap_reflect.vert", "shaders/cubemap_reflect.frag");
 
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
+        /*
         //std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
         std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf( //"assets/barrel/scene.gltf", 
                                                              "assets/box_normal/box_normal_tangent.gltf",
                                                                 texMgr_,  matMgr_, shaderMgr_);
         scene_->root_ = std::move(mesh);
+        */
+
+        std::unique_ptr<SceneNode> teapot = MeshFactory::loadGltf( "assets/teapot_texblue/scene.gltf", 
+                                                        texMgr_,  matMgr_, shaderMgr_);
+        
+        teapot->scaleToFitBBox(0.3);
+        teapot->center();
+        teapot->trans.pos += glm::vec3(0.0, 0.0, -0.5);
+        scene_->root_->children.push_back(std::move(teapot));
 
         AABB bbox = scene_->getBBox();
         spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox.min.x, bbox.min.y, bbox.min.z, 
@@ -60,13 +72,14 @@ protected:
         glm::vec3 dim = bbox.getDimension();
         glm::vec3 center = bbox.getCenter();
         float maxSize = std::max(dim.x, std::max(dim.y, dim.z) );
-
+        
         // ================ Create camera entity ================
         // 4. Create the camera entity id
         EntityID camId = scene_->ecsWorld_.createEntityID();
 
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
-            .eye = center, //  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, // + glm::vec3(-200.0, 5.0, 0) for barrel testing
+            //.eye = center  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, // + glm::vec3(-200.0, 5.0, 0) for barrel testing
+            .eye = glm::vec3(0.0f, 0.0f, 0.0f),
             .fov = 45.0f,
             .far = maxSize * 5.0f,
             .front = glm::vec3(0, 0, -1),
@@ -103,6 +116,7 @@ protected:
         // ================ Shaders and Pipeline Setup ================
         // 6. render pipeline init
         //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
+        renderPipe_.addPass(std::make_unique<CubeMapReflectionPass>());
         renderPipe_.addPass(std::make_unique<SkyBoxPass>());
 
         renderPipe_.init(context_);

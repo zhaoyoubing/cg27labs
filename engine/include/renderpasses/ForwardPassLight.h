@@ -17,7 +17,7 @@ class ForwardPassLight : public RenderPass
 {
 public:
     explicit ForwardPassLight() { }
-    // explicit ForwardPass(std::shared_ptr<GPUPipeline> gpuPipe) { }
+    // explicit ForwardPassLight(std::shared_ptr<GPUPipeline> gpuPipe) { }
     
     // Called once per frame.
     void execute(RenderContext& context) override;
