@@ -50,8 +50,11 @@ public:
             }
         }
 
+        // to disable view frustum translation, we take only the rotation part of the view matrix
+        glm::mat4 skyboxView = glm::mat4(glm::mat3(camera_.getViewMatrix()));
+
         gpuPipe->bind();
-        gpuPipe->setMat4("uView", camera_.getViewMatrix());
+        gpuPipe->setMat4("uView", skyboxView);
         gpuPipe->setMat4("uProj", camera_.getProjMatrix());
 
         //glClearColor(0.25f, 0.5f, 0.75f, 1.0f);

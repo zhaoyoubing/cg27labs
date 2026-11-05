@@ -63,7 +63,7 @@ protected:
         
         teapot->scaleToFitBBox(0.3);
         teapot->center();
-        teapot->trans.pos += glm::vec3(0.0, 0.0, -0.5);
+        //teapot->trans.pos += glm::vec3(0.0, 0.0, -0.5);
         scene_->root_->children.push_back(std::move(teapot));
 
         AABB bbox = scene_->getBBox();
@@ -78,8 +78,7 @@ protected:
         EntityID camId = scene_->ecsWorld_.createEntityID();
 
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
-            //.eye = center  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, // + glm::vec3(-200.0, 5.0, 0) for barrel testing
-            .eye = glm::vec3(0.0f, 0.0f, 0.0f),
+            .eye = center  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, // + glm::vec3(-200.0, 5.0, 0) for barrel testing
             .fov = 45.0f,
             .far = maxSize * 5.0f,
             .front = glm::vec3(0, 0, -1),
