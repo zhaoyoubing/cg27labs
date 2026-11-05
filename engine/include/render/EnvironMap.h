@@ -11,7 +11,7 @@ public:
     virtual bool load(const std::string& filename) = 0;
 
 protected:
-    GLuint id_ = 0; // OpenGL texture ID
+    GLuint mapId_ = 0; // OpenGL texture ID
     int width_ = 0;
     int height_ = 0;
     GLenum format_ = GL_RGBA; // Default format
