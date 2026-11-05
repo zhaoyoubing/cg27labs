@@ -54,6 +54,7 @@ private:
     //GLuint quadVBO = 0;
     //void drawQuad(RenderContext& context);
 
-    void setLights(const std::vector<GPULight> & lights);
+    void setSSBOLights(const std::vector<GPULight> & lights);
+    void setPointLights(RenderContext & ctx);
     
 };

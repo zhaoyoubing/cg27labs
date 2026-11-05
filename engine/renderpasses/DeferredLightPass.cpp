@@ -11,6 +11,8 @@ bool DeferredLightPass::init(RenderContext & ctx) {
 
     
     glCreateBuffers(1, &lightSSBO);
+
+    // for light data, we will use a shader storage buffer object (SSBO) to store an array of lights
 /*
     glNamedBufferData(
         lightSSBO,
@@ -44,8 +46,8 @@ void DeferredLightPass::execute(RenderContext & ctx) {
         }
     }
 
-    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-
+    glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
+    
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     
     glViewport(0, 0, camera_.viewport.w, camera_.viewport.h);
@@ -58,23 +60,55 @@ void DeferredLightPass::execute(RenderContext & ctx) {
 
     gpuPipe->bind();
 
+    // set GBuffer textures to the shader
     glBindTextureUnit(0, ctx.gbuf_.gAlbedo);
     glBindTextureUnit(1, ctx.gbuf_.gNormal);
     glBindTextureUnit(2, ctx.gbuf_.gMat);
     glBindTextureUnit(3, ctx.gbuf_.gDepth);
+
+    gpuPipe->setVec3("uEyePos", camera_.eye);
+    gpuPipe->setMat4("uMatInvProj", ctx.gbuf_.matInvProj);
+
+    setPointLights(ctx);
 
     glClear(GL_COLOR_BUFFER_BIT);
 
     glBindVertexArray(screenVAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
-
     gpuPipe->unbind();
 
 }
 
+void DeferredLightPass::setPointLights(RenderContext & ctx)
+{
+    std::vector<LightComp> & lights = ctx.scene_->lightList;
+    spdlog::trace("DeferredLightPass::setPointLights() - light count {}", lights.size());
 
-void DeferredLightPass::setLights(const std::vector<GPULight> & lights)
+    gpuPipe->setInt("uLightCount", static_cast<int>(lights.size()));
+
+    for (int i = 0; i < lights.size(); i++)
+    {
+        LightComp & light = lights[i];
+
+        
+        spdlog::trace("Light pos {}, {}, {}, colour {}, {}, {}, intensity {}", 
+            light.pos.x, light.pos.y, light.pos.z,
+            light.colour.r, light.colour.g, light.colour.b,
+            light.intensity
+        );
+        
+
+        gpuPipe->setVec3("uLights[" + std::to_string(i) + "].pos", light.pos);
+        gpuPipe->setVec3("uLights[" + std::to_string(i) + "].colour", light.colour);
+        gpuPipe->setFloat("uLights[" + std::to_string(i) + "].intensity", light.intensity);
+        gpuPipe->setFloat("uLights[" + std::to_string(i) + "].a", light.a);
+        gpuPipe->setFloat("uLights[" + std::to_string(i) + "].b", light.b);
+        gpuPipe->setFloat("uLights[" + std::to_string(i) + "].c", light.c);
+    }
+}
+
+void DeferredLightPass::setSSBOLights(const std::vector<GPULight> & lights)
 {
     constexpr size_t MAX_LIGHTS = 128;
 

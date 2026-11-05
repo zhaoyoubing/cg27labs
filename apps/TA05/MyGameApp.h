@@ -123,21 +123,9 @@ protected:
         // 6. render pipeline init
         std::unique_ptr<ShadowDepthPass> shadowDepthPass = std::make_unique<ShadowDepthPass>();
         std::unique_ptr<ShadowLightPass> shadowLightPass = std::make_unique<ShadowLightPass>();
-        ShadowDepthPass * depthPass = shadowDepthPass.get();
-        ShadowLightPass * lightPass = shadowLightPass.get();
         renderPipe_.addPass(std::move(shadowDepthPass));
         //renderPipe_.addPass(std::move(shadowLightPass));
         //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
-
-        /*
-        RenderContext ctx {
-            .scene_ = scene_,
-            .meshMgr_ = meshMgr_,
-            .matMgr_ = matMgr_,
-            .texMgr_ = texMgr_,
-            .shaderMgr_ = shaderMgr_
-        };
-        */
 
         // init render passes in the render pipeline
         renderPipe_.init(context_);

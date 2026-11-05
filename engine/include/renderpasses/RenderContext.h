@@ -21,6 +21,7 @@ struct GBufferData {
     GLuint gNormal = 0;
     GLuint gMat = 0;   // Metallic-Roughness
     GLuint gDepth = 0;
+    glm::mat4 matInvProj{1.0f};
 };
 
 struct RenderContext

@@ -56,31 +56,31 @@ protected:
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
         //std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
-        /*
+        
         std::unique_ptr<SceneNode> bunny = MeshFactory::loadGltf(//"assets/box_normal/box_normal_tangent.gltf",
                                                              "assets/bunny_tex.gltf", 
                                                              texMgr_,  matMgr_, shaderMgr_);
         //scene_->root_ = std::move(mesh);
         bunny->scaleToFitBBox(0.5);
-        //bunny->trans.pos += glm::vec3(0.0, 0.2, 0.3);
+        bunny->trans.pos += glm::vec3(0.0, 0.2, 0.3);
         
         AABB bbox1 = bunny->getBBox();
         spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox1.min.x, bbox1.min.y, bbox1.min.z, 
                                                                     bbox1.max.x, bbox1.max.y, bbox1.max.z);
         scene_->root_->children.push_back(std::move(bunny));
-        */
+        
 
         /*
         std::unique_ptr<SceneNode> barrel = MeshFactory::loadGltf("assets/barrel/scene.gltf", 
                                                              texMgr_,  matMgr_, shaderMgr_);
-        AABB bbox1 = barrel->getBBox();
-        spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox1.min.x, bbox1.min.y, bbox1.min.z, 
-                                                                    bbox1.max.x, bbox1.max.y, bbox1.max.z);
+        AABB bbox2 = barrel->getBBox();
+        spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox2.min.x, bbox2.min.y, bbox2.min.z, 
+                                                                    bbox2.max.x, bbox2.max.y, bbox2.max.z);
         barrel->scaleToFitBBox(0.8);
         barrel->center();
         barrel->trans.pos = barrel->trans.pos + glm::vec3(-0.7, 0.0, 0.0);
         scene_->root_->children.push_back(std::move(barrel));
-       */
+       
         
         std::unique_ptr<SceneNode> teapot = MeshFactory::loadGltf( "assets/teapot_texblue/scene.gltf", 
                                                         texMgr_,  matMgr_, shaderMgr_);
@@ -89,7 +89,7 @@ protected:
         teapot->center();
         //teapot->trans.pos += glm::vec3(0.5, 0.4, 0.6);
         scene_->root_->children.push_back(std::move(teapot));
-         
+        */ 
 
         AABB bbox = scene_->getBBox();
         spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox.min.x, bbox.min.y, bbox.min.z, 
@@ -103,7 +103,7 @@ protected:
         EntityID camId = scene_->ecsWorld_.createEntityID();
 
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
-            .eye = center + glm::vec3(0.0f, 0.0f, 1.5f) * maxSize,
+            .eye = center + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize,
             .fov = 45.0f,
             .far = maxSize * 3.0f,
             .front = glm::vec3(0.0, 0, -1),
@@ -114,6 +114,7 @@ protected:
 
         // ================ Light Setup ================
         // 5. Create a directional light
+        /*
         EntityID lightId = scene_->ecsWorld_.createEntityID();
         scene_->ecsWorld_.addComp<LightComp>(lightId, LightComp{
             .type = POINT,
@@ -125,6 +126,9 @@ protected:
             .b = 0.09f,
             .c = 0.032f 
         });
+        */
+
+        initLights(maxSize * 2.0f, 10); // add 10 random lights around the scene
 
         // ================ Shaders and Pipeline Setup ================
         // 6. render pipeline init
@@ -147,9 +151,10 @@ protected:
         //lightPass->setShadowMap(depthPass->getShadowMap());
     };
 
+    // add many random lights around the scene, for testing deferred rendering
     void initLights(float radius, int nLights = 20) {
 
-        radius = radius * 1.5f;
+        //radius = radius * 1.5f;
 
         for (unsigned int i = 0; i < nLights; i++)
         {
