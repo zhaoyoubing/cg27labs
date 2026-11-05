@@ -3,6 +3,8 @@
 #include <glad/glad.h>
 #include <string>
 
+// PanoramaMap class for handling panorama textures
+// To be used in the future in Image-based Lighting (IBL)
 class PanoramaMap : public EnvironMap {
 public:
     virtual ~PanoramaMap() = default;

@@ -4,6 +4,7 @@
 #include "scene/AABB.h"
 #include "scene/SceneNode.h"
 #include "entity/LightComp.h"
+#include "render/CubeMap.h"
 
 #include <string>
 #include <memory>
@@ -11,6 +12,8 @@
 struct Scene {
     std::string name_;
     ECSWorldRegistry ecsWorld_;
+
+    CubeMap skybox_;
 
     std::vector<LightComp> lightList;
 

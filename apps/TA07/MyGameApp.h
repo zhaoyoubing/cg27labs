@@ -17,6 +17,7 @@
 #include "entity/LightComp.h"
 
 #include "renderpasses/ForwardPassLightNormal.h"
+#include "renderpasses/SkyBoxPass.h"
 
 #include <algorithm>
 
@@ -43,10 +44,11 @@ protected:
         shaderMgr_.load("texplain", "shaders/vtexture.vert", "shaders/vtexture.frag");
         shaderMgr_.load("texblinn", "shaders/blinn_texture.vert", "shaders/blinn_texture.frag");
         shaderMgr_.load("texblinn_normal", "shaders/texblinn_normal.vert", "shaders/texblinn_normal.frag");
+        shaderMgr_.load("skybox", "shaders/skybox.vert", "shaders/skybox.frag");
 
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
-        // std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
+        //std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
         std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf( //"assets/barrel/scene.gltf", 
                                                              "assets/box_normal/box_normal_tangent.gltf",
                                                                 texMgr_,  matMgr_, shaderMgr_);
@@ -64,7 +66,7 @@ protected:
         EntityID camId = scene_->ecsWorld_.createEntityID();
 
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
-            .eye = center + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, // + glm::vec3(-200.0, 5.0, 0) for barrel testing
+            .eye = center, //  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, // + glm::vec3(-200.0, 5.0, 0) for barrel testing
             .fov = 45.0f,
             .far = maxSize * 5.0f,
             .front = glm::vec3(0, 0, -1),
@@ -87,9 +89,23 @@ protected:
             .c = 0.032f 
         });
 
+        // ================ Skybox Setup ================
+        std::vector<std::string> faces = {
+            "assets/cubemapYokohama/posx.jpg",
+            "assets/cubemapYokohama/negx.jpg",
+            "assets/cubemapYokohama/posy.jpg",
+            "assets/cubemapYokohama/negy.jpg",
+            "assets/cubemapYokohama/posz.jpg",
+            "assets/cubemapYokohama/negz.jpg"
+        };
+        scene_->skybox_.load(faces);
+
         // ================ Shaders and Pipeline Setup ================
         // 6. render pipeline init
-        renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
+        //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
+        renderPipe_.addPass(std::make_unique<SkyBoxPass>());
+
+        renderPipe_.init(context_);
     };
 
    void tick(float dt) override {
@@ -101,16 +117,6 @@ protected:
    void render() override {
         // Clear frame buffers
         mainWin_->clearScreen();
-
-        /*
-        RenderContext ctx {
-            .scene_ = scene_,
-            .meshMgr_ = meshMgr_,
-            .matMgr_ = matMgr_,
-            .texMgr_ = texMgr_,
-            .shaderMgr_ = shaderMgr_
-        };
-        */
 
         renderPipe_.render(context_);
 
