@@ -12,7 +12,9 @@ public:
     GLuint mapId_ = 0; // OpenGL texture ID
     int width_ = 0;
     int height_ = 0;
+    int mipLevels_ = 1; // Number of mipmap levels
     GLenum format_ = GL_RGBA; // Default format
+    GLenum internalFormat_ = GL_RGBA8; // Default internal format
 
     virtual ~CubeMap() = default;
 
@@ -50,11 +52,8 @@ public:
             //            0, GL_RGB, width_, height_, 0, GL_RGB, GL_UNSIGNED_BYTE, data
             //);
             
-            // Determine source format based on channels
-            GLenum dataFormat = (nChannels == 4) ? GL_RGBA : GL_RGB;
-
             if (!storageAllocated) {
-                format_ = (nChannels == 4) ? GL_RGBA8 : GL_RGB8;
+                internalFormat_ = (nChannels == 4) ? GL_RGBA8 : GL_RGB8;
                 width_ = width;
                 height_ = height;
 
@@ -63,7 +62,7 @@ public:
 
                 // Allocate immutable storage for the cube map (6 faces, 1 mip level)
                 // 1. Allocate immutable storage for the 6 faces (1 mip level in this example)
-                glTextureStorage2D(mapId_, 1, format_, width_, height_);
+                glTextureStorage2D(mapId_, 1, internalFormat_, width_, height_);
 
                 glTextureParameteri(mapId_, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                 glTextureParameteri(mapId_, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -74,12 +73,15 @@ public:
                 storageAllocated = true;
             }
 
+            // Determine source format based on channels
+            format_ = (nChannels == 4) ? GL_RGBA : GL_RGB;
+
             glTextureSubImage3D(
                     mapId_,            // Texture ID
                     0,                 // Mipmap level
                     0, 0, i,           // xoffset, yoffset, zoffset (zoffset maps to face index 0–5)
                     width, height, 1,  // width, height, depth (depth = 1 for a single face layer)
-                    dataFormat,            // Pixel format of your source data
+                    format_,            // Pixel format of your source data
                     GL_UNSIGNED_BYTE,  // Pixel data type
                     data      // Pointer to pixel data
             );
