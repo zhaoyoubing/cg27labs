@@ -22,7 +22,11 @@ out vec4 out_colour;
 
 void main()
 {
+    vec3 viewDir = normalize(uViewPos - fragPos);
+    // vec3 r = 2 * dot (fragNormal, viewDir) * fragNormal - 
+    vec3 reflectDir = reflect(viewDir, fragNormal);
     // RGBA from texture
+    out_colour = texture(cubemap, reflectDir);
     out_colour = texture(cubemap, fragNormal);
 
 }
