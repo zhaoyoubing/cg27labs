@@ -4,18 +4,8 @@ layout(binding = 5) uniform samplerCube cubemap;
 
 uniform vec3 uViewPos;
 
-/*
-uniform sampler2D baseColourMap;
-uniform bool bUseBlinn = true;
-
-
-uniform PointLight uLight;
-*/
-
 in vec3 fragPos;
 in vec3 fragNormal; // interpolated surface normal
-//in vec2 uv; // texture coordinates
-
 
 // the output pixel colour
 out vec4 out_colour;
@@ -23,10 +13,10 @@ out vec4 out_colour;
 void main()
 {
     vec3 viewDir = normalize(uViewPos - fragPos);
-    // vec3 r = 2 * dot (fragNormal, viewDir) * fragNormal - 
-    vec3 reflectDir = reflect(viewDir, fragNormal);
+    vec3 norm = normalize(fragNormal);
+
+    //vec3 reflectDir = 2 * dot (norm, viewDir) * norm - viewDir; 
+    vec3 reflectDir = reflect(-viewDir, norm);  // reflect() only takes normalised norm
     // RGBA from texture
     out_colour = texture(cubemap, reflectDir);
-    out_colour = texture(cubemap, fragNormal);
-
 }
