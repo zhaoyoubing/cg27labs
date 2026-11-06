@@ -63,7 +63,7 @@ protected:
         
         teapot->scaleToFitBBox(0.3);
         teapot->center();
-        //teapot->trans.pos += glm::vec3(0.0, 0.0, -0.5);
+        teapot->trans.pos += glm::vec3(-0.1, 0.2, -0.3);
         scene_->root_->children.push_back(std::move(teapot));
 
         AABB bbox = scene_->getBBox();
