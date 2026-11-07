@@ -38,8 +38,6 @@ public:
         }
 
         gpuPipe->bind();
-        //gpuPipe->setMat4("uView", camera_.getViewMatrix());
-        //gpuPipe->setMat4("uProj", camera_.getProjMatrix());
 
         glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -72,14 +70,10 @@ public:
 
             assert(meshBuf != nullptr);
 
-            // Select the material's shader
-            gpuPipe->bind();
-
             // set shader uniforms
             gpuPipe->setMat4("uModel", worldMatrix);
             gpuPipe->setMat4("uView",  viewMatrix);
             gpuPipe->setMat4("uProj", projMatrix);
-            
             gpuPipe->setVec3("uViewPos", camera_.eye);
 
             ctx.scene_->skybox_.bind(5); // Bind the cubemap texture to texture unit 5
@@ -89,7 +83,6 @@ public:
             meshBuf->draw();
             meshBuf->unbind();
 
-            gpuPipe->unbind();
         }
 
         // 3. Recursively process all children, passing down the updated world matrix
