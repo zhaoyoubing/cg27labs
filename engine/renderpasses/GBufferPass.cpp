@@ -11,7 +11,7 @@ bool GBufferPass::init(RenderContext & ctx) {
     // to get viewport width and height
     // currently viewport is in camera, to be changed in the future
 
-    // read camera data
+    // retrieve the camera object from ECS
     auto viewCam = ctx.scene_->ecsWorld_.view<CameraComp>();
 
     // a default camera in case no primary camera is found
@@ -29,10 +29,13 @@ bool GBufferPass::init(RenderContext & ctx) {
 
     spdlog::debug("GBuffer width {}, height {}", width_, height_);
 
-    // configure g-buffer framebuffer
     // ------------------------------
+    // 2. configure g-buffer framebuffer
     glCreateFramebuffers(1, &gBufFBO);
-    //glBindFramebuffer(GL_FRAMEBUFFER, gBufFBO);
+
+    // the alternative traditional way to create a framebuffer object
+    // glGenFramebuffers(1, &gBufFBO);
+    // glBindFramebuffer(GL_FRAMEBUFFER, gBufFBO);
     
     /*
     // vertex position buffer
@@ -43,15 +46,18 @@ bool GBufferPass::init(RenderContext & ctx) {
     glNamedFramebufferTexture(gBufFBO, GL_COLOR_ATTACHMENT0, gPos, 0);
     */
 
-    // colour + specular color buffer
+    // 3. fragment  diffuse colour buffer
     glCreateTextures(GL_TEXTURE_2D, 1, &gAlbedo);
     glTextureStorage2D(gAlbedo, 1, GL_RGBA8, width_, height_);
     glTextureParameteri(gAlbedo, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTextureParameteri(gAlbedo, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glNamedFramebufferTexture(gBufFBO, GL_COLOR_ATTACHMENT0, gAlbedo, 0);
 
+    // if you are following LearnOpenGL, you may see the more traditional API
+    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width_, height_, 0, GL_RGBA, GL_FLOAT, NULL);
+    // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gAlbedo, 0);
 
-    // vertex normal colour buffer
+    // 4. fragment normal buffer
     glCreateTextures(GL_TEXTURE_2D, 1, &gNormal);
     glTextureStorage2D(gNormal, 1, GL_RGBA16F, width_, height_);
     //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width_, height_, 0, GL_RGBA, GL_FLOAT, NULL);
@@ -60,18 +66,19 @@ bool GBufferPass::init(RenderContext & ctx) {
     //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gNormal, 0);
     glNamedFramebufferTexture(gBufFBO, GL_COLOR_ATTACHMENT1, gNormal, 0);
 
-    // Material: metallic roughness 
+    // 5. fragment material: metallic roughness
     glCreateTextures(GL_TEXTURE_2D, 1, &gMat);
     glTextureStorage2D(gMat, 1, GL_RGBA8, width_, height_);
     glTextureParameteri(gMat, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTextureParameteri(gMat, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glNamedFramebufferTexture(gBufFBO, GL_COLOR_ATTACHMENT2, gMat, 0);
 
-    // tell OpenGL which colour attachments we'll use (of this framebuffer) for rendering 
+    // 6. set colour attachments to use for rendering this framebuffer
     unsigned int attachments[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
     //unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
     glNamedFramebufferDrawBuffers(gBufFBO, 3, attachments);
 
+    // 7. create depth buffer
     glCreateTextures(GL_TEXTURE_2D, 1, &gDepth);
     glTextureStorage2D(gDepth, 1, GL_DEPTH_COMPONENT24, width_, height_);
     glTextureParameteri(gDepth, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -80,7 +87,7 @@ bool GBufferPass::init(RenderContext & ctx) {
     
     assert (glIsFramebuffer(gBufFBO) == GL_TRUE);
 
-    // finally check if framebuffer is complete
+    // 8. finally check if framebuffer is complete
     if ( glCheckNamedFramebufferStatus(gBufFBO, GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         spdlog::error("GBuffer Framebuffer not complete!");
         return false;
@@ -92,6 +99,7 @@ bool GBufferPass::init(RenderContext & ctx) {
     ctx.gbuf_.gMat = gMat;
     ctx.gbuf_.gDepth = gDepth;
 
+    // for recovering position from depth
     ctx.gbuf_.matInvProj = glm::inverse(camera_.getProjMatrix());
 
     spdlog::debug("After GBuffer init, albedo {}, normal {}, depth {}", gAlbedo, gNormal, gDepth);
@@ -120,7 +128,7 @@ void GBufferPass::execute(RenderContext & ctx) {
         }
     }
 
-
+    // enable the following to debug gbuffer output
     //glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, gBufFBO);
 

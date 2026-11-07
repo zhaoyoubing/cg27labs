@@ -44,7 +44,6 @@ private:
     GLuint gDepth = 0;
 
 
-
     void drawSceneGraph(RenderContext& context, std::unique_ptr<SceneNode>& node, 
                          const glm::mat4& parentMatrix, 
                          const glm::mat4& viewMatrix, const glm::mat4& projMatrix);
