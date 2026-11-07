@@ -32,10 +32,10 @@ int main() {
     // Instantiate the game-specific application derived from GameApp
     MyGameApp app("TA07");
     
-    // calls init(), initialises the window/context
+    // calls init(), initialises the window/context/resources
     app.init();
 
-    // starts the engine main event/rendering loop, 
+    // starts the engine main event/rendering loop
     app.run();
     
     return 0;
