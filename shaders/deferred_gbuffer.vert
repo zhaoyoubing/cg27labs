@@ -1,4 +1,4 @@
-#version 450 
+#version 410 
 
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
@@ -9,7 +9,7 @@ uniform mat4 uModel;
 uniform mat4 uView;
 uniform mat4 uProj;
 
-//out vec3 fragPos;
+//out vec3 fragPos;   // we don't need the position buffer
 out vec2 uv;
 out vec3 fragNormal;
 

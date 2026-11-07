@@ -1,4 +1,4 @@
-#version 450
+#version 410
 
 layout (location = 0) out vec4 gAlbedo;
 layout (location = 1) out vec3 gNormal;
@@ -8,8 +8,6 @@ in vec2 uv;
 in vec3 fragNormal;
 
 uniform sampler2D baseColourMap;
-//uniform sampler2D texture_specular1;
-
 
 void main()
 {    
@@ -23,7 +21,4 @@ void main()
     // debug show normal
     //gAlbedo = vec4((gNormal + 1.0) * 0.5, 1.0);
     
-    // store specular intensity in gAlbedoSpec's alpha component
-    //gAlbedoSpec.a = texture(texture_specular1, TexCoords).r;
-
 }
