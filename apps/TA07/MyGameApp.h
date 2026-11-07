@@ -115,7 +115,7 @@ protected:
         // ================ Render Pipeline Setup ================
         // 6. render pipeline init
         //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
-        //renderPipe_.addPass(std::make_unique<CubeMapReflectionPass>());
+        renderPipe_.addPass(std::make_unique<CubeMapReflectionPass>());
         renderPipe_.addPass(std::make_unique<SkyBoxPass>());
 
         renderPipe_.init(context_);
