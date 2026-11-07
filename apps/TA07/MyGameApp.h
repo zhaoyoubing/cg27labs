@@ -63,7 +63,7 @@ protected:
         
         teapot->scaleToFitBBox(0.3);
         teapot->center();
-        teapot->trans.pos += glm::vec3(-0.1, 0.2, -0.3);
+        //teapot->trans.pos += glm::vec3(-0.1, 0.2, -0.3);
         scene_->root_->children.push_back(std::move(teapot));
 
         AABB bbox = scene_->getBBox();
@@ -103,19 +103,19 @@ protected:
 
         // ================ Skybox Setup ================
         std::vector<std::string> faces = {
-            "assets/cubemapYokohama/posx.jpg",
-            "assets/cubemapYokohama/negx.jpg",
-            "assets/cubemapYokohama/posy.jpg",
-            "assets/cubemapYokohama/negy.jpg",
-            "assets/cubemapYokohama/posz.jpg",
-            "assets/cubemapYokohama/negz.jpg"
+            "assets/cubemapYokohama/posx.jpg",  // right
+            "assets/cubemapYokohama/negx.jpg",  // left
+            "assets/cubemapYokohama/posy.jpg",  // top
+            "assets/cubemapYokohama/negy.jpg",  // bottom
+            "assets/cubemapYokohama/posz.jpg",  // front
+            "assets/cubemapYokohama/negz.jpg"   // back
         };
         scene_->skybox_.load(faces);
 
-        // ================ Shaders and Pipeline Setup ================
+        // ================ Render Pipeline Setup ================
         // 6. render pipeline init
         //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
-        renderPipe_.addPass(std::make_unique<CubeMapReflectionPass>());
+        //renderPipe_.addPass(std::make_unique<CubeMapReflectionPass>());
         renderPipe_.addPass(std::make_unique<SkyBoxPass>());
 
         renderPipe_.init(context_);
