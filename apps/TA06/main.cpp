@@ -30,7 +30,7 @@ int main() {
     spdlog::set_level(spdlog::level::debug);
 
     // Instantiate the game-specific application derived from GameApp
-    MyGameApp app("TA05");
+    MyGameApp app("TA06");
     
     // calls init(), initialises the window/context
     app.init();
