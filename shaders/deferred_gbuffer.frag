@@ -18,7 +18,9 @@ void main()
     // and the diffuse per-fragment color
     gAlbedo = texture(baseColourMap, uv);
 
-    // debug show normal
-    //gAlbedo = vec4((gNormal + 1.0) * 0.5, 1.0);
-    
+    // debug preview normal
+    // gAlbedo = vec4((gNormal + 1.0) * 0.5, 1.0);
+
+    // debug preview depth
+    gAlbedo = vec4(vec3(gl_FragCoord.z), 1.0);
 }

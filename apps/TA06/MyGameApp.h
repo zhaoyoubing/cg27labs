@@ -60,7 +60,6 @@ protected:
         std::unique_ptr<SceneNode> bunny = MeshFactory::loadGltf(//"assets/box_normal/box_normal_tangent.gltf",
                                                              "assets/bunny_tex.gltf", 
                                                              texMgr_,  matMgr_, shaderMgr_);
-        //scene_->root_ = std::move(mesh);
         bunny->scaleToFitBBox(0.5);
         bunny->trans.pos += glm::vec3(0.0, 0.2, 0.3);
         
@@ -105,6 +104,7 @@ protected:
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
             .eye = center + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize,
             .fov = 45.0f,
+            .near = maxSize * 2.0f,  // for preview of depth map during debug
             .far = maxSize * 3.0f,
             .front = glm::vec3(0.0, 0, -1),
             .yaw = -90.0f,
@@ -141,7 +141,7 @@ protected:
         std::unique_ptr<GBufferPass> gBufferPass = std::make_unique<GBufferPass>();
         std::unique_ptr<DeferredLightPass> deferredLightPass = std::make_unique<DeferredLightPass>();
         renderPipe_.addPass(std::move(gBufferPass));
-        renderPipe_.addPass(std::move(deferredLightPass));
+        //renderPipe_.addPass(std::move(deferredLightPass));
         //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
 
 
