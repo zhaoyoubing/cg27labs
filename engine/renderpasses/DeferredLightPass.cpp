@@ -9,19 +9,20 @@ bool DeferredLightPass::init(RenderContext & ctx) {
 
     if (nullptr == gpuPipe) return false;
 
-    
+/*   
+    // To be used in the future 
     glCreateBuffers(1, &lightSSBO);
 
     // for light data, we will use a shader storage buffer object (SSBO) to store an array of lights
-/*
+
     glNamedBufferData(
         lightSSBO,
         MAX_LIGHTS * sizeof(GPULight),
         nullptr,
         GL_DYNAMIC_DRAW
     );
-*/
 
+*/
     glCreateVertexArrays(1, &screenVAO);
 
     return true;
@@ -48,6 +49,7 @@ void DeferredLightPass::execute(RenderContext & ctx) {
 
     glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
     
+    // bind the default framebuffer for lighting pass
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     
     glViewport(0, 0, camera_.viewport.w, camera_.viewport.h);
@@ -73,6 +75,7 @@ void DeferredLightPass::execute(RenderContext & ctx) {
 
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // render a full screeen geometry proxy (a triangle used here)
     glBindVertexArray(screenVAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -108,8 +111,11 @@ void DeferredLightPass::setPointLights(RenderContext & ctx)
     }
 }
 
+/*
+// To be used in the future
 void DeferredLightPass::setSSBOLights(const std::vector<GPULight> & lights)
 {
+    
     constexpr size_t MAX_LIGHTS = 128;
 
     size_t count = std::min(lights.size(), MAX_LIGHTS);
@@ -125,7 +131,9 @@ void DeferredLightPass::setSSBOLights(const std::vector<GPULight> & lights)
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, lightSSBO);
 
     gpuPipe->setInt("uLightCount", count);
+    
 }
+*/
 
 /*
 void DeferredLightPass::drawQuad(RenderContext& context) {

@@ -1,4 +1,4 @@
-#version 450
+#version 420
 
 layout(binding = 0) uniform sampler2D gAlbedo;
 layout(binding = 1) uniform sampler2D gNormal;
@@ -40,8 +40,8 @@ struct PointLight {
     float c; // quadratic
 };
 
-// max number of lights : 100
-#define MAX_LIGHTS 100
+// max number of lights : 128
+#define MAX_LIGHTS 128
 uniform PointLight uLights[MAX_LIGHTS];
 
 uniform int uLightCount = 1;
@@ -90,15 +90,17 @@ float blinnSpecular(vec3 lightDir, vec3 viewDir, vec3 diffuse, vec3 normal)
 */
 
 // code based on from LearnOpenGL.com
-// needs to adapt to PBR
+// needs to be adapted to PBR
 void main()
 {             
     // retrieve data from gbuffer
     // vec3 fragPos = texture(gPos, uv).rgb;
+    
     vec3 fragPos = reconViewPos(uv);
     
-    vec3 normal = texture(gNormal, uv).rgb;
     vec3 albedo = texture(gAlbedo, uv).rgb;
+    vec3 normal = texture(gNormal, uv).rgb;
+    
 
     //float specular = texture(gAlbedo, uv).a;
     // hard-coded k_s for Phong/Blinn-Phong
@@ -128,7 +130,7 @@ void main()
         totalLight += diffuse + specular;    
     }
     
-    // HDR conversion
+    // HDR tone mapping
     float exposure = 0.5f;
     // exposure tone mapping
     vec3 mapped = vec3(1.0) - exp(-totalLight * exposure);
@@ -139,6 +141,7 @@ void main()
 
     colour_out = vec4(mapped, 1.0);
 
+    // for debugging
     //colour_out = vec4(totalLight, 1.0);
     //colour_out = vec4(albedo, 1.0);
     //colour_out = vec4(normal * 0.5 + 0.5, 1.0);

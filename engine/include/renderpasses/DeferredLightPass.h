@@ -10,11 +10,11 @@
 #include <memory>
 
 #include "entity/CameraComp.h"
-#include "entity/LightComp.h"
+//#include "entity/LightComp.h"
 
-#include "device/GPULight.h"
+//#include "device/GPULight.h"
 
-// GBuffer Pass for Deferred Rendering
+// Lighting Pass for Deferred Rendering
 class DeferredLightPass : public RenderPass
 {
 public:
@@ -25,36 +25,41 @@ public:
     // Called once per frame.
     void execute(RenderContext& context) override;
 
-    const int MAX_LIGHTS = 128;
+    //const int MAX_LIGHTS = 128;
 
 private:
 
     CameraComp camera_;
-    LightComp lightDefault_;
+    //LightComp lightDefault_;
     
     bool bInited;
 
     GLuint gBuf = 0;
-    GLuint gPos = 0;
+    //GLuint gPos = 0;
     GLuint gNormal = 0;
     GLuint gAlbedo = 0;
     GLuint gMat = 0;   // Metallic-Roughness
     GLuint gDepth = 0;
 
     // GBuffer dimensions
-    int width_ = 0;
-    int height_ = 0;
+    //int width_ = 0;
+    //int height_ = 0;
 
-    // for uploading light data
-    GLuint lightSSBO = 0;
+    // for uploading light data, to be used in the future
+    //GLuint lightSSBO = 0; 
     std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 
+    // screen triangle VAO
     GLuint screenVAO = 0;
-    //GLuint quadVAO = 0;
-    //GLuint quadVBO = 0;
-    //void drawQuad(RenderContext& context);
 
-    void setSSBOLights(const std::vector<GPULight> & lights);
+    // An alternative to draw a quad
+    // GLuint quadVAO = 0;
+    // GLuint quadVBO = 0;
+    // void drawQuad(RenderContext& context);
+
+    // to be used in the future
+    //void setSSBOLights(const std::vector<GPULight> & lights);
+
     void setPointLights(RenderContext & ctx);
     
 };
