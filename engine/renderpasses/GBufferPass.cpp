@@ -129,8 +129,8 @@ void GBufferPass::execute(RenderContext & ctx) {
     }
 
     // enable the following to debug gbuffer output
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    //glBindFramebuffer(GL_FRAMEBUFFER, gBufFBO);
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, gBufFBO);
 
     glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
 

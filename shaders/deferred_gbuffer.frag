@@ -4,8 +4,8 @@ layout (location = 0) out vec4 gAlbedo;
 layout (location = 1) out vec3 gNormal;
 layout (location = 2) out vec4 gMat;
 
-in vec2 uv;
 in vec3 fragNormal;
+in vec2 uv;
 
 uniform sampler2D baseColourMap;
 uniform sampler2D metallicRoughnessMap;
@@ -13,11 +13,11 @@ uniform sampler2D metallicRoughnessMap;
 void main()
 {    
 
+    // diffuse per-fragment colour
+    gAlbedo = texture(baseColourMap, uv);
+
     // per-fragment normals into the gbuffer
     gNormal = normalize(fragNormal);
-
-    // and the diffuse per-fragment colour
-    gAlbedo = texture(baseColourMap, uv);
 
     // metallic roughness for PBr
     gMat = texture(metallicRoughnessMap, uv);
