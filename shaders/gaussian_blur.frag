@@ -3,11 +3,11 @@
   
 in vec2 uv;
 
-layout (binding=9) uniform sampler2D texblur;
+layout (binding=8) uniform sampler2D texblur;
 
 uniform float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);
 
-uniform int pass;
+uniform int uPass;
 
 out vec4 colour_out;
 
@@ -18,7 +18,7 @@ void main()
     // gets size of single texel 
     vec2 tex_offset = 1.0 / textureSize(texblur, 0);     
 
-    if ( pass % 2 == 0)
+    if ( uPass == 0)
     {
         // horizontal on the x direction
         for(int i = 1; i < 5; ++i)

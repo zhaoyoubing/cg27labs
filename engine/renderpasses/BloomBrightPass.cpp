@@ -14,8 +14,9 @@ bool BloomBrightPass::init(RenderContext & ctx) {
     // to get viewport width and height
     // currently viewport is in camera, to be changed in the future
     // shrinking for better blurring
-    width_ = camera_.viewport.w / 2.0;
-    height_ = camera_.viewport.h / 2.0;
+    int downSampleFactor = ctx.postp_.downSampleFactor;
+    width_ = camera_.viewport.w / downSampleFactor;
+    height_ = camera_.viewport.h / downSampleFactor;
 
     spdlog::debug("Viewport width {}, height {}", width_, height_);
 
@@ -62,8 +63,8 @@ void BloomBrightPass::execute(RenderContext & ctx) {
     spdlog::trace("Bloom bright pass rendering to {}", texFB);
 
     // read camera data
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    //glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
     glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
 
@@ -75,6 +76,8 @@ void BloomBrightPass::execute(RenderContext & ctx) {
     glClear(GL_COLOR_BUFFER_BIT);
 
     gpuPipe->bind();
+
+    gpuPipe->setFloat("uThreshold", ctx.postp_.bloomThreshold);
 
     // set GBuffer textures to the shader
     glBindTextureUnit(8, ctx.postp_.texScene);

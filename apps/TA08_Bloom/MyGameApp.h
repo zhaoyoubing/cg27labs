@@ -20,6 +20,7 @@
 #include "renderpasses/ForwardPassLightNormal.h"
 #include "renderpasses/BloomScenePass.h"
 #include "renderpasses/BloomBrightPass.h"
+#include "renderpasses/GaussianBlurPass.h"
 
 #include <algorithm>
 
@@ -48,7 +49,7 @@ protected:
         shaderMgr_.load("texblinn_normal", "shaders/texblinn_normal.vert", "shaders/texblinn_normal.frag");
 
         shaderMgr_.load("bloom_brightpass", "shaders/bloom_fullscreen.vert", "shaders/bloom_brightpass.frag");
-        shaderMgr_.load("gaussian_blur", "shaders/gaussian_blur.vert", "shaders/gaussian_blur.frag");
+        shaderMgr_.load("gaussian_blur", "shaders/bloom_fullscreen.vert", "shaders/gaussian_blur.frag");
         shaderMgr_.load("bloom_blend", "shaders/bloom_fullscreen.vert", "shaders/bloom_blend.frag");
 
         // ================ Model Setup ================
@@ -116,6 +117,7 @@ protected:
         //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
         renderPipe_.addPass(std::make_unique<BloomScenePass>());
         renderPipe_.addPass(std::make_unique<BloomBrightPass>());
+        renderPipe_.addPass(std::make_unique<GaussianBlurPass>());
         renderPipe_.init(context_);
     };
 

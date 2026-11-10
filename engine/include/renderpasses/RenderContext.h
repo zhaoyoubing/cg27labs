@@ -39,8 +39,9 @@ struct PostProcessData {
     //struct Settings {
     float exposure = 1.0f;
     float bloomIntensity = 0.05f;
-    float bloomThreshold = 1.0f;
-    int   blurPassCount = 4;
+    float bloomThreshold = 0.8f;
+    int   blurPassCount = 2;
+    int downSampleFactor = 2;
     //} settings;
     
     // 4. Fullscreen Quad Mesh/Buffer
