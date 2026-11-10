@@ -4,13 +4,13 @@
 in vec2 uv;
 
 // render-to-texture of the scene generated in the 1st pass
-layout (binding=8) uniform sampler2D texrender;
+layout (binding=8) uniform sampler2D texScene;
 
 out vec4 colour_out;
 
 void main()
 {
-    vec4 colour = texture(texrender, uv);
+    vec4 colour = texture(texScene, uv);
 
     // check whether fragment output is higher than threshold, if so output as brightness color
     float brightness = dot(colour.rgb, vec3(0.2126, 0.7152, 0.0722));

@@ -4,6 +4,7 @@
 #include "scene/AABB.h"
 #include "scene/SceneNode.h"
 #include "entity/LightComp.h"
+#include "entity/CameraComp.h"
 #include "render/CubeMap.h"
 
 #include <string>
@@ -30,5 +31,34 @@ struct Scene {
     }
 
     std::unique_ptr<SceneNode> root_;
-    //ECSWorldRegistry & getRegistry() { return registry_; }
+
+    CameraComp getMainCamera() {
+        auto viewCam = ecsWorld_.view<CameraComp>();
+        CameraComp camera;
+
+        // a default camera in case no primary camera is found
+        for (auto entity : viewCam)
+        {
+            auto & cam = ecsWorld_.getComp<CameraComp>(entity);
+            if (cam.isPrimary) {
+                camera = cam;
+                break;
+            }
+        }
+
+        return camera;
+    }
+
+    std::vector<LightComp> getLights() {
+        std::vector<LightComp> lights;
+
+        auto viewLight = ecsWorld_.view<LightComp>();
+        for (auto entity : viewLight)
+        {
+            auto & light = ecsWorld_.getComp<LightComp>(entity);
+            lights.push_back(light);
+        }
+
+        return lights;
+    }
 };
