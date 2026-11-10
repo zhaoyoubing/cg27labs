@@ -30,12 +30,12 @@ int main() {
     spdlog::set_level(spdlog::level::debug);
 
     // Instantiate the game-specific application derived from GameApp
-    MyGameApp app("TA08_SSAO");
+    MyGameApp app("TA08_Bloom");
     
-    // calls init(), initialises the window/context/resources
+    // calls init(), initialises the window/context
     app.init();
 
-    // starts the engine main event/rendering loop
+    // starts the engine main event/rendering loop, 
     app.run();
     
     return 0;

@@ -42,9 +42,6 @@ private:
 
     std::shared_ptr<GPUPipeline> depthShader;
 
-   
-
-    
 
     void drawSceneGraph(const RenderContext & ctx, std::unique_ptr<SceneNode>& node, 
                         const glm::mat4& parentMatrix = glm::mat4(1.0), 
