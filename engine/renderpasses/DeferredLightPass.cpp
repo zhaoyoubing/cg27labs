@@ -23,7 +23,6 @@ bool DeferredLightPass::init(RenderContext & ctx) {
     );
 
 */
-    glCreateVertexArrays(1, &screenVAO);
 
     return true;
 }
@@ -76,7 +75,6 @@ void DeferredLightPass::execute(RenderContext & ctx) {
     glClear(GL_COLOR_BUFFER_BIT);
 
     // render a full screeen geometry proxy (a triangle used here)
-    glBindVertexArray(screenVAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
     gpuPipe->unbind();

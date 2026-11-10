@@ -49,9 +49,7 @@ private:
     //GLuint lightSSBO = 0; 
     std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 
-    // screen triangle VAO
-    GLuint screenVAO = 0;
-
+ 
     // An alternative to draw a quad
     // GLuint quadVAO = 0;
     // GLuint quadVBO = 0;
