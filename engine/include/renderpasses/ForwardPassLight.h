@@ -27,9 +27,9 @@ private:
     CameraComp camera_;
     LightComp lightDefault_;
 
-    void drawSceneGraph(std::unique_ptr<SceneNode>& node, 
+    void drawSceneGraph(const RenderContext& ctx,
+                        std::unique_ptr<SceneNode>& node, 
                          const glm::mat4& parentMatrix, 
-                         const MaterialManager & matMgr,
                          const glm::mat4& viewMatrix, const glm::mat4& projMatrix);
     //Framebuffer framebuffer_;
 };

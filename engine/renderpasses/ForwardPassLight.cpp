@@ -42,14 +42,14 @@ void ForwardPassLight::execute(RenderContext& context)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    drawSceneGraph(context.scene_->root_, glm::mat4(1.0), 
-                context.matMgr_, camera_.getViewMatrix(), camera_.getProjMatrix());
+    drawSceneGraph(context, context.scene_->root_, glm::mat4(1.0), 
+                camera_.getViewMatrix(), camera_.getProjMatrix());
 
 }
 
-void ForwardPassLight::drawSceneGraph(std::unique_ptr<SceneNode>& node, 
+void ForwardPassLight::drawSceneGraph(const RenderContext& ctx,
+                        std::unique_ptr<SceneNode>& node, 
                          const glm::mat4& parentMatrix, 
-                         const MaterialManager & matMgr,
                          const glm::mat4& viewMatrix, const glm::mat4& projMatrix)
 {
     // 1. Calculate this node's world transform
@@ -66,17 +66,28 @@ void ForwardPassLight::drawSceneGraph(std::unique_ptr<SceneNode>& node,
 
         assert(material != nullptr);
 
-        std::shared_ptr<GPUPipeline> gpuPipe = material->gpuPipe;
+        //std::shared_ptr<GPUPipeline> gpuPipe = material->gpuPipe;
+        
+
+        std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
+        if (ShadingModel::TexBlinn == material->shadingModel) {
+            gpuPipe = ctx.shaderMgr_.get("texblinn");
+        } else if (ShadingModel::PlainBlinn == material->shadingModel) {
+            gpuPipe = ctx.shaderMgr_.get("plainblinn");
+        } else if (ShadingModel::TexBlinnNormal == material->shadingModel) {
+            gpuPipe = ctx.shaderMgr_.get("texblinn_normal");
+        } else {
+            gpuPipe = ctx.shaderMgr_.get("plain");
+        }
 
         assert(gpuPipe != nullptr);
 
-        std::shared_ptr<Texture> texture = material->baseColourTex;
-
-        assert(texture != nullptr);
-
+        // std::shared_ptr<Texture> texture = material->baseColourTex;
+        // assert(texture != nullptr);
 
         // Select the material's shader
-        gpuPipe->bind();
+        // gpuPipe->bind();
+        material->bind(gpuPipe);
 
         // set shader uniforms
         gpuPipe->setMat4("uModel", worldMatrix);
@@ -85,16 +96,17 @@ void ForwardPassLight::drawSceneGraph(std::unique_ptr<SceneNode>& node,
         
         gpuPipe->setVec3("uViewPos", camera_.eye);
 
-        //gpuPipe->setVec3("uLight.dir", lightDefault_.dir);
+        //gpuPipe->setInt("uLight.type", lightDefault_.type);
         gpuPipe->setVec3("uLight.pos", lightDefault_.pos);
-        //gpuPipe->setVec3("uLight.colour", lightDefault_.colour);
-        //gpuPipe->setFloat("uLight.intensity", lightDefault_.intensity);
-        //gpuPipe->setFloat("uLight.a", lightDefault_.a);
-        //gpuPipe->setFloat("uLight.b", lightDefault_.b);
-        //gpuPipe->setFloat("uLight.c", lightDefault_.c);
+        gpuPipe->setVec3("uLight.dir", lightDefault_.dir);
+        gpuPipe->setVec3("uLight.colour", lightDefault_.colour);
+        gpuPipe->setFloat("uLight.intensity", lightDefault_.intensity);
+        gpuPipe->setFloat("uLight.a", lightDefault_.a);
+        gpuPipe->setFloat("uLight.b", lightDefault_.b);
+        gpuPipe->setFloat("uLight.c", lightDefault_.c);
 
-        texture->bind(0);
-        gpuPipe->setInt("baseColourMap", 0);
+        //texture->bind(0);
+        //gpuPipe->setInt("baseColourMap", 0);
         
         //material.gpuPipe->setVec3( "uBaseColour",  material.baseColour);
 
@@ -103,12 +115,13 @@ void ForwardPassLight::drawSceneGraph(std::unique_ptr<SceneNode>& node,
         meshBuf->draw();
         meshBuf->unbind();
 
-        texture->unbind();
-        gpuPipe->unbind();
+        material->unbind();
+        // texture->unbind();
+        // gpuPipe->unbind();
     }
 
     // 3. Recursively process all children, passing down the updated world matrix
     for (auto& child : node->children) {
-        drawSceneGraph(child, worldMatrix, matMgr, viewMatrix, projMatrix);
+        drawSceneGraph(ctx, child, worldMatrix, viewMatrix, projMatrix);
     }
 }
