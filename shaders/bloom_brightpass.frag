@@ -1,4 +1,4 @@
-// bloom_filter.frag
+// bloom_brightpass.frag
 #version 420
 
 in vec2 uv;
@@ -16,7 +16,7 @@ void main()
     float brightness = dot(colour.rgb, vec3(0.2126, 0.7152, 0.0722));
 
     // filter the bright part based on a threshold
-    if(brightness > 0.9)
+    if(brightness > 0.8)
         colour_out = vec4(colour.rgb, 1.0);
     else
         colour_out = vec4(0.0, 0.0, 0.0, 1.0);

@@ -19,6 +19,7 @@
 #include "renderpasses/ForwardPassLight.h"
 #include "renderpasses/ForwardPassLightNormal.h"
 #include "renderpasses/BloomScenePass.h"
+#include "renderpasses/BloomBrightPass.h"
 
 #include <algorithm>
 
@@ -46,9 +47,9 @@ protected:
         shaderMgr_.load("texblinn", "shaders/blinn_texture.vert", "shaders/blinn_texture.frag");
         shaderMgr_.load("texblinn_normal", "shaders/texblinn_normal.vert", "shaders/texblinn_normal.frag");
 
-        shaderMgr_.load("bloom_filter", "shaders/bloom_filter.vert", "shaders/bloom_filter.frag");
+        shaderMgr_.load("bloom_brightpass", "shaders/bloom_fullscreen.vert", "shaders/bloom_brightpass.frag");
         shaderMgr_.load("gaussian_blur", "shaders/gaussian_blur.vert", "shaders/gaussian_blur.frag");
-        shaderMgr_.load("bloom_blend", "shaders/bloom_blend.vert", "shaders/bloom_blend.frag");
+        shaderMgr_.load("bloom_blend", "shaders/bloom_fullscreen.vert", "shaders/bloom_blend.frag");
 
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
@@ -114,6 +115,7 @@ protected:
         // renderPipe_.addPass(std::make_unique<ForwardPassLight>());
         //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
         renderPipe_.addPass(std::make_unique<BloomScenePass>());
+        renderPipe_.addPass(std::make_unique<BloomBrightPass>());
         renderPipe_.init(context_);
     };
 

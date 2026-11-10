@@ -11,29 +11,17 @@ bool BloomScenePass::init(RenderContext & ctx) {
     // currently viewport is in camera, to be changed in the future
 
     // read camera data
-    auto viewCam = ctx.scene_->ecsWorld_.view<CameraComp>();
-
-    // a default camera in case no primary camera is found
-    for (auto entity : viewCam)
-    {
-        auto & cam = ctx.scene_->ecsWorld_.getComp<CameraComp>(entity);
-        if (cam.isPrimary) {
-            camera_ = cam;
-            break;
-        }
-    }
+    camera_ = ctx.scene_->getMainCamera();
 
     width_ = camera_.viewport.w;
     height_ = camera_.viewport.h;
 
     spdlog::debug("GBuffer width {}, height {}", width_, height_);
 
-    // configure g-buffer framebuffer
+    // configure framebuffer
     // ------------------------------
     glCreateFramebuffers(1, &FBO);
-    //glBindFramebuffer(GL_FRAMEBUFFER, gBufFBO);
     
-
     // colour + specular color buffer
     glCreateTextures(GL_TEXTURE_2D, 1, & texScene);
     glTextureStorage2D(texScene, 1, GL_RGBA8, width_, height_);
@@ -45,11 +33,19 @@ bool BloomScenePass::init(RenderContext & ctx) {
     unsigned int attachments[] = { GL_COLOR_ATTACHMENT0};
     glNamedFramebufferDrawBuffers(FBO, 1, attachments);
 
+    /*
+    glCreateTextures(GL_TEXTURE_2D, 1, &texDepth);
+    glTextureStorage2D(texDepth, 1, GL_DEPTH_COMPONENT24, width_, height_);
+    glTextureParameteri(texDepth, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTextureParameteri(texDepth, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glNamedFramebufferTexture(FBO, GL_DEPTH_ATTACHMENT, texDepth, 0 );
+    */
+   
     assert (glIsFramebuffer(FBO) == GL_TRUE);
 
     // finally check if framebuffer is complete
     if ( glCheckNamedFramebufferStatus(FBO, GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        spdlog::error("GBuffer Framebuffer not complete!");
+        spdlog::error("Framebuffer not complete!");
         return false;
     }
 
@@ -67,8 +63,6 @@ bool BloomScenePass::init(RenderContext & ctx) {
 
 void BloomScenePass::execute(RenderContext & ctx) {
 
-    if (!bInited) return;
-
     spdlog::trace("Bloom scene rendering,  {}", texScene);
 
     // read camera data
@@ -77,8 +71,8 @@ void BloomScenePass::execute(RenderContext & ctx) {
     if (! lights.empty())
         lightDefault_ = lights[0];
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    //glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
     glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
 
