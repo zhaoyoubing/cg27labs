@@ -9,11 +9,11 @@ bool DeferredLightPass::init(RenderContext & ctx) {
 
     if (nullptr == gpuPipe) return false;
 
-    
+/*    
     glCreateBuffers(1, &lightSSBO);
 
     // for light data, we will use a shader storage buffer object (SSBO) to store an array of lights
-/*
+
     glNamedBufferData(
         lightSSBO,
         MAX_LIGHTS * sizeof(GPULight),
@@ -21,8 +21,6 @@ bool DeferredLightPass::init(RenderContext & ctx) {
         GL_DYNAMIC_DRAW
     );
 */
-
-    glCreateVertexArrays(1, &screenVAO);
 
     return true;
 }
@@ -34,17 +32,7 @@ void DeferredLightPass::execute(RenderContext & ctx) {
     spdlog::trace("Deferred Lighting: albedo {}", ctx.gbuf_.gAlbedo);
 
     // read camera data
-    auto viewCam = ctx.scene_->ecsWorld_.view<CameraComp>();
-
-    // a default camera in case no primary camera is found
-    for (auto entity : viewCam)
-    {
-        auto & cam = ctx.scene_->ecsWorld_.getComp<CameraComp>(entity);
-        if (cam.isPrimary) {
-            camera_ = cam;
-            break;
-        }
-    }
+    camera_ = ctx.scene_->getMainCamera();
 
     glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
     
@@ -73,7 +61,6 @@ void DeferredLightPass::execute(RenderContext & ctx) {
 
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glBindVertexArray(screenVAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
     gpuPipe->unbind();
