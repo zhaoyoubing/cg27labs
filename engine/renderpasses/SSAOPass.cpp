@@ -1,5 +1,8 @@
 #include "renderpasses/SSAOPass.h"
 
+// for sample generation
+#include <random>
+#include <cmath>
 
 bool SSAOPass::init(RenderContext & ctx) {
 
@@ -40,6 +43,7 @@ bool SSAOPass::init(RenderContext & ctx) {
         return false;
     }
 
+    samplePoints_ = generateSamples(nSample);
     bInited = true;
     return bInited;
 }
@@ -56,7 +60,7 @@ void SSAOPass::execute(RenderContext & ctx) {
     glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
     
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    //glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     
     glViewport(0, 0, camera_.viewport.w, camera_.viewport.h);
 
@@ -73,9 +77,18 @@ void SSAOPass::execute(RenderContext & ctx) {
     glBindTextureUnit(2, ctx.gbuf_.gMat);
     glBindTextureUnit(3, ctx.gbuf_.gDepth);
 
-    //gpuPipe->setVec3("uEyePos", camera_.eye);
-    //gpuPipe->setMat4("uMatInvProj", ctx.gbuf_.matInvProj);
+    gpuPipe->setInt("uKernelSize", nSample);
+    gpuPipe->setFloat("uRadius", 1.0);
+    gpuPipe->setFloat("uBias", 0.0032);
 
+    //gpuPipe->setVec2("uViewport", glm::vec2(width_, height_));
+
+    gpuPipe->setMat4("uMatInvProj", ctx.gbuf_.matInvProj);
+    gpuPipe->setMat4("uMatProj", glm::inverse(ctx.gbuf_.matInvProj));
+
+    // this is not an efficent way of setting an array
+    for (int i = 0; i < nSample; i++)
+        gpuPipe->setVec3("uSamplePoints[" + std::to_string(i) + "]", samplePoints_[i]);
 
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -83,4 +96,33 @@ void SSAOPass::execute(RenderContext & ctx) {
 
     gpuPipe->unbind();
 
+}
+
+// code from GenAI
+std::vector<glm::vec3> SSAOPass::generateSamples(int nsample) {
+    std::vector<glm::vec3> samples;
+    samples.reserve(64);
+
+    // Standard uniform random number generators
+    std::uniform_real_distribution<float> randomFloats(0.0f, 1.0f);
+    std::default_random_engine generator;
+
+    for (int i = 0; i < nsample; ++i) {
+        // Generate random sample inside a unit hemisphere (Z is positive/upwards)
+        glm::vec3 sample(
+            randomFloats(generator) * 2.0f - 1.0f, // X: [-1.0, 1.0]
+            randomFloats(generator) * 2.0f - 1.0f, // Y: [-1.0, 1.0]
+            randomFloats(generator)                // Z: [ 0.0, 1.0] (hemisphere)
+        );
+        
+        sample = glm::normalize(sample);
+        
+        // Scale random strength so that samples are clustered closer to the center/origin
+        float scale = (float)i / nsample;
+        scale = std::lerp(0.1f, 1.0f, scale * scale); // Non-linear distribution
+        sample *= scale;
+
+        samples.push_back(sample);
+    }
+    return samples;
 }

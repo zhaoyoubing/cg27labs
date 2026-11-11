@@ -30,21 +30,30 @@ struct PostProcessData {
     GLuint bloomBufferA;
     GLuint bloomBufferB;
     
-    // 3. Global Settings / Uniform Buffer Data
-    //struct Settings {
+    // 2. Global Settings / Uniform Buffer Data
     float exposure = 1.0f;
     float bloomIntensity = 1.5f;
     float bloomThreshold = 0.8f;
     int  blurPassCount = 4;
     int downSampleFactor = 4;
-    //} settings;
-    
 };
 
+struct SSAOData {
+    // --- Quality & Kernel ---
+    int sampleCount = 64;          // Number of hemisphere samples (e.g., 32 or 64)
+    float radius = 0.5f;           // World-space sampling radius (how far occluders look)
+    float bias = 0.025f;           // Depth bias to prevent self-shadowing/shadow acne
+    
+    // --- Visual Tuning ---
+    float intensity = 1.5f;        // Multiplier to darken or soften the occlusion contrast
+    float power = 1.0f;            // Exponent for contrast falloff (optional)
+    
+    // --- Performance / Resolution ---
+    bool halfResolution = false;   // Render SSAO at half-res for performance, then upscale/blur
+};
 
 struct RenderContext
 {
- 
     std::shared_ptr<Scene> scene_; // Scene graph root for hierarchical scene representation
 
     MeshManager & meshMgr_;
@@ -60,5 +69,7 @@ struct RenderContext
     GBufferData gbuf_;
 
     PostProcessData postp_;
+
+    SSAOData ssao_;
 
 };

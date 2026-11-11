@@ -52,7 +52,7 @@ protected:
 
 
         shaderMgr_.load("deferred_gbuffer", "shaders/deferred_gbuffer.vert", "shaders/deferred_gbuffer.frag");
-        shaderMgr_.load("ssao", "shaders/ssao.vert", "shaders/ssao.frag");
+        shaderMgr_.load("ssao", "shaders/fullview.vert", "shaders/ssao.frag");
         shaderMgr_.load("boxblur", "shaders/fullview.vert", "shaders/boxblur.frag");
 
 
@@ -66,6 +66,7 @@ protected:
         scene_->root_ = std::move(mesh);
         */
 
+        /*
         std::unique_ptr<SceneNode> teapot = MeshFactory::loadGltf( "assets/teapot_texblue/scene.gltf", 
                                                         texMgr_,  matMgr_, shaderMgr_);
         
@@ -73,6 +74,30 @@ protected:
         teapot->center();
         //teapot->trans.pos += glm::vec3(-0.1, 0.2, -0.3);
         scene_->root_->children.push_back(std::move(teapot));
+        
+
+        std::unique_ptr<SceneNode> bunny = MeshFactory::loadGltf("assets/bunny_tex.gltf", 
+                                                             texMgr_,  matMgr_, shaderMgr_);
+        bunny->scaleToFitBBox(0.5);
+        bunny->trans.pos += glm::vec3(0.0, 0.3, 0.3);
+        
+        AABB bbox1 = bunny->getBBox();
+        spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox1.min.x, bbox1.min.y, bbox1.min.z, 
+                                                                    bbox1.max.x, bbox1.max.y, bbox1.max.z);
+        scene_->root_->children.push_back(std::move(bunny));
+        */
+        
+        std::unique_ptr<SceneNode> sponza = MeshFactory::loadGltf("assets/Sponza/glTF/Sponza.gltf", 
+                                                             texMgr_,  matMgr_, shaderMgr_);
+        sponza->scaleToFitBBox(0.8);
+        scene_->root_->children.push_back(std::move(sponza));
+        
+            /*
+        std::unique_ptr<SceneNode> chapel = MeshFactory::loadGltf("assets/chapel_ruin/scene.gltf", 
+                                                             texMgr_,  matMgr_, shaderMgr_);
+        chapel->scaleToFitBBox(0.8);
+        scene_->root_->children.push_back(std::move(chapel));
+            */
 
         AABB bbox = scene_->getBBox();
         spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox.min.x, bbox.min.y, bbox.min.z, 
@@ -86,7 +111,8 @@ protected:
         EntityID camId = scene_->ecsWorld_.createEntityID();
 
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
-            .eye = center  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, // + glm::vec3(-200.0, 5.0, 0) for barrel testing
+            .eye = center,
+            //.eye = center  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, // + glm::vec3(-200.0, 5.0, 0) for barrel testing
             .fov = 45.0f,
             .far = maxSize * 5.0f,
             .front = glm::vec3(0, 0, -1),

@@ -1,6 +1,8 @@
+// shader based on https://github.com/Baksonator/ssao
 #version 420
 
-out float fragColor;
+//out float fragColor;
+out vec4 out_color;
 
 in vec2 uv;
 
@@ -15,17 +17,17 @@ layout(binding = 3) uniform sampler2D gDepth;
 //uniform sampler2D uni_texture1;  // gNormal
 //uniform sampler2D uni_texture2;  // texNoise
 
-uniform float sample_points[192];
+uniform vec3 uSamplePoints[64];
 
-uniform int kernelSize;
-uniform float radius;
-uniform float bias;
-
-const vec2 noiseScale = vec2(1280.0/4.0, 720.0/4.0);
+uniform int uKernelSize = 64;
+uniform float uRadius = 1.0f;
+uniform float uBias = 0.002f;
 
 uniform mat4 uMatProj;
 uniform mat4 uMatInvProj;
-uniform vec2 viewport;
+//uniform vec2 uViewport;
+
+const vec2 noiseScale = vec2(1280.0/4.0, 720.0/4.0);
 
 // This function is from genAI
 vec3 reconViewPos(vec2 uv) {
@@ -70,24 +72,27 @@ void main()
 
     float occlusion = 0.0;
 
-	for(int i = 0; i < kernelSize * 3; i += 3)
+	for(int i = 0; i < uKernelSize; i ++)
 	{
-		vec3 samplep = vec3(sample_points[i], sample_points[i + 1], sample_points[i + 2]);
+		vec3 samplep = uSamplePoints[i];
 		samplep = TBN * samplep;
-		samplep = fragPos + samplep * radius;
+		samplep = fragPos + samplep * uRadius;
 
 		vec4 offset = vec4(samplep, 1.0);
 		offset = uMatProj * offset;
 		offset.xyz /= offset.w;
+        // from NDC [-1, 1] to depth [0, 1]
 		offset.xyz  = offset.xyz * 0.5 + 0.5;
 
 		float sampleDepth = texture(gDepth, offset.xy).z;
 
-		float rangeCheck = smoothstep(0.0, 1.0, radius / abs(fragPos.z - sampleDepth));
+		float rangeCheck = smoothstep(0.0, 1.0, uRadius / abs(fragPos.z - sampleDepth));
 
-		occlusion += (sampleDepth >= samplep.z + bias ? 1.0 : 0.0) * rangeCheck;
+		occlusion += (sampleDepth >= samplep.z + uBias ? 1.0 : 0.0) * rangeCheck;
 	}
-    occlusion = 1.0 - (occlusion / kernelSize);
+    occlusion = 1.0 - (occlusion / uKernelSize);
     
-    fragColor = occlusion;
+    //fragColor = occlusion;
+    out_color = vec4(vec3(occlusion), 1.0);
+    //out_color = vec4(texture(gAlbedo, uv).xyz, 1.0);
 }

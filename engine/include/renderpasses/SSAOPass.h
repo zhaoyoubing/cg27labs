@@ -44,4 +44,9 @@ private:
 
     std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 
+    const int nSample = 64;
+    std::vector<glm::vec3> samplePoints_;
+
+    std::vector<glm::vec3> generateSamples(int n);
+
 };
