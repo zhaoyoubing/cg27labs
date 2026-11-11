@@ -9,7 +9,7 @@ layout(binding = 1) uniform sampler2D gNormal;
 layout(binding = 2) uniform sampler2D gMaterial;
 layout(binding = 3) uniform sampler2D gDepth;
 
-layout(binding = 9) uniform sampler2D texNoise;
+//layout(binding = 9) uniform sampler2D texNoise;
 
 //uniform sampler2D uni_texture0;  // gPosition
 //uniform sampler2D uni_texture1;  // gNormal
@@ -25,6 +25,7 @@ const vec2 noiseScale = vec2(1280.0/4.0, 720.0/4.0);
 
 uniform mat4 uMatProj;
 uniform mat4 uMatInvProj;
+uniform vec2 viewport;
 
 // This function is from genAI
 vec3 reconViewPos(vec2 uv) {
@@ -46,12 +47,22 @@ vec3 reconViewPos(vec2 uv) {
     return viewPos.xyz; // This is the 3D position in View Space
 }
 
+float InterleavedGradientNoise(vec2 uv) {
+    vec3 magic = vec3(0.06711056f, 0.00583715f, 52.9829189f);
+    return fract(magic.z * fract(dot(uv, magic.xy)));
+}
+
 void main()
 {
     //vec3 fragPos = texture(uni_texture0, uv).xyz;
     vec3 fragPos = reconViewPos(uv);
     vec3 normal = texture(gNormal, uv).rgb;
-    vec3 randomVec = texture(texNoise, uv * noiseScale).xyz;
+
+    // 1. Get random rotation angle (0.0 to 1.0) using fragment screen coordinates
+    float noiseVal = InterleavedGradientNoise(gl_FragCoord.xy);
+    float rotationAngle = noiseVal * 6.2831853f; // Scale to 2 * PI
+    vec3 randomVec = vec3(cos(rotationAngle), sin(rotationAngle), 0.0);
+    //vec3 randomVec = texture(texNoise, uv * noiseScale).xyz;
 
     vec3 tangent = normalize(randomVec - normal * dot(randomVec, normal));
     vec3 bitangent = cross(normal, tangent);

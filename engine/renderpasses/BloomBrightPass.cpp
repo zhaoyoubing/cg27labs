@@ -37,7 +37,6 @@ bool BloomBrightPass::init(RenderContext & ctx) {
     glTextureParameteri(texFB, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTextureParameteri(texFB, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-
     glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, texFB, 0);
 
     // tell OpenGL which colour attachments we'll use (of this framebuffer) for rendering 

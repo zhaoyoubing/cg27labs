@@ -19,6 +19,8 @@
 #include "renderpasses/ForwardPassLightNormal.h"
 #include "renderpasses/SkyBoxPass.h"
 #include "renderpasses/CubeMapReflectionPass.h"
+#include "renderpasses/GBufferPass.h"
+#include "renderpasses/SSAOPass.h"
 
 #include <algorithm>
 
@@ -49,6 +51,7 @@ protected:
         shaderMgr_.load("cubemap_reflect", "shaders/cubemap_reflect.vert", "shaders/cubemap_reflect.frag");
 
 
+        shaderMgr_.load("deferred_gbuffer", "shaders/deferred_gbuffer.vert", "shaders/deferred_gbuffer.frag");
         shaderMgr_.load("ssao", "shaders/ssao.vert", "shaders/ssao.frag");
         shaderMgr_.load("boxblur", "shaders/fullview.vert", "shaders/boxblur.frag");
 
@@ -120,8 +123,10 @@ protected:
         // ================ Render Pipeline Setup ================
         // 6. render pipeline init
         //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
-        renderPipe_.addPass(std::make_unique<CubeMapReflectionPass>());
-        renderPipe_.addPass(std::make_unique<SkyBoxPass>());
+        //renderPipe_.addPass(std::make_unique<CubeMapReflectionPass>());
+        //renderPipe_.addPass(std::make_unique<SkyBoxPass>());
+        renderPipe_.addPass(std::make_unique<GBufferPass>());
+        renderPipe_.addPass(std::make_unique<SSAOPass>());
 
         renderPipe_.init(context_);
     };
