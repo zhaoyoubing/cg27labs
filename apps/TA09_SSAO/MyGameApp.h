@@ -48,6 +48,10 @@ protected:
         shaderMgr_.load("skybox", "shaders/skybox.vert", "shaders/skybox.frag");
         shaderMgr_.load("cubemap_reflect", "shaders/cubemap_reflect.vert", "shaders/cubemap_reflect.frag");
 
+
+        shaderMgr_.load("ssao", "shaders/ssao.vert", "shaders/ssao.frag");
+
+
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
         /*
