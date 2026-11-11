@@ -50,6 +50,7 @@ protected:
 
 
         shaderMgr_.load("ssao", "shaders/ssao.vert", "shaders/ssao.frag");
+        shaderMgr_.load("boxblur", "shaders/bloom_fullview.vert", "shaders/boxblur.frag");
 
 
         // ================ Model Setup ================
