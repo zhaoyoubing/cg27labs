@@ -4,20 +4,24 @@ out float fragColor;
 
 in vec2 uv;
 
-layout (binding=8) uniform sampler2D texblur;
+//layout(binding = 0) uniform sampler2D gAlbedo;
+//layout(binding = 1) uniform sampler2D gNormal;
+//layout(binding = 2) uniform sampler2D gMaterial;
+layout(binding = 3) uniform sampler2D gDepth;
 
-//uniform sampler2D uni_texture0;
+layout (binding=9) uniform sampler2D texAO;
+
 
 void main() {
-    vec2 texelSize = 1.0 / vec2(textureSize(texblur, 0));
+    vec2 texelSize = 1.0 / vec2(textureSize(texAO, 0));
     float result = 0.0;
-    for (int x = -2; x < 2; ++x)
+    for (int x = -2; x <= 2; ++x)
     {
-        for (int y = -2; y < 2; ++y)
+        for (int y = -2; y <= 2; ++y)
         {
             vec2 offset = vec2(float(x), float(y)) * texelSize;
-            result += texture(texblur, uv + offset).r;
+            result += texture(texAO, uv + offset).r;
         }
     }
-    fragColor = result / (4.0 * 4.0);
+    fragColor = result / (5.0 * 5.0);
 }

@@ -39,6 +39,9 @@ struct PostProcessData {
 };
 
 struct SSAOData {
+    GLuint texAO;  
+    GLuint texBlur;
+
     // --- Quality & Kernel ---
     int sampleCount = 64;          // Number of hemisphere samples (e.g., 32 or 64)
     float radius = 0.5f;           // World-space sampling radius (how far occluders look)

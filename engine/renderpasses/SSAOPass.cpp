@@ -44,6 +44,9 @@ bool SSAOPass::init(RenderContext & ctx) {
     }
 
     samplePoints_ = generateSamples(nSample);
+
+    ctx.ssao_.texAO = texSSAO;
+
     bInited = true;
     return bInited;
 }
@@ -57,10 +60,10 @@ void SSAOPass::execute(RenderContext & ctx) {
     // read camera data
     camera_ = ctx.scene_->getMainCamera();
 
-    glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
+    //glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
     
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    //glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     
     glViewport(0, 0, camera_.viewport.w, camera_.viewport.h);
 

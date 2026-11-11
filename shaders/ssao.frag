@@ -1,8 +1,8 @@
 // shader based on https://github.com/Baksonator/ssao
 #version 420
 
-//out float fragColor;
-out vec4 out_color;
+out float fragColor;
+//out vec4 out_color;
 
 in vec2 uv;
 
@@ -92,7 +92,7 @@ void main()
 	}
     occlusion = 1.0 - (occlusion / uKernelSize);
     
-    //fragColor = occlusion;
-    out_color = vec4(vec3(occlusion), 1.0);
+    fragColor = occlusion;
+    //out_color = vec4(vec3(occlusion), 1.0);
     //out_color = vec4(texture(gAlbedo, uv).xyz, 1.0);
 }

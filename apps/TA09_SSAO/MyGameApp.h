@@ -21,6 +21,7 @@
 #include "renderpasses/CubeMapReflectionPass.h"
 #include "renderpasses/GBufferPass.h"
 #include "renderpasses/SSAOPass.h"
+#include "renderpasses/SSAOBoxBlurPass.h"
 
 #include <algorithm>
 
@@ -153,6 +154,7 @@ protected:
         //renderPipe_.addPass(std::make_unique<SkyBoxPass>());
         renderPipe_.addPass(std::make_unique<GBufferPass>());
         renderPipe_.addPass(std::make_unique<SSAOPass>());
+        renderPipe_.addPass(std::make_unique<SSAOBoxBlurPass>());
 
         renderPipe_.init(context_);
     };
