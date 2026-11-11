@@ -36,8 +36,7 @@ private:
         .b = 0.09f,
         .c = 0.032f 
     };
-    
-    bool bInited;
+
 
     std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 
@@ -47,6 +46,7 @@ private:
 
     GLuint FBO = 0;  // frame buffer object
     GLuint texScene = 0;  // scene rendering
+    GLuint depthBuf = 0;
 
     void drawSceneGraph(RenderContext& context, std::unique_ptr<SceneNode>& node, 
                          const glm::mat4& parentMatrix, 

@@ -32,8 +32,6 @@ private:
     CameraComp camera_;
     LightComp lightDefault_;
     
-    bool bInited;
-
     GLuint gBuf = 0;
     GLuint gPos = 0;
     GLuint gNormal = 0;

@@ -12,4 +12,7 @@ public:
 
     // Called once per frame.
     virtual void execute(RenderContext& context) = 0;
+
+protected:
+    bool bInited = false;
 };

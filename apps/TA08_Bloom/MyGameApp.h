@@ -21,6 +21,7 @@
 #include "renderpasses/BloomScenePass.h"
 #include "renderpasses/BloomBrightPass.h"
 #include "renderpasses/GaussianBlurPass.h"
+#include "renderpasses/BloomBlendPass.h"
 
 #include <algorithm>
 
@@ -48,9 +49,9 @@ protected:
         shaderMgr_.load("texblinn", "shaders/blinn_texture.vert", "shaders/blinn_texture.frag");
         shaderMgr_.load("texblinn_normal", "shaders/texblinn_normal.vert", "shaders/texblinn_normal.frag");
 
-        shaderMgr_.load("bloom_brightpass", "shaders/bloom_fullscreen.vert", "shaders/bloom_brightpass.frag");
-        shaderMgr_.load("gaussian_blur", "shaders/bloom_fullscreen.vert", "shaders/gaussian_blur.frag");
-        shaderMgr_.load("bloom_blend", "shaders/bloom_fullscreen.vert", "shaders/bloom_blend.frag");
+        shaderMgr_.load("bloom_brightpass", "shaders/bloom_fullview.vert", "shaders/bloom_brightpass.frag");
+        shaderMgr_.load("gaussian_blur", "shaders/bloom_fullview.vert", "shaders/gaussian_blur.frag");
+        shaderMgr_.load("bloom_blend", "shaders/bloom_fullview.vert", "shaders/bloom_blend.frag");
 
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
@@ -104,8 +105,8 @@ protected:
             .type = POINT,
             .pos = bbox.max * 3.0f,
             .dir = glm::vec3(0.0f, -1.0f, 0.0f),
-            .colour = glm::vec3(1.0f, 1.0f, 1.0f),
-            .intensity = 1.0f,
+            .colour = glm::vec3(1.0f, 0.0f, 0.0f),
+            .intensity = 2.0f,
             .a = 1.0f,
             .b = 0.09f,
             .c = 0.032f 
@@ -118,6 +119,8 @@ protected:
         renderPipe_.addPass(std::make_unique<BloomScenePass>());
         renderPipe_.addPass(std::make_unique<BloomBrightPass>());
         renderPipe_.addPass(std::make_unique<GaussianBlurPass>());
+        renderPipe_.addPass(std::make_unique<BloomBlendPass>());
+
         renderPipe_.init(context_);
     };
 

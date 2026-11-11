@@ -22,7 +22,8 @@ bool DeferredLightPass::init(RenderContext & ctx) {
     );
 */
 
-    return true;
+    bInited = true;
+    return bInited;
 }
 
 

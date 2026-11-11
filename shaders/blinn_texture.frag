@@ -71,7 +71,7 @@ void main()
     }
 
     // assuming a light source with a bright white colour
-    vec3 specular = vec3(0.3) * spec;
+    vec3 specular = spec * uLight.colour * uLight.intensity;
 
     // The final output fragment colour 
     // combination of ambient, diffuse and specular

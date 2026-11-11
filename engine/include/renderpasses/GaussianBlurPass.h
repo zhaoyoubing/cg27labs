@@ -31,10 +31,10 @@ private:
     int width_ = 0;
     int height_ = 0;
 
-    int nIter = 20;   // number of iterations
-
     GLuint FBO = 0;  // frame buffer object
-    GLuint texBufA = 0;  // buffer A and B for ping-pong blurring
+
+    // buffer A and B for ping-pong blurring
+    GLuint texBufA = 0;  
     GLuint texBufB = 0;  
     
 };

@@ -30,22 +30,15 @@ struct PostProcessData {
     GLuint bloomBufferA;
     GLuint bloomBufferB;
     
-    // 2. Pipelines & Shaders
-    // ShaderPipeline bloomDownsampleShader;
-    // ShaderPipeline gaussianBlurShader;
-    // ShaderPipeline tonemapCompositeShader;
-    
     // 3. Global Settings / Uniform Buffer Data
     //struct Settings {
     float exposure = 1.0f;
-    float bloomIntensity = 0.05f;
+    float bloomIntensity = 1.5f;
     float bloomThreshold = 0.8f;
-    int   blurPassCount = 2;
-    int downSampleFactor = 2;
+    int  blurPassCount = 4;
+    int downSampleFactor = 4;
     //} settings;
     
-    // 4. Fullscreen Quad Mesh/Buffer
-    GLuint screenQuad;
 };
 
 

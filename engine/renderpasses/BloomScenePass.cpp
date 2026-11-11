@@ -24,23 +24,22 @@ bool BloomScenePass::init(RenderContext & ctx) {
     
     // colour + specular color buffer
     glCreateTextures(GL_TEXTURE_2D, 1, & texScene);
-    glTextureStorage2D(texScene, 1, GL_RGBA8, width_, height_);
-    glTextureParameteri(texScene, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTextureParameteri(texScene, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTextureStorage2D(texScene, 1,  GL_RGBA16F, width_, height_);
+    glTextureParameteri(texScene, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTextureParameteri(texScene, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTextureParameteri(texScene, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTextureParameteri(texScene, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, texScene, 0);
 
     // tell OpenGL which colour attachments we'll use (of this framebuffer) for rendering 
     unsigned int attachments[] = { GL_COLOR_ATTACHMENT0};
     glNamedFramebufferDrawBuffers(FBO, 1, attachments);
 
-    /*
-    glCreateTextures(GL_TEXTURE_2D, 1, &texDepth);
-    glTextureStorage2D(texDepth, 1, GL_DEPTH_COMPONENT24, width_, height_);
-    glTextureParameteri(texDepth, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTextureParameteri(texDepth, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glNamedFramebufferTexture(FBO, GL_DEPTH_ATTACHMENT, texDepth, 0 );
-    */
-   
+    // 2. Depth/Stencil renderbuffer (NEW)
+    glCreateRenderbuffers(1, &depthBuf);
+    glNamedRenderbufferStorage(depthBuf, GL_DEPTH24_STENCIL8, width_, height_);
+    glNamedFramebufferRenderbuffer(FBO, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
+
     assert (glIsFramebuffer(FBO) == GL_TRUE);
 
     // finally check if framebuffer is complete
@@ -52,16 +51,15 @@ bool BloomScenePass::init(RenderContext & ctx) {
     // share GBuffer texture ids
     ctx.postp_.texScene = texScene;
 
-    //ctx.gbuf_.matInvProj = glm::inverse(camera_.getProjMatrix());
-
     spdlog::debug("After BloomRender init, texRender {}", texScene);
 
-    return true;
-
+    bInited = true;
+    return bInited;
 }
 
 
 void BloomScenePass::execute(RenderContext & ctx) {
+    if (!bInited) return;
 
     spdlog::trace("Bloom scene rendering,  {}", texScene);
 
@@ -71,10 +69,11 @@ void BloomScenePass::execute(RenderContext & ctx) {
     if (! lights.empty())
         lightDefault_ = lights[0];
 
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
-    glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
+    // using Black backgruond to make Bloom more visible
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     glViewport(0, 0, width_, height_);
 

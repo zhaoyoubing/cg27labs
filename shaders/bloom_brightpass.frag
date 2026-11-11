@@ -23,4 +23,5 @@ void main()
         colour_out = vec4(colour.rgb, 1.0);
     else
         colour_out = vec4(0.0, 0.0, 0.0, 1.0);
+
 }
