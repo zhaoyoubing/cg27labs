@@ -2,7 +2,7 @@
 #version 420
 
 out float fragColor;
-//out vec4 out_color;
+//out vec4 out_color;  // for debugging
 
 in vec2 uv;
 

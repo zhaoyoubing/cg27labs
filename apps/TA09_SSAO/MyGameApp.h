@@ -90,7 +90,7 @@ protected:
         
         std::unique_ptr<SceneNode> sponza = MeshFactory::loadGltf("assets/Sponza/glTF/Sponza.gltf", 
                                                              texMgr_,  matMgr_, shaderMgr_);
-        sponza->scaleToFitBBox(0.8);
+        sponza->scaleToFitBBox(30.0);
         scene_->root_->children.push_back(std::move(sponza));
         
             /*
@@ -115,6 +115,7 @@ protected:
             .eye = center,
             //.eye = center  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, // + glm::vec3(-200.0, 5.0, 0) for barrel testing
             .fov = 45.0f,
+            .near = 0.1,
             .far = maxSize * 5.0f,
             .front = glm::vec3(0, 0, -1),
             .yaw = -90.0f,
