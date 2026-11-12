@@ -20,6 +20,8 @@ public:
     void tick(ECSWorldRegistry & world, InputState&  input, float deltaTime) {
         auto entities = world.view<CameraComp>();
 
+        //spdlog::trace("Camera System tick");
+
         for (EntityID id : entities) {
 
             //auto& transform = world.getComp<TransformComp>(id);
@@ -36,7 +38,32 @@ public:
                 camera.viewport.w = input.winWidth;
                 camera.viewport.h = input.winHeight;
                 input.bWinResized = false;
+                camera.isDirty = true;
             }
+
+            // 2. Process Keyboard Movement
+            float velocity = 5.0f * deltaTime;
+            glm::vec3 right = glm::normalize(glm::cross(camera.front, camera.up));
+
+            if (input.isKeyHeld(GLFW_KEY_W)) {
+                spdlog::trace("W pressed");
+                camera.eye += camera.front * velocity;
+                camera.isDirty = true;
+            }
+            if (input.isKeyHeld(GLFW_KEY_S)) {
+                camera.eye -= camera.front * velocity;
+                camera.isDirty = true;
+            }
+            if (input.isKeyHeld(GLFW_KEY_A)) {
+                camera.eye -= right * velocity;
+                camera.isDirty = true;
+            }
+
+            if (input.isKeyHeld(GLFW_KEY_D)) {
+                camera.eye += right * velocity;
+                camera.isDirty = true;
+            }
+
             
             // left button pressed
             // comment it if you want Unreal style camera control
@@ -61,14 +88,6 @@ public:
             camera.front.z = sin(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
             camera.front = glm::normalize(camera.front);
 
-            // 2. Process Keyboard Movement
-            float velocity = 5.0f * deltaTime;
-            glm::vec3 right = glm::normalize(glm::cross(camera.front, camera.up));
-
-            if (input.isKeyHeld(GLFW_KEY_W)) camera.eye += camera.front * velocity;
-            if (input.isKeyHeld(GLFW_KEY_S)) camera.eye -= camera.front * velocity;
-            if (input.isKeyHeld(GLFW_KEY_A)) camera.eye -= right * velocity;
-            if (input.isKeyHeld(GLFW_KEY_D)) camera.eye += right * velocity;
 
             camera.isDirty = true; // Mark camera as dirty to recalculate matrices
 
