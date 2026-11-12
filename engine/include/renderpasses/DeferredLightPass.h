@@ -47,7 +47,7 @@ private:
     GLuint lightSSBO = 0;
     std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 
-    GLuint screenVAO = 0;
+    //GLuint screenVAO = 0;
     //GLuint quadVAO = 0;
     //GLuint quadVBO = 0;
     //void drawQuad(RenderContext& context);

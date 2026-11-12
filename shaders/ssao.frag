@@ -13,21 +13,19 @@ layout(binding = 3) uniform sampler2D gDepth;
 
 //layout(binding = 9) uniform sampler2D texNoise;
 
-//uniform sampler2D uni_texture0;  // gPosition
-//uniform sampler2D uni_texture1;  // gNormal
-//uniform sampler2D uni_texture2;  // texNoise
 
 uniform vec3 uSamplePoints[64];
 
 uniform int uKernelSize = 64;
-uniform float uRadius = 1.0f;
-uniform float uBias = 0.002f;
+uniform float uRadius = 0.5f;
+uniform float uBias = 0.025f;
+uniform float uPowerAO = 1.0f;
 
 uniform mat4 uMatProj;
 uniform mat4 uMatInvProj;
 //uniform vec2 uViewport;
 
-const vec2 noiseScale = vec2(1280.0/4.0, 720.0/4.0);
+// const vec2 noiseScale = vec2(1280.0/4.0, 720.0/4.0);
 
 // This function is from genAI
 vec3 reconViewPos(vec2 uv) {
@@ -56,7 +54,6 @@ float InterleavedGradientNoise(vec2 uv) {
 
 void main()
 {
-    //vec3 fragPos = texture(uni_texture0, uv).xyz;
     vec3 fragPos = reconViewPos(uv);
     vec3 normal = texture(gNormal, uv).rgb;
 
@@ -64,14 +61,15 @@ void main()
     float noiseVal = InterleavedGradientNoise(gl_FragCoord.xy);
     float rotationAngle = noiseVal * 6.2831853f; // Scale to 2 * PI
     vec3 randomVec = vec3(cos(rotationAngle), sin(rotationAngle), 0.0);
-    //vec3 randomVec = texture(texNoise, uv * noiseScale).xyz;
 
     vec3 tangent = normalize(randomVec - normal * dot(randomVec, normal));
     vec3 bitangent = cross(normal, tangent);
     mat3 TBN = mat3(tangent, bitangent, normal);
 
     float occlusion = 0.0;
+    float totalSampleFloat = 0.0;
 
+    // comparison must be done in view space
 	for(int i = 0; i < uKernelSize; i ++)
 	{
 		vec3 samplep = uSamplePoints[i];
@@ -79,20 +77,34 @@ void main()
 		samplep = fragPos + samplep * uRadius;
 
 		vec4 offset = vec4(samplep, 1.0);
-		offset = uMatProj * offset;
-		offset.xyz /= offset.w;
+		vec4 offsetProj = uMatProj * offset;
+		offsetProj.xyz /= offsetProj.w;
         // from NDC [-1, 1] to depth [0, 1]
-		offset.xyz  = offset.xyz * 0.5 + 0.5;
+		offsetProj.xyz  = offsetProj.xyz * 0.5 + 0.5;
 
-		float sampleDepth = texture(gDepth, offset.xy).z;
+        // Verify sample is inside screen bounds
+        if (offsetProj.x >= 0.0 && offsetProj.x <= 1.0 && offsetProj.y >= 0.0 && offsetProj.y <= 1.0)
+        {
+            // Note: If gDepth is a raw hardware depth buffer, sampleDepth must be 
+            // linearized or reconstructed to view-space depth to match samplep.z.
 
-		float rangeCheck = smoothstep(0.0, 1.0, uRadius / abs(fragPos.z - sampleDepth));
+            vec3 fragPosOffset = reconViewPos(offsetProj.xy);
+            // visible depth in the view space
+            float sampleDepth = fragPosOffset.z;
 
-		occlusion += (sampleDepth >= samplep.z + uBias ? 1.0 : 0.0) * rangeCheck;
+            float rangeCheck = smoothstep(0.0, 1.0, uRadius / abs(offset.z - sampleDepth));
+            // in local shadow
+            occlusion += (sampleDepth >= offset.z + uBias ? 1.0 : 0.0) * rangeCheck;
+
+            totalSampleFloat += 1.0;
+        }
 	}
-    occlusion = 1.0 - (occlusion / uKernelSize);
+    // non occlusion
+    float non_occlusion = 1.0 - (occlusion / totalSampleFloat);
+    non_occlusion = pow(non_occlusion, uPowerAO);
     
-    fragColor = occlusion;
-    //out_color = vec4(vec3(occlusion), 1.0);
+    fragColor = non_occlusion;
+    //out_color = vec4(vec3(non_occlusion), 1.0);
     //out_color = vec4(texture(gAlbedo, uv).xyz, 1.0);
+    //out_color = vec4(vec3(texture(gDepth, uv).z), 1.0);
 }

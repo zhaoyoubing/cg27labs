@@ -46,6 +46,8 @@ bool SSAOPass::init(RenderContext & ctx) {
     samplePoints_ = generateSamples(nSample);
 
     ctx.ssao_.texAO = texSSAO;
+    //ctx.ssao_.power = 1.0;
+    //ctx.ssao_.bias = 0.025;
 
     bInited = true;
     return bInited;
@@ -60,8 +62,11 @@ void SSAOPass::execute(RenderContext & ctx) {
     // read camera data
     camera_ = ctx.scene_->getMainCamera();
     
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0); // for previewing AO map in debugging
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    
+    // White represents fully unoccluded space
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); 
     
     glViewport(0, 0, camera_.viewport.w, camera_.viewport.h);
 
@@ -79,8 +84,9 @@ void SSAOPass::execute(RenderContext & ctx) {
     glBindTextureUnit(3, ctx.gbuf_.gDepth);
 
     gpuPipe->setInt("uKernelSize", nSample);
-    gpuPipe->setFloat("uRadius", 1.0);
-    gpuPipe->setFloat("uBias", 0.0032);
+    gpuPipe->setFloat("uRadius", ctx.ssao_.radius);
+    gpuPipe->setFloat("uBias", ctx.ssao_.bias);
+    gpuPipe->setFloat("uPowerAO", ctx.ssao_.power);
 
     //gpuPipe->setVec2("uViewport", glm::vec2(width_, height_));
 

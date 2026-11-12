@@ -1,6 +1,7 @@
 #version 420
 
 out float fragColor;
+//out vec4 out_colour;
 
 in vec2 uv;
 
@@ -9,7 +10,7 @@ in vec2 uv;
 //layout(binding = 2) uniform sampler2D gMaterial;
 layout(binding = 3) uniform sampler2D gDepth;
 
-layout (binding=9) uniform sampler2D texAO;
+layout (binding = 9) uniform sampler2D texAO;
 
 
 void main() {
@@ -23,5 +24,7 @@ void main() {
             result += texture(texAO, uv + offset).r;
         }
     }
-    fragColor = result / (5.0 * 5.0);
+     fragColor = result / (5.0 * 5.0);
+
+    //out_colour = vec4(vec3(result / (5.0 * 5.0)), 1.0);
 }

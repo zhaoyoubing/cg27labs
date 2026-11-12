@@ -51,14 +51,12 @@ bool SSAOBoxBlurPass::init(RenderContext & ctx) {
     // share blur texture ids
     // use previous rendering
     //texBufA = ctx.postp_.bloomBufferA;
-    ctx.ssao_.texBlur = texBuf;
+    ctx.ssao_.texBlurAO = texBuf;
 
     bInited = true;
     return bInited;
 }
 
-// warning: don't call glClear(GL_COLOR_BUFFER_BIT) in rendering
-// it may lead to undesired clearing and blackscreen
 void SSAOBoxBlurPass::execute(RenderContext & ctx) {
     if (!bInited) return;
 

@@ -3,6 +3,8 @@
 
 
 out float fragColor;
+//out vec4 out_colour;
+
 in vec2 v_TexCoord;
 
 uniform sampler2D u_SSAOTexture;
@@ -43,5 +45,6 @@ void main() {
     }
 
     // Normalize and prevent division by zero
-    fragColor = (totalWeight > 0.0) ? (cumulativeAO / totalWeight) : centerAO;
+    float fragColor = (totalWeight > 0.0) ? (cumulativeAO / totalWeight) : centerAO;
+    //out_colour = vec4(vec3(fragColor), 1.0);
 }

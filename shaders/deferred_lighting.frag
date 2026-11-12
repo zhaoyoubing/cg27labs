@@ -40,8 +40,8 @@ struct PointLight {
     float c; // quadratic
 };
 
-// max number of lights : 100
-#define MAX_LIGHTS 100
+// max number of lights : 128
+#define MAX_LIGHTS 128
 uniform PointLight uLights[MAX_LIGHTS];
 
 uniform int uLightCount = 1;

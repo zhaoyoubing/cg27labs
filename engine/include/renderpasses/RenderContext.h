@@ -40,7 +40,7 @@ struct PostProcessData {
 
 struct SSAOData {
     GLuint texAO;  
-    GLuint texBlur;
+    GLuint texBlurAO;
 
     // --- Quality & Kernel ---
     int sampleCount = 64;          // Number of hemisphere samples (e.g., 32 or 64)
@@ -48,7 +48,7 @@ struct SSAOData {
     float bias = 0.025f;           // Depth bias to prevent self-shadowing/shadow acne
     
     // --- Visual Tuning ---
-    float intensity = 1.5f;        // Multiplier to darken or soften the occlusion contrast
+    float intensity = 1.0f;        // Multiplier to darken or soften the occlusion contrast
     float power = 1.0f;            // Exponent for contrast falloff (optional)
     
     // --- Performance / Resolution ---

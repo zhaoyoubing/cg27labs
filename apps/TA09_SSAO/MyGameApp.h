@@ -20,9 +20,11 @@
 #include "renderpasses/SkyBoxPass.h"
 #include "renderpasses/CubeMapReflectionPass.h"
 #include "renderpasses/GBufferPass.h"
+#include "renderpasses/DeferredLightPass.h"
+
 #include "renderpasses/SSAOPass.h"
 #include "renderpasses/SSAOBoxBlurPass.h"
-#include "renderpasses/DeferredLightPass.h"
+#include "renderpasses/SSAODeferredLightPass.h"
 
 #include <algorithm>
 
@@ -57,6 +59,7 @@ protected:
         shaderMgr_.load("deferred_lighting", "shaders/deferred_lighting.vert", "shaders/deferred_lighting.frag");
         shaderMgr_.load("ssao", "shaders/fullview.vert", "shaders/ssao.frag");
         shaderMgr_.load("boxblur", "shaders/fullview.vert", "shaders/boxblur.frag");
+        shaderMgr_.load("ssao_deferred_lighting", "shaders/fullview.vert", "shaders/ssao_deferred_lighting.frag");
 
 
         // ================ Model Setup ================
@@ -118,8 +121,8 @@ protected:
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
             //.eye = glm::vec3(0.0f, 2.0f, 0.0f),
             .eye = center, //  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, 
-            .fov = 45.0f,
-            .near = 0.1,
+            .fov = 60.0f,
+            .near = 0.1f,
             .far = maxSize * 5.0f,
             .front = glm::vec3(0, 0, -1),
             .yaw = -90.0f,
@@ -144,7 +147,7 @@ protected:
 
         initLights(maxSize * 1.0f, 20); // add 10 random lights around the scene
         
-        
+        /*
         // ================ Skybox Setup ================
         std::vector<std::string> faces = {
             "assets/cubemapYokohama/posx.jpg",  // right
@@ -155,7 +158,9 @@ protected:
             "assets/cubemapYokohama/negz.jpg"   // back
         };
         scene_->skybox_.load(faces);
-        
+        */
+
+
         // ================ Render Pipeline Setup ================
         // 6. render pipeline init
         //renderPipe_.addPass(std::make_unique<ForwardPassLightNormal>());
@@ -163,9 +168,9 @@ protected:
         //renderPipe_.addPass(std::make_unique<SkyBoxPass>());
         
         renderPipe_.addPass(std::make_unique<GBufferPass>());
-        //renderPipe_.addPass(std::make_unique<SSAOPass>());
-        //renderPipe_.addPass(std::make_unique<SSAOBoxBlurPass>());
-        renderPipe_.addPass(std::make_unique<DeferredLightPass>());
+        renderPipe_.addPass(std::make_unique<SSAOPass>());
+        renderPipe_.addPass(std::make_unique<SSAOBoxBlurPass>());
+        renderPipe_.addPass(std::make_unique<SSAODeferredLightPass>());
         
         renderPipe_.init(context_);
     };
