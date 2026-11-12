@@ -30,15 +30,28 @@ struct SceneNode {
         trans.scale = glm::vec3(scale, scale, scale);
 
         trans.bMatrixDirty = true;
-        //bBoxDirty = true;
+        bBoxDirty = true;
+        updateBBox();
     }
 
     void center() {
-        glm::vec center = bbox.getCenter();
+        glm::vec3 centerPos = bbox.getCenter();
+
+        centerAt(centerPos);
+        /*
         trans.pos = glm::vec3(- center.x * trans.scale.x,
                             - center.y * trans.scale.y,
                             - center.z * trans.scale.z );
         trans.bMatrixDirty = true;
+        */
+    }
+
+    void centerAt(glm::vec3 pos) {
+        trans.pos = glm::vec3(- pos.x, - pos.y, -pos.z );
+        trans.bMatrixDirty = true;
+        bBoxDirty = true;
+
+        updateBBox();
     }
 
 
@@ -66,7 +79,7 @@ struct SceneNode {
             bBoxDirty = false;
         }
 
-        // need to apply matrix
+        // apply local transoform
         AABB box;
         box.min = glm::vec3(trans.getLocalMatrix() * glm::vec4(bbox.min, 1.0));
         box.max = glm::vec3(trans.getLocalMatrix() * glm::vec4(bbox.max, 1.0));

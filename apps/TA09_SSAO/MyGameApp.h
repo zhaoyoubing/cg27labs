@@ -59,6 +59,9 @@ protected:
 
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
+        AABB bbox;
+        glm::vec3 center;
+        glm::vec3 dim;
         /*
         //std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
         std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf( //"assets/barrel/scene.gltf", 
@@ -91,20 +94,24 @@ protected:
         std::unique_ptr<SceneNode> sponza = MeshFactory::loadGltf("assets/Sponza/glTF/Sponza.gltf", 
                                                              texMgr_,  matMgr_, shaderMgr_);
         sponza->scaleToFitBBox(30.0);
+        bbox = sponza->getBBox();
+        center = bbox.getCenter();
+        sponza->centerAt(glm::vec3(center.x, center.y, bbox.min.z));
         scene_->root_->children.push_back(std::move(sponza));
         
-            /*
+        /*    
         std::unique_ptr<SceneNode> chapel = MeshFactory::loadGltf("assets/chapel_ruin/scene.gltf", 
                                                              texMgr_,  matMgr_, shaderMgr_);
         chapel->scaleToFitBBox(0.8);
         scene_->root_->children.push_back(std::move(chapel));
-            */
+        */    
 
-        AABB bbox = scene_->getBBox();
+        bbox = scene_->getBBox();
         spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox.min.x, bbox.min.y, bbox.min.z, 
                                                                     bbox.max.x, bbox.max.y, bbox.max.z);
-        glm::vec3 dim = bbox.getDimension();
-        glm::vec3 center = bbox.getCenter();
+        dim = bbox.getDimension();
+        center = bbox.getCenter();
+        spdlog::debug("Scene centre: {} {} {}", center.x, center.y, center.z);
         float maxSize = std::max(dim.x, std::max(dim.y, dim.z) );
         
         // ================ Create camera entity ================
@@ -112,7 +119,7 @@ protected:
         EntityID camId = scene_->ecsWorld_.createEntityID();
 
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
-            .eye = center,
+            .eye = glm::vec3(0.0f, 0.0f, 4.0f),
             //.eye = center  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, // + glm::vec3(-200.0, 5.0, 0) for barrel testing
             .fov = 45.0f,
             .near = 0.1,
