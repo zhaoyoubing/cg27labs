@@ -94,9 +94,10 @@ protected:
         std::unique_ptr<SceneNode> sponza = MeshFactory::loadGltf("assets/Sponza/glTF/Sponza.gltf", 
                                                              texMgr_,  matMgr_, shaderMgr_);
         sponza->scaleToFitBBox(30.0);
-        bbox = sponza->getBBox();
-        center = bbox.getCenter();
-        sponza->centerAt(glm::vec3(center.x, center.y, bbox.min.z));
+        //bbox = sponza->getBBox();
+        //center = bbox.getCenter();
+        //sponza->centerAt(glm::vec3(center.x, center.y, bbox.min.z));
+        sponza->center();
         scene_->root_->children.push_back(std::move(sponza));
         
         /*    
@@ -119,8 +120,8 @@ protected:
         EntityID camId = scene_->ecsWorld_.createEntityID();
 
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
-            .eye = glm::vec3(0.0f, 0.0f, 4.0f),
-            //.eye = center  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, // + glm::vec3(-200.0, 5.0, 0) for barrel testing
+            //.eye = glm::vec3(0.0f, 2.0f, 0.0f),
+            .eye = center, //  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, 
             .fov = 45.0f,
             .near = 0.1,
             .far = maxSize * 5.0f,
