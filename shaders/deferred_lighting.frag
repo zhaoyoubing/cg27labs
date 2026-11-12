@@ -1,4 +1,4 @@
-#version 450
+#version 420
 
 layout(binding = 0) uniform sampler2D gAlbedo;
 layout(binding = 1) uniform sampler2D gNormal;
@@ -112,13 +112,13 @@ void main()
     {
         // diffuse
         vec3 lightDir = normalize(uLights[i].pos - fragPos);
-        vec3 diffuse = max(dot(normal, lightDir), 0.0) * albedo * uLights[i].colour;
+        vec3 diffuse = max(dot(normal, lightDir), 0.0) * albedo * uLights[i].colour * uLights[i].intensity;
         // specular
         vec3 halfwayDir = normalize(lightDir + viewDir);  
-        float spec = pow(max(dot(normal, halfwayDir), 0.0), 16.0);
+        float spec = pow(max(dot(normal, halfwayDir), 0.0), 64.0);
         
-        // take the specular colour as 0
-        vec3 specular = uLights[i].colour * spec * k_s;
+        // specular colour 
+        vec3 specular = uLights[i].colour * spec * k_s * uLights[i].intensity;
 
         // attenuation
         float distance = length(uLights[i].pos - fragPos);
@@ -129,7 +129,7 @@ void main()
     }
     
     // HDR conversion
-    float exposure = 0.5f;
+    float exposure = 1.0f;
     // exposure tone mapping
     vec3 mapped = vec3(1.0) - exp(-totalLight * exposure);
     //vec3 mapped = ACESFilm(lighting);
