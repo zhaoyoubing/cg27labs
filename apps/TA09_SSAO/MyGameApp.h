@@ -95,7 +95,7 @@ protected:
                                                                     bbox1.max.x, bbox1.max.y, bbox1.max.z);
         scene_->root_->children.push_back(std::move(bunny));
         */
-        /*
+        
         std::unique_ptr<SceneNode> sponza = MeshFactory::loadGltf("assets/Sponza/glTF/Sponza.gltf", 
                                                              texMgr_,  matMgr_, shaderMgr_);
         sponza->scaleToFitBBox(30.0);
@@ -104,13 +104,14 @@ protected:
         //sponza->centerAt(glm::vec3(center.x, center.y, bbox.min.z));
         sponza->center();
         scene_->root_->children.push_back(std::move(sponza));
-        */
-
+        
+        /*
         std::unique_ptr<SceneNode> chapel = MeshFactory::loadGltf("assets/chapel_ruin/scene.gltf", 
                                                              texMgr_,  matMgr_, shaderMgr_);
         chapel->scaleToFitBBox(10.0);
         chapel->center();
         scene_->root_->children.push_back(std::move(chapel));
+        */
           
 
         bbox = scene_->getBBox();
@@ -127,8 +128,8 @@ protected:
 
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
             //.eye = glm::vec3(0.0f, 2.0f, 0.0f),
-            //.eye = center, //  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, 
-            .eye = center  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, 
+            .eye = center, //  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, 
+            //.eye = center  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, 
             .fov = 60.0f,
             .near = 0.1f,
             .far = maxSize * 5.0f,
