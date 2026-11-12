@@ -54,6 +54,7 @@ public:
                 camera.eye -= camera.front * velocity;
                 camera.isDirty = true;
             }
+
             if (input.isKeyHeld(GLFW_KEY_A)) {
                 camera.eye -= right * velocity;
                 camera.isDirty = true;
@@ -61,6 +62,16 @@ public:
 
             if (input.isKeyHeld(GLFW_KEY_D)) {
                 camera.eye += right * velocity;
+                camera.isDirty = true;
+            }
+
+            if (input.isKeyHeld(GLFW_KEY_E)) {
+                camera.eye += camera.up * velocity;
+                camera.isDirty = true;
+            }
+
+            if (input.isKeyHeld(GLFW_KEY_Q)) {
+                camera.eye -= camera.up * velocity;
                 camera.isDirty = true;
             }
 
