@@ -74,8 +74,12 @@ protected:
         teapot->scaleToFitBBox(0.4);
         teapot->center();
         teapot->trans.pos += glm::vec3(-0.5, 0.2, 0.2);
-        scene_->root_->children.push_back(std::move(teapot));
+        
+        bbox1 = teapot->getBBox();
+        spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox1.min.x, bbox1.min.y, bbox1.min.z, 
+                                                                    bbox1.max.x, bbox1.max.y, bbox1.max.z);
 
+        scene_->root_->children.push_back(std::move(teapot));
 
         AABB bbox = scene_->getBBox();
         spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox.min.x, bbox.min.y, bbox.min.z, 
