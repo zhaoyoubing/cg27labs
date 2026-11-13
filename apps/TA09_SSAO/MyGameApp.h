@@ -57,9 +57,9 @@ protected:
 
         shaderMgr_.load("deferred_gbuffer", "shaders/deferred_gbuffer.vert", "shaders/deferred_gbuffer.frag");
         shaderMgr_.load("deferred_lighting", "shaders/deferred_lighting.vert", "shaders/deferred_lighting.frag");
-        shaderMgr_.load("ssao", "shaders/fullview.vert", "shaders/ssao.frag");
-        shaderMgr_.load("boxblur", "shaders/fullview.vert", "shaders/boxblur.frag");
-        shaderMgr_.load("ssao_deferred_lighting", "shaders/fullview.vert", "shaders/ssao_deferred_lighting.frag");
+        shaderMgr_.load("ssao", "shaders/fullscreen.vert", "shaders/ssao.frag");
+        shaderMgr_.load("boxblur", "shaders/fullscreen.vert", "shaders/boxblur.frag");
+        shaderMgr_.load("ssao_deferred_lighting", "shaders/fullscreen.vert", "shaders/ssao_deferred_lighting.frag");
 
 
         // ================ Model Setup ================
