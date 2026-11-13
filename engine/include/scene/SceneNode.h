@@ -30,56 +30,48 @@ struct SceneNode {
         trans.scale = glm::vec3(scale, scale, scale);
 
         trans.bMatrixDirty = true;
-        bBoxDirty = true;
-        updateBBox();
+
     }
 
     void center() {
-        glm::vec3 centerPos = bbox.getCenter();
+        glm::vec3 c = bbox.getCenter();
 
-        centerAt(centerPos);
-        /*
-        trans.pos = glm::vec3(- center.x * trans.scale.x,
-                            - center.y * trans.scale.y,
-                            - center.z * trans.scale.z );
-        trans.bMatrixDirty = true;
-        */
+        centerAt(glm::vec3(- c.x * trans.scale.x,
+                            - c.y * trans.scale.y,
+                            - c.z * trans.scale.z ));
     }
 
     void centerAt(glm::vec3 pos) {
         trans.pos = glm::vec3(- pos.x, - pos.y, -pos.z );
         trans.bMatrixDirty = true;
-        bBoxDirty = true;
-
-        updateBBox();
     }
 
 
     // need to take transform into account
     void updateBBox() {
 
+        if (!bBoxDirty) return;
+
         AABB box;
 
         for (auto & mesh : meshList) {
-            //box = box.unite(mesh->geometry_->getBBox(mat * trans.getLocalMatrix()));   
             box = box.unite(mesh->geometry_->getBBox());           
         }
 
         for (auto & node : children) {
-            //box = box.unite(node->getBBox(mat * trans.getLocalMatrix()));
             box = box.unite(node->getBBox());
         }
 
         bbox = box;
+        bBoxDirty = false;
     }
 
     AABB getBBox() {
         if (bBoxDirty) {
             updateBBox();
-            bBoxDirty = false;
         }
 
-        // apply local transoform
+        // apply local transoform, important !!
         AABB box;
         box.min = glm::vec3(trans.getLocalMatrix() * glm::vec4(bbox.min, 1.0));
         box.max = glm::vec3(trans.getLocalMatrix() * glm::vec4(bbox.max, 1.0));
