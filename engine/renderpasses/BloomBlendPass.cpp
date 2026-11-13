@@ -31,6 +31,7 @@ void BloomBlendPass::execute(RenderContext & ctx) {
 
     glViewport(0, 0, width_, height_);
 
+    //glEnable(GL_FRAMEBUFFER_SRGB);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
