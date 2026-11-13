@@ -58,8 +58,8 @@ protected:
         // std::unique_ptr<SceneNode> mesh = MeshFactory::loadGltf("assets/BoxTextured/glTF/BoxTextured.gltf", texMgr_,  matMgr_, shaderMgr_);
         std::unique_ptr<SceneNode> bunny = MeshFactory::loadGltf("assets/bunny_tex.gltf", 
                                                              texMgr_,  matMgr_, shaderMgr_);
-        //scene_->root_ = std::move(mesh);
         bunny->scaleToFitBBox(0.5);
+        bunny->center();
         bunny->trans.pos += glm::vec3(0.0, 0.3, 0.3);
         
         AABB bbox1 = bunny->getBBox();
