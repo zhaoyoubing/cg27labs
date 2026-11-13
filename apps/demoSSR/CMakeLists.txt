@@ -12,16 +12,16 @@ add_executable(${PROJ_NAME})
 target_sources(${PROJ_NAME}
     PRIVATE
         main.cpp
-        #MyGameApp.cpp
     )
 
 # 3. third-party libraries
 target_link_libraries(${PROJ_NAME} PRIVATE
     glfw
     glad
-    engine
+    glm
+
     spdlog::spdlog
-    tinygltf
+    #tinygltf
 )
 
 # copy shaders and models to the target directory
