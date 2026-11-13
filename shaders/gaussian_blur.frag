@@ -29,7 +29,7 @@ void main()
     }
     else
     {
-        // vertical on the x direction  
+        // vertical on the y direction  
         for(int i = 1; i < 5; ++i)
         {
             result += texture(texblur, uv + vec2(0.0, tex_offset.y * i)).rgb * weight[i];
