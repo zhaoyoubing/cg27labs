@@ -49,9 +49,9 @@ protected:
         shaderMgr_.load("texblinn", "shaders/blinn_texture.vert", "shaders/blinn_texture.frag");
         shaderMgr_.load("texblinn_normal", "shaders/texblinn_normal.vert", "shaders/texblinn_normal.frag");
 
-        shaderMgr_.load("bloom_brightpass", "shaders/fullview.vert", "shaders/bloom_brightpass.frag");
-        shaderMgr_.load("gaussian_blur", "shaders/fullview.vert", "shaders/gaussian_blur.frag");
-        shaderMgr_.load("bloom_blend", "shaders/fullview.vert", "shaders/bloom_blend.frag");
+        shaderMgr_.load("bloom_brightpass", "shaders/fullscreen.vert", "shaders/bloom_brightpass.frag");
+        shaderMgr_.load("gaussian_blur", "shaders/fullscreen.vert", "shaders/gaussian_blur.frag");
+        shaderMgr_.load("bloom_blend", "shaders/fullscreen.vert", "shaders/bloom_blend.frag");
 
         // ================ Model Setup ================
         // 3. set up data and vertex buffers
