@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 # Define the project/target name in one place here
-set(PROJ_NAME TestSSR)
+set(PROJ_NAME DemoSSR)
 
 project(${PROJ_NAME} LANGUAGES CXX)
 
