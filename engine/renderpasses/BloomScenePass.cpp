@@ -10,29 +10,30 @@ bool BloomScenePass::init(RenderContext & ctx) {
     // to get viewport width and height
     // currently viewport is in camera, to be changed in the future
 
-    // read camera data
+    // get camera from scene
     camera_ = ctx.scene_->getMainCamera();
-
+    // set up framebuffer dimension
     width_ = camera_.viewport.w;
     height_ = camera_.viewport.h;
 
     spdlog::debug("GBuffer width {}, height {}", width_, height_);
 
-    // configure framebuffer
+    // create scene render framebuffer FBO id
     // ------------------------------
     glCreateFramebuffers(1, &FBO);
     
-    // colour + specular color buffer
+    // colour buffer texture
     glCreateTextures(GL_TEXTURE_2D, 1, & texScene);
     glTextureStorage2D(texScene, 1,  GL_RGBA16F, width_, height_);
     glTextureParameteri(texScene, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTextureParameteri(texScene, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTextureParameteri(texScene, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTextureParameteri(texScene, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    // associate the colour texture to one FBO attachment
     glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, texScene, 0);
-
-    // tell OpenGL which colour attachments we'll use (of this framebuffer) for rendering 
-    unsigned int attachments[] = { GL_COLOR_ATTACHMENT0};
+    // tell OpenGL the colour attachments to render to 
+    unsigned int attachments[] = {GL_COLOR_ATTACHMENT0};
     glNamedFramebufferDrawBuffers(FBO, 1, attachments);
 
     // 2. Depth/Stencil renderbuffer (NEW)

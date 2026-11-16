@@ -40,13 +40,13 @@ private:
 
     std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 
-    // GBuffer dimensions
+    // framebuffer dimensions
     int width_ = 0;
     int height_ = 0;
 
-    GLuint FBO = 0;  // frame buffer object
-    GLuint texScene = 0;  // scene rendering
-    GLuint depthBuf = 0;
+    GLuint FBO = 0;  // framebuffer object id
+    GLuint texScene = 0;  // framebuffer texture id
+    GLuint depthBuf = 0;  // depth buffer texture id
 
     void drawSceneGraph(RenderContext& context, std::unique_ptr<SceneNode>& node, 
                          const glm::mat4& parentMatrix, 

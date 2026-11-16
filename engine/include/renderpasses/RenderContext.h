@@ -30,7 +30,7 @@ struct PostProcessData {
     GLuint bloomBufferA;
     GLuint bloomBufferB;
     
-    // 3. Global Settings / Uniform Buffer Data
+    // 2. Global Settings / Uniform Buffer Data
     //struct Settings {
     float exposure = 1.0f;
     float bloomIntensity = 1.5f;
