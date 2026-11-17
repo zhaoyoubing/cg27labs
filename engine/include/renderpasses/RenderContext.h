@@ -31,13 +31,11 @@ struct PostProcessData {
     GLuint bloomBufferB;
     
     // 2. Global Settings / Uniform Buffer Data
-    //struct Settings {
     float exposure = 1.0f;
     float bloomIntensity = 1.5f;
-    float bloomThreshold = 0.8f;
+    float bloomThreshold = 1.0f;
     int  blurPassCount = 4;   // four horizontal and vertical passes, i.e. two pass 2D Gaussian
     int downSampleFactor = 4; // down size to 1/4
-    //} settings;
     
 };
 

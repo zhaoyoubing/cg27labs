@@ -3,10 +3,10 @@
 
 in vec2 uv;
 
-layout (binding=8) uniform sampler2D texScene;
-layout (binding=9) uniform sampler2D texblur;
+layout (binding = 8) uniform sampler2D texScene;
+layout (binding = 9) uniform sampler2D texblur;
 
-uniform float uExposure = 1.0;
+// uniform float uExposure = 1.0;
 uniform float uBloomIntensity = 1.0;
 
 out vec4 colour_out;

@@ -24,7 +24,8 @@ bool BloomBlendPass::init(RenderContext & ctx) {
 
 void BloomBlendPass::execute(RenderContext & ctx) {
 
-    // read camera data
+    // 1. Render setup
+    // onscreen rendering
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
@@ -35,16 +36,16 @@ void BloomBlendPass::execute(RenderContext & ctx) {
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
-    //glClear(GL_COLOR_BUFFER_BIT);
-
+    // 2. Shader pipeline setup
     gpuPipe->bind();
 
-    gpuPipe->setFloat("uExposure", ctx.postp_.exposure);
+    //gpuPipe->setFloat("uExposure", ctx.postp_.exposure);
     gpuPipe->setFloat("uBloomIntensity", ctx.postp_.bloomIntensity);
 
     glBindTextureUnit(8, ctx.postp_.texScene);
-    glBindTextureUnit(9, ctx.postp_.bloomBufferB);
+    glBindTextureUnit(9, ctx.postp_.bloomBufferA);
 
+    // 3. Draw the proxy geometry
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
     gpuPipe->unbind();
