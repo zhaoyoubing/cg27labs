@@ -10,7 +10,7 @@ bool BloomScenePass::init(RenderContext & ctx) {
     // to get viewport width and height
     // currently viewport is in camera, to be changed in the future
 
-    // get camera from scene
+    // get camera from scene for viewport width and height
     camera_ = ctx.scene_->getMainCamera();
     // set up framebuffer dimension
     width_ = camera_.viewport.w;
@@ -22,7 +22,7 @@ bool BloomScenePass::init(RenderContext & ctx) {
     // ------------------------------
     glCreateFramebuffers(1, &FBO);
     
-    // colour buffer texture
+    // create framebuffer colour texture id
     glCreateTextures(GL_TEXTURE_2D, 1, & texScene);
     glTextureStorage2D(texScene, 1,  GL_RGBA16F, width_, height_);
     glTextureParameteri(texScene, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -36,7 +36,7 @@ bool BloomScenePass::init(RenderContext & ctx) {
     unsigned int attachments[] = {GL_COLOR_ATTACHMENT0};
     glNamedFramebufferDrawBuffers(FBO, 1, attachments);
 
-    // 2. Depth/Stencil renderbuffer (NEW)
+    // create and associate the Depth/Stencil renderbuffer 
     glCreateRenderbuffers(1, &depthBuf);
     glNamedRenderbufferStorage(depthBuf, GL_DEPTH24_STENCIL8, width_, height_);
     glNamedFramebufferRenderbuffer(FBO, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthBuf);

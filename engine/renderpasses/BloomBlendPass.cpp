@@ -8,11 +8,10 @@ bool BloomBlendPass::init(RenderContext & ctx) {
 
     if (! gpuPipe) return false;
 
-    // read camera data
+    // get camera from scene for viewport width and height
     camera_ = ctx.scene_->getMainCamera();
 
-    // to get viewport width and height
-    // currently viewport is in camera, to be changed in the future
+    // set up framebuffer dimension
     width_ = camera_.viewport.w;
     height_ = camera_.viewport.h;
 
