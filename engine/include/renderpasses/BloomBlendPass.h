@@ -1,4 +1,4 @@
-// engine/include/renderpasses/ForwardPass.h
+// engine/include/renderpasses/BloomBlendPass.h
 #pragma once
 
 #include "device/GPUPipeline.h"
@@ -12,15 +12,16 @@
 #include "entity/CameraComp.h"
 #include "entity/LightComp.h"
 
-// GBuffer Pass for Deferred Rendering
+// Blend Pass for Bloom post-processing effects
 class BloomBlendPass : public RenderPass
 {
 public:
     explicit BloomBlendPass() { }
     
+    // called once before the rendering loop
     bool init(RenderContext& context) override;
 
-    // Called once per frame.
+    // Render function called once per frame.
     void execute(RenderContext& context) override;
 
 private:

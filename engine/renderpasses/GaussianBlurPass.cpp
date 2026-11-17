@@ -3,29 +3,26 @@
 bool GaussianBlurPass::init(RenderContext & ctx) {
     spdlog::debug("GaussianBlurPass::init()");
 
-    // 1. Fetch shader from manager
+    // 1. Fetching the shader pipeline from the shader manager
     gpuPipe = ctx.shaderMgr_.get("gaussian_blur");
 
     if (! gpuPipe) return false;
 
-    // read camera data
+    // 2. get camera from scene for viewport width and height
     camera_ = ctx.scene_->getMainCamera();
 
-    // to get viewport width and height
-    // currently viewport is in camera, to be changed in the future
-    // shrinking for better blurring
+    // set up framebuffer dimension, downsize for better blurring
     int downSampleFactor = ctx.postp_.downSampleFactor;
     width_ = camera_.viewport.w / downSampleFactor;
     height_ = camera_.viewport.h / downSampleFactor;
 
     spdlog::debug("Viewport width {}, height {}", width_, height_);
 
-    // configure framebuffer
+    // 3. configure framebuffer
     // ------------------------------
     glCreateFramebuffers(1, &FBO);
     
-    // two textures for ping-pong Gaussian blurring
-
+    // texture B for ping-pong Gaussian blurring
     glCreateTextures(GL_TEXTURE_2D, 1, & texBufB);
     glTextureStorage2D(texBufB, 1, GL_RGBA16F, width_, height_);
     glTextureParameteri(texBufB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -37,7 +34,7 @@ bool GaussianBlurPass::init(RenderContext & ctx) {
     // initial binding
     //glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, texBufB, 0);
 
-    // tell OpenGL which colour attachments we'll use (of this framebuffer) for rendering 
+    // 4. tell OpenGL the colour attachments to render to
     unsigned int attachments[] = { GL_COLOR_ATTACHMENT0};
     glNamedFramebufferDrawBuffers(FBO, 1, attachments);
 
@@ -51,8 +48,7 @@ bool GaussianBlurPass::init(RenderContext & ctx) {
 
     spdlog::debug("In Gaussian Pass init, bloomBuffer A {}", ctx.postp_.bloomBufferA);
 
-    // share blur texture ids
-    // use previous rendering
+    // 5. set textBufA and share texBufB ids
     texBufA = ctx.postp_.bloomBufferA;
     ctx.postp_.bloomBufferB = texBufB;
 
@@ -65,9 +61,10 @@ bool GaussianBlurPass::init(RenderContext & ctx) {
 void GaussianBlurPass::execute(RenderContext & ctx) {
     if (!bInited) return;
 
-    // read camera data
-    // glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    // 1. Render setup
+
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0); // onscreen rendering
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO); // offscreen rendering
 
     glViewport(0, 0, width_, height_);
 
@@ -76,12 +73,12 @@ void GaussianBlurPass::execute(RenderContext & ctx) {
 
     gpuPipe->bind();
 
-    for (int i = 0; i < ctx.postp_.blurPassCount; i++)
-    {
+    // 2. Ping-pong blurring
+    for (int i = 0; i < ctx.postp_.blurPassCount; i++) {
         int pass = i % 2;
         gpuPipe->setInt("uPass", pass);
 
-        // set GBuffer textures to the shader
+        // set the source texture to blur
         if (pass == 0) {
             glBindTextureUnit(8, texBufA);
             glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, texBufB, 0);
@@ -93,11 +90,11 @@ void GaussianBlurPass::execute(RenderContext & ctx) {
             spdlog::trace("Bloom blur pass B rendering to A {}", texBufA);
         }
 
+        // render fullscreen
         glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 
-
+    // 3. unbind shader pipeline and framebuffer
     gpuPipe->unbind();
-
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

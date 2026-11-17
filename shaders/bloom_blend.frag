@@ -1,4 +1,4 @@
-// bloom_blend.frag
+// shaders/bloom_blend.frag
 #version 420 core
 
 in vec2 uv;
@@ -32,16 +32,15 @@ void main()
     vec3 result = blendColour;
     
     // HDR Tone Mapping
-    //result = vec3(1.0) - exp(-result * uExposure);
-    
+    // result = vec3(1.0) - exp(-result * uExposure);
     result = ACESFilm(result);
 
-    //Gamma correction     
+    // Gamma correction     
     const float gamma = 2.2;  
     result = pow(result, vec3(1.0 / gamma));
     
     colour_out = vec4(result, 1.0);
     
     // blur colour preview for debugging
-    //colour_out = vec4(blurColour, 1.0);
+    // colour_out = vec4(blurColour, 1.0);
 }  

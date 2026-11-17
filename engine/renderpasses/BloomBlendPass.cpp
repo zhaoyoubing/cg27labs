@@ -8,7 +8,7 @@ bool BloomBlendPass::init(RenderContext & ctx) {
 
     if (! gpuPipe) return false;
 
-    // get camera from scene for viewport width and height
+    // 2. get camera from scene for viewport width and height
     camera_ = ctx.scene_->getMainCamera();
 
     // set up framebuffer dimension
@@ -17,7 +17,8 @@ bool BloomBlendPass::init(RenderContext & ctx) {
 
     spdlog::debug("Viewport width {}, height {}", width_, height_);
 
-    return true;
+    bInited = true;
+    return bInited;
 }
 
 

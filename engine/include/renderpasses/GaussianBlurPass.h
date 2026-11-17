@@ -1,4 +1,4 @@
-// engine/include/renderpasses/ForwardPass.h
+// engine/include/renderpasses/GaussianBlurPass.h
 #pragma once
 
 #include "device/GPUPipeline.h"
@@ -12,15 +12,16 @@
 #include "entity/CameraComp.h"
 #include "entity/LightComp.h"
 
-// GBuffer Pass for Deferred Rendering
+// Gaussian Blur Pass for post-processing
 class GaussianBlurPass : public RenderPass
 {
 public:
     explicit GaussianBlurPass() { }
     
+    // called once before the rendering loop
     bool init(RenderContext& context) override;
 
-    // Called once per frame.
+    // Render function called once per frame.
     void execute(RenderContext& context) override;
 
 private:
@@ -33,8 +34,7 @@ private:
 
     GLuint FBO = 0;  // frame buffer object
 
-    // buffer A and B for ping-pong blurring
+    // buffer A and B for ping-pong Gaussian blurring
     GLuint texBufA = 0;  
     GLuint texBufB = 0;  
-    
 };

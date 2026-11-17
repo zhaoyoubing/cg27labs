@@ -35,8 +35,8 @@ struct PostProcessData {
     float exposure = 1.0f;
     float bloomIntensity = 1.5f;
     float bloomThreshold = 0.8f;
-    int  blurPassCount = 4;
-    int downSampleFactor = 4;
+    int  blurPassCount = 4;   // four horizontal and vertical passes, i.e. two pass 2D Gaussian
+    int downSampleFactor = 4; // down size to 1/4
     //} settings;
     
 };

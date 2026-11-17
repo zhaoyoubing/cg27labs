@@ -1,4 +1,4 @@
-// bloom_brightpass.vert
+// fullscreen.vert
 #version 420
 
 // Hardcoded array of 2D positions for a triangle
