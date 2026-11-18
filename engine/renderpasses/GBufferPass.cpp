@@ -92,6 +92,7 @@ bool GBufferPass::init(RenderContext & ctx) {
     ctx.gbuf_.gMat = gMat;
     ctx.gbuf_.gDepth = gDepth;
 
+    ctx.gbuf_.matProj = camera_.getProjMatrix();
     ctx.gbuf_.matInvProj = glm::inverse(camera_.getProjMatrix());
 
     spdlog::debug("After GBuffer init, albedo {}, normal {}, depth {}", gAlbedo, gNormal, gDepth);
