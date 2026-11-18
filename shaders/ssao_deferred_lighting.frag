@@ -54,25 +54,15 @@ uniform mat4 uMatInvProj;
 
 out vec4 colour_out;
 
-// This function is from genAI
-vec3 reconViewPos(vec2 uv) {
-    // 1. Sample the depth buffer value [0, 1]
-    float depth = texture(gDepth, uv).r;
-    
-    // If depth is 1.0, it's usually the background/skybox (no geometry)
-    if (depth >= 1.0) discard; 
 
-    // 2. Convert screen UV and depth to Normalized Device Coordinates (NDC) [-1, 1]
-    vec4 ndcPos = vec4(uv * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
+// convert Screen Space position (u, v, depth) to View Space position
+vec3 screen2view(vec3 screenPos) {
+	vec4 viewPos = uMatInvProj * vec4(screenPos * 2 - vec3(1.0), 1.0);
+	viewPos /= viewPos.w;
 
-    // 3. Transform by the inverse projection matrix to get Clip Space coordinates
-    vec4 clipPos = uMatInvProj * ndcPos;
-
-    // 4. Perspective divide (divide by w to complete the projection math)
-    vec4 viewPos = clipPos / clipPos.w;
-
-    return viewPos.xyz; // This is the 3D position in View Space
+    return viewPos.xyz; 
 }
+
 
 vec3 ACESFilm(vec3 x) {
     float a = 2.51;
@@ -94,10 +84,11 @@ float blinnSpecular(vec3 lightDir, vec3 viewDir, vec3 diffuse, vec3 normal)
 // code based on from LearnOpenGL.com
 // needs to adapt to PBR
 void main()
-{             
-    // retrieve data from gbuffer
-    // vec3 fragPos = texture(gPos, uv).rgb;
-    vec3 fragPos = reconViewPos(uv);
+{
+    // recover screen space frag postion
+    float fragScreenDepth = texture(gDepth, uv).r;
+    vec3 fragScreenPos = vec3(uv, fragScreenDepth);
+    vec3 fragPos = screen2view(fragScreenPos);
     
     vec3 normal = texture(gNormal, uv).rgb;
     vec3 albedo = texture(gAlbedo, uv).rgb;
