@@ -61,7 +61,7 @@ struct SSAOData {
 
 // screen space reflection
 struct SSRData {
-    GLuint texReflect;
+    GLuint texSSR;
     float maxRayDistance = 100.0f;
     int maxSteps = 64;
     float stride = 1.0f;

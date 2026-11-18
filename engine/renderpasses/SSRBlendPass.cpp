@@ -1,7 +1,7 @@
 #include "renderpasses/SSRBlendPass.h"
 
 bool SSRBlendPass::init(RenderContext & ctx) {
-    spdlog::debug("GaussianBlurPass::init()");
+    spdlog::debug("SSRBlendPass::init()");
 
     // 1. Fetch shader from manager
     gpuPipe = ctx.shaderMgr_.get("ssr_blend");
@@ -24,6 +24,8 @@ bool SSRBlendPass::init(RenderContext & ctx) {
 
 void SSRBlendPass::execute(RenderContext & ctx) {
 
+    camera_ = ctx.scene_->getMainCamera();
+
     // read camera data
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -38,11 +40,11 @@ void SSRBlendPass::execute(RenderContext & ctx) {
 
     gpuPipe->bind();
 
-    gpuPipe->setFloat("uExposure", ctx.postp_.exposure);
-    gpuPipe->setFloat("uBloomIntensity", ctx.postp_.bloomIntensity);
+    gpuPipe->setMat4("uMatView", camera_.getViewMatrix());
+    gpuPipe->setMat4("uMatInvProj", ctx.gbuf_.matInvProj);
 
     glBindTextureUnit(8, ctx.postp_.texScene);
-    glBindTextureUnit(9, ctx.postp_.bloomBufferB);
+    glBindTextureUnit(9, ctx.ssr_.texSSR);
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
 

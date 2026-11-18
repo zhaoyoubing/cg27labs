@@ -5,7 +5,7 @@ bool SSRDeferredLightPass::init(RenderContext & ctx) {
 
     spdlog::debug("Deferred Lighting Pass init");
 
-    gpuPipe = ctx.shaderMgr_.get("deferred_lighting");
+    gpuPipe = ctx.shaderMgr_.get("ssr_deferred_lighting");
 
     if (nullptr == gpuPipe) return false;
 
@@ -18,7 +18,7 @@ bool SSRDeferredLightPass::init(RenderContext & ctx) {
     // generate scene texture
     glCreateTextures(GL_TEXTURE_2D, 1, & texFBO);
     // Allocate single-channel 8-bit uncompressed storage
-    glTextureStorage2D(texFBO, 1, GL_R8, width_, height_);
+    glTextureStorage2D(texFBO, 1, GL_RGB16F, width_, height_);
 
     // Set filtering to nearest or linear depending on whether you blur it
     glTextureParameteri(texFBO, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -74,7 +74,8 @@ void SSRDeferredLightPass::execute(RenderContext & ctx) {
     glBindTextureUnit(2, ctx.gbuf_.gMat);
     glBindTextureUnit(3, ctx.gbuf_.gDepth);
 
-    gpuPipe->setVec3("uEyePos", camera_.eye);
+    //gpuPipe->setVec3("uEyePos", camera_.eye);
+    gpuPipe->setMat4("uMatView", camera_.getViewMatrix());
     gpuPipe->setMat4("uMatInvProj", ctx.gbuf_.matInvProj);
 
     setPointLights(ctx);

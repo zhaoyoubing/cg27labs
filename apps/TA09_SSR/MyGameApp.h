@@ -66,6 +66,7 @@ protected:
         // shaderMgr_.load("boxblur", "shaders/fullscreen.vert", "shaders/boxblur.frag");
         // shaderMgr_.load("ssao_deferred_lighting", "shaders/fullscreen.vert", "shaders/ssao_deferred_lighting.frag");
         
+        shaderMgr_.load("ssr_deferred_lighting", "shaders/fullscreen.vert", "shaders/ssr_deferred_lighting.frag");
         shaderMgr_.load("ssr_reflect", "shaders/fullscreen.vert", "shaders/ssr_reflect.frag");
         shaderMgr_.load("ssr_blend", "shaders/fullscreen.vert", "shaders/ssr_blend.frag");
 
@@ -187,7 +188,7 @@ protected:
         renderPipe_.addPass(std::make_unique<GBufferPass>());
         renderPipe_.addPass(std::make_unique<SSRDeferredLightPass>());
         renderPipe_.addPass(std::make_unique<SSRReflectPass>());
-        //renderPipe_.addPass(std::make_unique<SSRBlendPass>());
+        renderPipe_.addPass(std::make_unique<SSRBlendPass>());
 
         // renderPipe_.addPass(std::make_unique<SSAOPass>());
         // renderPipe_.addPass(std::make_unique<SSAOBoxBlurPass>());

@@ -30,6 +30,4 @@ private:
     int width_ = 0;
     int height_ = 0;
 
-    GLuint FBO = 0;  // frame buffer object
-
 };

@@ -17,7 +17,7 @@ uniform float uStride = 1.0f;
 uniform float uThickness = 0.5f;
 uniform float uRoughThres = 0.2f;
 
-uniform bool bDebug = true;
+uniform bool bDebug = false;
 
 const float screenThres = 0.05;
 
