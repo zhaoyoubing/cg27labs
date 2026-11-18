@@ -26,6 +26,10 @@
 #include "renderpasses/SSAOBoxBlurPass.h"
 #include "renderpasses/SSAODeferredLightPass.h"
 
+#include "renderpasses/SSRDeferredLightPass.h"
+#include "renderpasses/SSRReflectPass.h"
+#include "renderpasses/SSRBlendPass.h"
+
 #include <algorithm>
 
 #include <string>
@@ -57,9 +61,13 @@ protected:
 
         shaderMgr_.load("deferred_gbuffer", "shaders/deferred_gbuffer.vert", "shaders/deferred_gbuffer.frag");
         shaderMgr_.load("deferred_lighting", "shaders/deferred_lighting.vert", "shaders/deferred_lighting.frag");
-        shaderMgr_.load("ssao", "shaders/fullscreen.vert", "shaders/ssao.frag");
-        shaderMgr_.load("boxblur", "shaders/fullscreen.vert", "shaders/boxblur.frag");
-        shaderMgr_.load("ssao_deferred_lighting", "shaders/fullscreen.vert", "shaders/ssao_deferred_lighting.frag");
+        
+        // shaderMgr_.load("ssao", "shaders/fullscreen.vert", "shaders/ssao.frag");
+        // shaderMgr_.load("boxblur", "shaders/fullscreen.vert", "shaders/boxblur.frag");
+        // shaderMgr_.load("ssao_deferred_lighting", "shaders/fullscreen.vert", "shaders/ssao_deferred_lighting.frag");
+        
+        shaderMgr_.load("ssr_reflect", "shaders/fullscreen.vert", "shaders/ssr_reflect.frag");
+        shaderMgr_.load("ssr_blend", "shaders/fullscreen.vert", "shaders/ssr_blend.frag");
 
 
         // ================ Model Setup ================
@@ -177,9 +185,13 @@ protected:
         //renderPipe_.addPass(std::make_unique<SkyBoxPass>());
         
         renderPipe_.addPass(std::make_unique<GBufferPass>());
-        renderPipe_.addPass(std::make_unique<SSAOPass>());
-        renderPipe_.addPass(std::make_unique<SSAOBoxBlurPass>());
-        renderPipe_.addPass(std::make_unique<SSAODeferredLightPass>());
+        renderPipe_.addPass(std::make_unique<SSRDeferredLightPass>());
+        //renderPipe_.addPass(std::make_unique<SSRReflectPass>());
+        //renderPipe_.addPass(std::make_unique<SSRBlendPass>());
+
+        // renderPipe_.addPass(std::make_unique<SSAOPass>());
+        // renderPipe_.addPass(std::make_unique<SSAOBoxBlurPass>());
+        // renderPipe_.addPass(std::make_unique<SSAODeferredLightPass>());
         
         renderPipe_.init(context_);
     };

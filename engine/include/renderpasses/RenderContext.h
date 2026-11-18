@@ -15,6 +15,7 @@ struct ShadowData {
     glm::mat4 matLightSpace{1.0f};
 };
 
+// GBuffer parameters for deferred shading
 struct GBufferData {
     //GLuint gBufFBO = 0;
     GLuint gAlbedo = 0;
@@ -56,6 +57,16 @@ struct SSAOData {
     bool halfResolution = false;   // Render SSAO at half-res for performance, then upscale/blur
 };
 
+struct SSRData {
+    GLuint texReflect;
+    float maxRayDistance = 100.0f;
+    int maxSteps = 64;
+    float stride = 1.0f;
+    float thickness = 0.5f;
+    float roughnessThreshold = 0.2f;
+    //uint32_t flags = 0; // e.g., enable/disable jitter
+};
+
 struct RenderContext
 {
     std::shared_ptr<Scene> scene_; // Scene graph root for hierarchical scene representation
@@ -75,5 +86,7 @@ struct RenderContext
     PostProcessData postp_;
 
     SSAOData ssao_;
+
+    SSRData ssr_;
 
 };

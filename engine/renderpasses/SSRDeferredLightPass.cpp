@@ -1,11 +1,11 @@
-#include "renderpasses/SSRPass.h"
+#include "renderpasses/SSRDeferredLightPass.h"
 
 
-bool SSRPass::init(RenderContext & ctx) {
+bool SSRDeferredLightPass::init(RenderContext & ctx) {
 
     spdlog::debug("Deferred Lighting Pass init");
 
-    gpuPipe = ctx.shaderMgr_.get("ssr");
+    gpuPipe = ctx.shaderMgr_.get("deferred_lighting");
 
     if (nullptr == gpuPipe) return false;
 
@@ -27,7 +27,7 @@ bool SSRPass::init(RenderContext & ctx) {
 }
 
 
-void SSRPass::execute(RenderContext & ctx) {
+void SSRDeferredLightPass::execute(RenderContext & ctx) {
     if (!bInited) return;
 
     spdlog::trace("Deferred Lighting: albedo {}", ctx.gbuf_.gAlbedo);
@@ -68,7 +68,7 @@ void SSRPass::execute(RenderContext & ctx) {
 
 }
 
-void DeferredLightPass::setPointLights(RenderContext & ctx)
+void SSRDeferredLightPass::setPointLights(RenderContext & ctx)
 {
     std::vector<LightComp> & lights = ctx.scene_->lightList;
     spdlog::trace("DeferredLightPass::setPointLights() - light count {}", lights.size());
@@ -96,7 +96,8 @@ void DeferredLightPass::setPointLights(RenderContext & ctx)
     }
 }
 
-void DeferredLightPass::setSSBOLights(const std::vector<GPULight> & lights)
+/*
+void SSRDeferredLightPass::setSSBOLights(const std::vector<GPULight> & lights)
 {
     constexpr size_t MAX_LIGHTS = 128;
 
@@ -115,7 +116,7 @@ void DeferredLightPass::setSSBOLights(const std::vector<GPULight> & lights)
     gpuPipe->setInt("uLightCount", count);
 }
 
-/*
+
 void DeferredLightPass::drawQuad(RenderContext& context) {
     if (quadVAO == 0)
     {
