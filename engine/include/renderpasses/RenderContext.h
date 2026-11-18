@@ -19,8 +19,9 @@ struct GBufferData {
     //GLuint gBufFBO = 0;
     GLuint gAlbedo = 0;
     GLuint gNormal = 0;
-    GLuint gMat = 0;   // Metallic-Roughness
+    GLuint gMat = 0;   // Material: Metallic-Roughness for PBR
     GLuint gDepth = 0;
+    glm::mat4 matProj{1.0}; 
     glm::mat4 matInvProj{1.0f};
 };
 
