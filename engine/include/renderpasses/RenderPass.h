@@ -13,6 +13,9 @@ public:
     // Called once per frame.
     virtual void execute(RenderContext& context) = 0;
 
+    // for future support of window resizing
+    // void onResize(int w, int h);
+
 protected:
     bool bInited = false;
 };

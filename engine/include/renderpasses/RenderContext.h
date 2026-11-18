@@ -66,7 +66,7 @@ struct SSRData {
     int maxSteps = 64;
     float stride = 1.0f;
     float thickness = 0.5f;
-    float roughnessThreshold = 0.2f;
+    float roughThres = 0.2f; // roughness threshold
     //uint32_t flags = 0; // e.g., enable/disable jitter
 };
 

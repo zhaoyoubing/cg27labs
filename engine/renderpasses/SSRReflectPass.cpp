@@ -9,9 +9,13 @@ bool SSRReflectPass::init(RenderContext & ctx) {
 
     if (nullptr == gpuPipe) return false;
 
+    camera_ = ctx.scene_->getMainCamera();
+    width_ = camera_.viewport.w;
+    height_ = camera_.viewport.h;
+
     glCreateFramebuffers(1, &FBO);
 
-    // generate SSAO texture
+    // generate SSR texture
     glCreateTextures(GL_TEXTURE_2D, 1, & texFBO);
     // Allocate single-channel 8-bit uncompressed storage
     glTextureStorage2D(texFBO, 1, GL_R8, width_, height_);
@@ -48,19 +52,17 @@ void SSRReflectPass::execute(RenderContext & ctx) {
 
     spdlog::trace("Deferred Lighting: albedo {}", ctx.gbuf_.gAlbedo);
 
-    // read camera data
     camera_ = ctx.scene_->getMainCamera();
+    width_ = camera_.viewport.w;
+    height_ = camera_.viewport.h;
 
-    glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);   // onscreen
+    //glBindFramebuffer(GL_FRAMEBUFFER, FBO); // offscreen
     
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    
-    glViewport(0, 0, camera_.viewport.w, camera_.viewport.h);
+    glViewport(0, 0, width_, height_);
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
-    //glDepthMask(GL_FALSE);
     glDisable(GL_BLEND);
 
     gpuPipe->bind();
@@ -71,10 +73,19 @@ void SSRReflectPass::execute(RenderContext & ctx) {
     glBindTextureUnit(2, ctx.gbuf_.gMat);
     glBindTextureUnit(3, ctx.gbuf_.gDepth);
 
-    //gpuPipe->setVec3("uEyePos", camera_.eye);
+    //gpuPipe->setInt("uWidth", width_);
+    //gpuPipe->setInt("uHeight", height_);
+
+    gpuPipe->setMat4("uMatView", camera_.getViewMatrix());
+    gpuPipe->setMat4("uMatProj", ctx.gbuf_.matProj);
     gpuPipe->setMat4("uMatInvProj", ctx.gbuf_.matInvProj);
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    gpuPipe->setFloat("uMaxRayDistance", ctx.ssr_.maxRayDistance);
+    gpuPipe->setFloat("uMaxSteps", ctx.ssr_.maxSteps);
+    gpuPipe->setFloat("uStride", ctx.ssr_.stride);
+    gpuPipe->setFloat("uThickness", ctx.ssr_.thickness);
+    gpuPipe->setFloat("uRoughThres", ctx.ssr_.roughThres);
+
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
 

@@ -8,21 +8,7 @@ bool GBufferPass::init(RenderContext & ctx) {
 
     if (! gpuPipe) return false;
 
-    // to get viewport width and height
-    // currently viewport is in camera, to be changed in the future
-
-    // read camera data
-    auto viewCam = ctx.scene_->ecsWorld_.view<CameraComp>();
-
-    // a default camera in case no primary camera is found
-    for (auto entity : viewCam)
-    {
-        auto & cam = ctx.scene_->ecsWorld_.getComp<CameraComp>(entity);
-        if (cam.isPrimary) {
-            camera_ = cam;
-            break;
-        }
-    }
+    camera_ = ctx.scene_->getMainCamera();
 
     width_ = camera_.viewport.w;
     height_ = camera_.viewport.h;
@@ -92,6 +78,7 @@ bool GBufferPass::init(RenderContext & ctx) {
     ctx.gbuf_.gMat = gMat;
     ctx.gbuf_.gDepth = gDepth;
 
+    ctx.gbuf_.matProj = camera_.getProjMatrix();
     ctx.gbuf_.matInvProj = glm::inverse(camera_.getProjMatrix());
 
     spdlog::debug("After GBuffer init, albedo {}, normal {}, depth {}", gAlbedo, gNormal, gDepth);
@@ -107,18 +94,12 @@ void GBufferPass::execute(RenderContext & ctx) {
 
     spdlog::trace("GBuffer rendering, albedo {}", gAlbedo);
 
-    // read camera data
-    auto viewCam = ctx.scene_->ecsWorld_.view<CameraComp>();
+    camera_ = ctx.scene_->getMainCamera();
+    width_ = camera_.viewport.w;
+    height_ = camera_.viewport.h;
 
-    // a default camera in case no primary camera is found
-    for (auto entity : viewCam)
-    {
-        auto & cam = ctx.scene_->ecsWorld_.getComp<CameraComp>(entity);
-        if (cam.isPrimary) {
-            camera_ = cam;
-            break;
-        }
-    }
+    ctx.gbuf_.matProj = camera_.getProjMatrix();
+    ctx.gbuf_.matInvProj = glm::inverse(camera_.getProjMatrix());
 
 
     //glBindFramebuffer(GL_FRAMEBUFFER, 0);

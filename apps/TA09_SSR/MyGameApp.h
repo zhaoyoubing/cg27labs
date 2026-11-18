@@ -186,7 +186,7 @@ protected:
         
         renderPipe_.addPass(std::make_unique<GBufferPass>());
         renderPipe_.addPass(std::make_unique<SSRDeferredLightPass>());
-        //renderPipe_.addPass(std::make_unique<SSRReflectPass>());
+        renderPipe_.addPass(std::make_unique<SSRReflectPass>());
         //renderPipe_.addPass(std::make_unique<SSRBlendPass>());
 
         // renderPipe_.addPass(std::make_unique<SSAOPass>());
