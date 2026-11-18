@@ -11,8 +11,6 @@ layout(binding = 1) uniform sampler2D gNormal;
 layout(binding = 2) uniform sampler2D gMaterial;
 layout(binding = 3) uniform sampler2D gDepth;
 
-//layout(binding = 9) uniform sampler2D texNoise;
-
 
 uniform vec3 uSamplePoints[64];
 
@@ -21,30 +19,29 @@ uniform float uRadius = 0.5f;
 uniform float uBias = 0.025f;
 uniform float uPowerAO = 1.0f;
 
+uniform mat4 uMatView;
 uniform mat4 uMatProj;
 uniform mat4 uMatInvProj;
-//uniform vec2 uViewport;
 
-// const vec2 noiseScale = vec2(1280.0/4.0, 720.0/4.0);
+// convert Screen Space position (u, v, depth) to View Space position
+vec3 screen2view(vec3 screenPos) {
+	vec4 viewPos = uMatInvProj * vec4(screenPos * 2 - vec3(1.0), 1.0);
+	viewPos /= viewPos.w;
 
-// This function is from genAI
-vec3 reconViewPos(vec2 uv) {
-    // 1. Sample the depth buffer value [0, 1]
-    float depth = texture(gDepth, uv).r;
-    
-    // If depth is 1.0, it's usually the background/skybox (no geometry)
-    if (depth >= 1.0) discard; 
+    return viewPos.xyz; 
+}
 
-    // 2. Convert screen UV and depth to Normalized Device Coordinates (NDC) [-1, 1]
-    vec4 ndcPos = vec4(uv * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
+// convert View Space position (u, v, depth) to Screen Space position
+vec3 view2screen(vec3 viewPos) {
+	vec4 clipPos = uMatProj * vec4(viewPos, 1.0);
+	vec3 ndcPos = clipPos.xyz / clipPos.w;
+	vec3 screenPos = (ndcPos + 1.0) * 0.5;
+	return screenPos;
+}
 
-    // 3. Transform by the inverse projection matrix to get Clip Space coordinates
-    vec4 clipPos = uMatInvProj * ndcPos;
-
-    // 4. Perspective divide (divide by w to complete the projection math)
-    vec4 viewPos = clipPos / clipPos.w;
-
-    return viewPos.xyz; // This is the 3D position in View Space
+bool isOutofScreen(vec3 screenPos){
+	return (screenPos.x > 1 || screenPos.y > 1  || screenPos.z > 1
+	       || screenPos.x < 0 || screenPos.y < 0 || screenPos.z < 0) ? true : false;
 }
 
 float InterleavedGradientNoise(vec2 uv) {
@@ -54,8 +51,12 @@ float InterleavedGradientNoise(vec2 uv) {
 
 void main()
 {
-    vec3 fragPos = reconViewPos(uv);
-    vec3 normal = texture(gNormal, uv).rgb;
+    float fragScreenDepth = texture(gDepth, uv).r;
+    vec3 fragScreenPos = vec3(uv, fragScreenDepth);
+    vec3 fragViewPos = screen2view(fragScreenPos);
+
+    vec3 normal = mat3(uMatView) * texture(gNormal, uv).rgb;
+    normal = normalize(normal);
 
     // 1. Get random rotation angle (0.0 to 1.0) using fragment screen coordinates
     float noiseVal = InterleavedGradientNoise(gl_FragCoord.xy);
@@ -72,38 +73,39 @@ void main()
     // comparison must be done in view space
 	for(int i = 0; i < uKernelSize; i ++)
 	{
-		vec3 samplep = uSamplePoints[i];
-		samplep = TBN * samplep;
-		samplep = fragPos + samplep * uRadius;
+		vec3 sampleOffset = uSamplePoints[i];
+		sampleOffset = TBN * sampleOffset;
+		vec3 sampleViewPos = fragViewPos + sampleOffset * uRadius;
 
-		vec4 offset = vec4(samplep, 1.0);
-		vec4 offsetProj = uMatProj * offset;
-		offsetProj.xyz /= offsetProj.w;
-        // from NDC [-1, 1] to depth [0, 1]
-		offsetProj.xyz  = offsetProj.xyz * 0.5 + 0.5;
+        vec3 sampleScreenPos = view2screen(sampleViewPos);
 
         // Verify sample is inside screen bounds
-        if (offsetProj.x >= 0.0 && offsetProj.x <= 1.0 && offsetProj.y >= 0.0 && offsetProj.y <= 1.0)
-        {
-            // Note: If gDepth is a raw hardware depth buffer, sampleDepth must be 
-            // linearized or reconstructed to view-space depth to match samplep.z.
+        if (isOutofScreen(sampleScreenPos))
+            continue;
+        
+        // reconstruct scene view space position at the sample pixel
+        float sceneScreenDepth = texture(gDepth, sampleScreenPos.xy).r;
+        vec3 sceneScreenPos = vec3(sampleScreenPos.xy, sceneScreenDepth);
+        vec3 sceneViewPos = screen2view(sceneScreenPos);
 
-            vec3 fragPosOffset = reconViewPos(offsetProj.xy);
-            // visible depth in the view space
-            float sampleDepth = fragPosOffset.z;
+        // visible depth in the view space
+        float sceneViewDepth = sceneViewPos.z;
 
-            float rangeCheck = smoothstep(0.0, 1.0, uRadius / abs(offset.z - sampleDepth));
-            // in local shadow
-            occlusion += (sampleDepth >= offset.z + uBias ? 1.0 : 0.0) * rangeCheck;
+        float rangeCheck = smoothstep(0.0, 1.0, uRadius / abs(sampleViewPos.z - sceneViewPos.z));
+        
+        // in local shadow
+        occlusion += (sceneViewPos.z >= sampleViewPos.z + uBias ? 1.0 : 0.0) * rangeCheck;
 
-            totalSampleFloat += 1.0;
-        }
+        totalSampleFloat += 1.0; 
 	}
+
     // non occlusion
     float non_occlusion = 1.0 - (occlusion / totalSampleFloat);
     non_occlusion = pow(non_occlusion, uPowerAO);
     
     fragColor = non_occlusion;
+
+    // for debugging
     //out_color = vec4(vec3(non_occlusion), 1.0);
     //out_color = vec4(texture(gAlbedo, uv).xyz, 1.0);
     //out_color = vec4(vec3(texture(gDepth, uv).z), 1.0);

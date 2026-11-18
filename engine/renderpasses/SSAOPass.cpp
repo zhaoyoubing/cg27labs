@@ -62,8 +62,8 @@ void SSAOPass::execute(RenderContext & ctx) {
     // read camera data
     camera_ = ctx.scene_->getMainCamera();
     
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0); // for previewing AO map in debugging
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0); // for previewing AO map in debugging
     
     // White represents fully unoccluded space
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f); 
@@ -88,11 +88,10 @@ void SSAOPass::execute(RenderContext & ctx) {
     gpuPipe->setFloat("uBias", ctx.ssao_.bias);
     gpuPipe->setFloat("uPowerAO", ctx.ssao_.power);
 
-    //gpuPipe->setVec2("uViewport", glm::vec2(width_, height_));
-
+    gpuPipe->setMat4("uMatView", camera_.getViewMatrix());
+    gpuPipe->setMat4("uMatProj", ctx.gbuf_.matProj);
     gpuPipe->setMat4("uMatInvProj", ctx.gbuf_.matInvProj);
-    gpuPipe->setMat4("uMatProj", glm::inverse(ctx.gbuf_.matInvProj));
-
+    
     // this is not an efficent way of setting an array
     for (int i = 0; i < nSample; i++)
         gpuPipe->setVec3("uSamplePoints[" + std::to_string(i) + "]", samplePoints_[i]);

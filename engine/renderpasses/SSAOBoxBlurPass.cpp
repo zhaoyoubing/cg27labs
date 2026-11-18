@@ -60,9 +60,9 @@ bool SSAOBoxBlurPass::init(RenderContext & ctx) {
 void SSAOBoxBlurPass::execute(RenderContext & ctx) {
     if (!bInited) return;
 
-    // read camera data
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     glViewport(0, 0, width_, height_);
 
