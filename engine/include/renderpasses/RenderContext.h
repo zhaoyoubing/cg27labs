@@ -9,7 +9,7 @@
 
 #include <memory>
 
-// for shadow mapping
+// shadow mapping
 struct ShadowData {
     GLuint depthMap = 0;
     glm::mat4 matLightSpace{1.0f};
@@ -26,6 +26,7 @@ struct GBufferData {
     glm::mat4 matInvProj{1.0f};
 };
 
+// postprocessing and bloom
 struct PostProcessData {
     // 1. Resources (Transient RT pool)
     GLuint texScene;  // should be HDR in bloom
@@ -40,6 +41,7 @@ struct PostProcessData {
     int downSampleFactor = 4;
 };
 
+// screen space ambient occlusion
 struct SSAOData {
     GLuint texAO;  
     GLuint texBlurAO;
@@ -57,6 +59,7 @@ struct SSAOData {
     bool halfResolution = false;   // Render SSAO at half-res for performance, then upscale/blur
 };
 
+// screen space reflection
 struct SSRData {
     GLuint texReflect;
     float maxRayDistance = 100.0f;
@@ -69,24 +72,17 @@ struct SSRData {
 
 struct RenderContext
 {
-    std::shared_ptr<Scene> scene_; // Scene graph root for hierarchical scene representation
+    std::shared_ptr<Scene> scene_; // Scene graph root
 
     MeshManager & meshMgr_;
-
     MaterialManager & matMgr_;
-
     TextureManager & texMgr_;
-
     ShaderManager & shaderMgr_;
 
     ShadowData shadow_;
-
     GBufferData gbuf_;
-
     PostProcessData postp_;
-
     SSAOData ssao_;
-
     SSRData ssr_;
 
 };
