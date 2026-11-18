@@ -27,7 +27,7 @@ int main() {
 
     std::cout << "Hello, Graphics!" << std::endl; 
 
-    spdlog::set_level(spdlog::level::debug);
+    spdlog::set_level(spdlog::level::info);
 
     // Instantiate the game-specific application derived from GameApp
     MyGameApp app("TA09_SSAO");
