@@ -2,9 +2,10 @@
 
 layout (location = 0) out vec4 reflectionColor;
 
-uniform sampler2D gNormal;
-uniform sampler2D gAlbedo;
-uniform sampler2D gDepth;
+layout (binding = 1) uniform sampler2D gAlbedo;
+layout (binding = 2) uniform sampler2D gNormal;
+layout (binding = 3) uniform sampler2D gMetallicRoughness;
+layout (binding = 4) uniform sampler2D gDepth;
 
 uniform float SCR_WIDTH;
 uniform float SCR_HEIGHT;
