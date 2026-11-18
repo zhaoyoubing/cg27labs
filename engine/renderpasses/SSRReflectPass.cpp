@@ -18,7 +18,7 @@ bool SSRReflectPass::init(RenderContext & ctx) {
     // generate SSR texture
     glCreateTextures(GL_TEXTURE_2D, 1, & texFBO);
     // Allocate single-channel 8-bit uncompressed storage
-    glTextureStorage2D(texFBO, 1, GL_RGB16F, width_, height_);
+    glTextureStorage2D(texFBO, 1, GL_RGBA16F, width_, height_);
 
     // Set filtering to nearest or linear depending on whether you blur it
     glTextureParameteri(texFBO, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

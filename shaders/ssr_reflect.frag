@@ -43,9 +43,9 @@ vec3 view2screen(vec3 viewPos) {
 	return screenPos;
 }
 
-vec3 rayMarch(vec3 rayPos, vec3 dir, float maxDist) {
+vec4 rayMarch(vec3 rayPos, vec3 dir, float maxDist) {
 	
-	vec3 hitColor = vec3(0.0); // black for missing
+	vec4 hitColor = vec4(0.0); // black for missing
 	
 	float sceneDepth;
 	bool hit = false;
@@ -60,7 +60,7 @@ vec3 rayMarch(vec3 rayPos, vec3 dir, float maxDist) {
 
 		if (dist > maxDist) {
 			if (bDebug)
-				hitColor = vec3(0.5,0.5,0);
+				hitColor = vec4(0.5,0.5,0,0.0);
 			break;
 		}
 
@@ -68,7 +68,7 @@ vec3 rayMarch(vec3 rayPos, vec3 dir, float maxDist) {
 
 		if(rayIsOutofScreen(raySampleScreenPos)) {
 			if (bDebug)
-				hitColor = vec3(0.5,0,0); // for debugging
+				hitColor = vec4(0.5,0,0, 0.0); // for debugging
 			break;
 		}
 
@@ -81,7 +81,7 @@ vec3 rayMarch(vec3 rayPos, vec3 dir, float maxDist) {
 		// ray hit
 		if(depthDif >= -uThickness && depthDif <= uThickness) { 
 			hit = true;
-			hitColor = texture(gAlbedo, sceneScreenPos.xy).rgb;
+			hitColor = vec4(texture(gAlbedo, sceneScreenPos.xy).rgb, 1.0);
 			break;
 		}
 	}
@@ -94,7 +94,7 @@ void main(){
 	float depth = texture(gDepth, uv).r;	// [0, 1]
     if (depth >= 1.0) {
 		if (bDebug) {
-			reflectColour = vec4(0,0,0.5,1);
+			reflectColour = vec4(0,0,0.5,0.0);
 			return;
 		}
 		discard;
@@ -110,9 +110,9 @@ void main(){
 	normalView = normalize(normalView);
 	vec3 reflectionView = normalize(reflect(positionView.xyz, normalView));
 
-	vec3 outColour = rayMarch(positionView.xyz, reflectionView, uMaxRayDistance);
+	vec4 outColour = rayMarch(positionView.xyz, reflectionView, uMaxRayDistance);
 
-	reflectColour = vec4(outColour, 1);
+	reflectColour = outColour;
 	
 	//reflectColour = vec4(texture(gNormal, uv).xyz, 1);
 	//reflectColour = vec4(reflectionView, 1);
