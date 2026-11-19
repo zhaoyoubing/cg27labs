@@ -104,10 +104,10 @@ void SSAOPass::execute(RenderContext & ctx) {
 
 }
 
-// code from GenAI
+// Generate sample points in a hemisphere (code from GenAI)
 std::vector<glm::vec3> SSAOPass::generateSamples(int nsample) {
     std::vector<glm::vec3> samples;
-    samples.reserve(64);
+    samples.reserve(nsample);
 
     // Standard uniform random number generators
     std::uniform_real_distribution<float> randomFloats(0.0f, 1.0f);
