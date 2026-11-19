@@ -69,27 +69,6 @@ vec3 screen2world(vec3 screenPos) {
     return worldPos.xyz; 
 }
 
-/*
-// This function is from genAI
-vec3 reconViewPos(vec2 uv) {
-    // 1. Sample the depth buffer value [0, 1]
-    float depth = texture(gDepth, uv).r;
-    
-    // If depth is 1.0, it's usually the background/skybox (no geometry)
-    if (depth >= 1.0) discard; 
-
-    // 2. Convert screen UV and depth to Normalized Device Coordinates (NDC) [-1, 1]
-    vec4 ndcPos = vec4(uv * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
-
-    // 3. Transform by the inverse projection matrix to get Clip Space coordinates
-    vec4 clipPos = uMatInvProj * ndcPos;
-
-    // 4. Perspective divide (divide by w to complete the projection math)
-    vec4 viewPos = clipPos / clipPos.w;
-
-    return viewPos.xyz; // This is the 3D position in View Space
-}
-*/
 
 vec3 ACESFilm(vec3 x) {
     float a = 2.51;
@@ -116,8 +95,6 @@ void main()
     float fragScreenDepth = texture(gDepth, uv).r;
     vec3 fragScreenPos = vec3(uv, fragScreenDepth);
     vec3 fragPos = screen2world(fragScreenPos);
-
-    //vec3 fragPos = reconViewPos(uv);
     
     vec3 albedo = texture(gAlbedo, uv).rgb;
     vec3 normal = texture(gNormal, uv).rgb;
@@ -128,7 +105,6 @@ void main()
     vec3 k_s = vec3(0.9, 0.7, 0.5);
     
     // then calculate lighting as usual
-    
     vec3 totalLight  = albedo * 0.05; // hard-coded ambient component
     vec3 viewDir  = normalize(uEyePos - fragPos);
     for(int i = 0; i < uLightCount; ++i)
