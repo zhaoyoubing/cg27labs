@@ -45,6 +45,7 @@ void SSAODeferredLightPass::execute(RenderContext & ctx) {
     glBindTextureUnit(9, ctx.ssao_.texBlurAO);
 
     gpuPipe->setVec3("uEyePos", camera_.eye);
+    gpuPipe->setMat4("uInvMatView", glm::inverse(camera_.getViewMatrix()));
     gpuPipe->setMat4("uMatInvProj", ctx.gbuf_.matInvProj);
 
     setPointLights(ctx);

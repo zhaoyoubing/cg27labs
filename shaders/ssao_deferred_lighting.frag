@@ -49,7 +49,7 @@ uniform PointLight uLights[MAX_LIGHTS];
 uniform int uLightCount = 1;
 
 uniform vec3 uEyePos;
-
+uniform mat4 uMatInvView;
 uniform mat4 uMatInvProj;
 
 out vec4 colour_out;
@@ -61,6 +61,15 @@ vec3 screen2view(vec3 screenPos) {
 	viewPos /= viewPos.w;
 
     return viewPos.xyz; 
+}
+
+// convert Screen Space position (u, v, depth) to World Space position
+vec3 screen2world(vec3 screenPos) {
+	vec4 viewPos = uMatInvProj * vec4(screenPos * 2 - vec3(1.0), 1.0);
+	viewPos /= viewPos.w;
+    vec4 worldPos = uMatInvView * viewPos;
+
+    return worldPos.xyz; 
 }
 
 
@@ -88,7 +97,7 @@ void main()
     // recover screen space frag postion
     float fragScreenDepth = texture(gDepth, uv).r;
     vec3 fragScreenPos = vec3(uv, fragScreenDepth);
-    vec3 fragPos = screen2view(fragScreenPos);
+    vec3 fragPos = screen2world(fragScreenPos);
     
     vec3 normal = texture(gNormal, uv).rgb;
     vec3 albedo = texture(gAlbedo, uv).rgb;
