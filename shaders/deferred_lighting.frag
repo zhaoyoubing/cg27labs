@@ -91,9 +91,10 @@ float blinnSpecular(vec3 lightDir, vec3 viewDir, vec3 diffuse, vec3 normal)
 // needs to be adapted to PBR
 void main()
 {             
-    // recover screen space frag postion
+    // screen space frag position
     float fragScreenDepth = texture(gDepth, uv).r;
     vec3 fragScreenPos = vec3(uv, fragScreenDepth);
+    // recover world space position from screen space
     vec3 fragPos = screen2world(fragScreenPos);
     
     vec3 albedo = texture(gAlbedo, uv).rgb;

@@ -53,10 +53,8 @@ void DeferredLightPass::execute(RenderContext & ctx) {
     
     glViewport(0, 0, camera_.viewport.w, camera_.viewport.h);
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
-    //glDepthMask(GL_FALSE);
     glDisable(GL_BLEND);
 
     gpuPipe->bind();
