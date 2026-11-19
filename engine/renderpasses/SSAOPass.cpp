@@ -94,7 +94,7 @@ void SSAOPass::execute(RenderContext & ctx) {
     
     // this is not an efficent way of setting an array
     for (int i = 0; i < nSample; i++)
-        gpuPipe->setVec3("uSamplePoints[" + std::to_string(i) + "]", samplePoints_[i]);
+        gpuPipe->setVec3("uSampleVectors[" + std::to_string(i) + "]", samplePoints_[i]);
 
     glClear(GL_COLOR_BUFFER_BIT);
 

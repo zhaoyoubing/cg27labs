@@ -12,7 +12,7 @@ layout(binding = 2) uniform sampler2D gMaterial;
 layout(binding = 3) uniform sampler2D gDepth;
 
 
-uniform vec3 uSamplePoints[64];
+uniform vec3 uSampleVectors[64];
 
 uniform int uKernelSize = 64;
 uniform float uRadius = 0.5f;
@@ -44,6 +44,9 @@ bool isOutofScreen(vec3 screenPos){
 	       || screenPos.x < 0 || screenPos.y < 0 || screenPos.z < 0) ? true : false;
 }
 
+// IGN, popularized by Jorge Jimenez for Call of Duty
+// achieves variation across pixels — and across frames — by evaluating 
+// a fast, deterministic dot-product hash on screen coordinates
 float InterleavedGradientNoise(vec2 uv) {
     vec3 magic = vec3(0.06711056f, 0.00583715f, 52.9829189f);
     return fract(magic.z * fract(dot(uv, magic.xy)));
@@ -51,9 +54,9 @@ float InterleavedGradientNoise(vec2 uv) {
 
 void main()
 {
-    float fragScreenDepth = texture(gDepth, uv).r;
-    vec3 fragScreenPos = vec3(uv, fragScreenDepth);
-    vec3 fragViewPos = screen2view(fragScreenPos);
+    float fragDepthScreen = texture(gDepth, uv).r;
+    vec3 fragPosScreen = vec3(uv, fragDepthScreen);
+    vec3 fragPosView = screen2view(fragPosScreen);
 
     vec3 normal = mat3(uMatView) * texture(gNormal, uv).rgb;
     normal = normalize(normal);
@@ -73,28 +76,28 @@ void main()
     // comparison must be done in view space
 	for(int i = 0; i < uKernelSize; i ++)
 	{
-		vec3 sampleOffset = uSamplePoints[i];
-		sampleOffset = TBN * sampleOffset;
-		vec3 sampleViewPos = fragViewPos + sampleOffset * uRadius;
+		vec3 sampleVec = uSampleVectors[i];
+		sampleVec = TBN * sampleVec;
+		vec3 samplePosView = fragPosView + sampleVec * uRadius;
 
-        vec3 sampleScreenPos = view2screen(sampleViewPos);
+        vec3 samplePosScreen = view2screen(samplePosView);
 
         // Verify sample is inside screen bounds
-        if (isOutofScreen(sampleScreenPos))
+        if (isOutofScreen(samplePosScreen))
             continue;
         
         // reconstruct scene view space position at the sample pixel
-        float sceneScreenDepth = texture(gDepth, sampleScreenPos.xy).r;
-        vec3 sceneScreenPos = vec3(sampleScreenPos.xy, sceneScreenDepth);
-        vec3 sceneViewPos = screen2view(sceneScreenPos);
+        float sceneDepthScreen = texture(gDepth, samplePosScreen.xy).r;
+        vec3 scenePosScreen = vec3(samplePosScreen.xy, sceneDepthScreen);
+        vec3 scenePosView = screen2view(scenePosScreen);
 
         // visible depth in the view space
-        float sceneViewDepth = sceneViewPos.z;
+        // float sceneDepthView = scenePosView.z;
 
-        float rangeCheck = smoothstep(0.0, 1.0, uRadius / abs(sampleViewPos.z - sceneViewPos.z));
+        float rangeCheck = smoothstep(0.0, 1.0, uRadius / abs(samplePosView.z - scenePosView.z));
         
         // in local shadow
-        occlusion += (sceneViewPos.z >= sampleViewPos.z + uBias ? 1.0 : 0.0) * rangeCheck;
+        occlusion += (scenePosView.z >= samplePosView.z + uBias ? 1.0 : 0.0) * rangeCheck;
 
         totalSampleFloat += 1.0; 
 	}

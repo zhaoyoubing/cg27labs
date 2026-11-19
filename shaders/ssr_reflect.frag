@@ -101,16 +101,19 @@ void main(){
 	} 
 
 	// View Space ray calculation
-	vec3 screenPos = vec3(uv, depth);
+	vec3 fragPosScreen = vec3(uv, depth);
 	
-	vec4 positionView = uMatInvProj * vec4(screenPos * 2 - vec3(1), 1);
-	positionView /= positionView.w;
+	vec4 fragPosNdc = uMatInvProj * vec4(fragPosScreen * 2 - 1.0, 1.0);
+	vec3 fragPosView = fragPosNdc.xyz / fragPosNdc.w;
 
-    vec3 normalView = mat3(uMatView) * texture(gNormal, screenPos.xy).rgb;
+    // surface normal in View Space
+    vec3 normalView = mat3(uMatView) * texture(gNormal, fragPosScreen.xy).rgb;
 	normalView = normalize(normalView);
-	vec3 reflectionView = normalize(reflect(positionView.xyz, normalView));
 
-	vec4 outColour = rayMarch(positionView.xyz, reflectionView, uMaxRayDistance);
+	// the reflection Ray in View Space
+	vec3 reflectRayView = normalize(reflect(fragPosView, normalView));
+
+	vec4 outColour = rayMarch(fragPosView, reflectRayView, uMaxRayDistance);
 
 	reflectColour = outColour;
 	
