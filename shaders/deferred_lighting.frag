@@ -129,10 +129,10 @@ void main()
     }
     
     // HDR tone mapping
-    float exposure = 0.5f;
+    // float exposure = 0.5f;
     // exposure tone mapping
-    vec3 mapped = vec3(1.0) - exp(-totalLight * exposure);
-    //vec3 mapped = ACESFilm(lighting);
+    // vec3 mapped = vec3(1.0) - exp(-totalLight * exposure);
+    vec3 mapped = ACESFilm(totalLight);
     // Gamma correction
     const float gamma = 2.2;
     mapped = pow(mapped, vec3(1.0 / gamma));
