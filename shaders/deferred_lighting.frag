@@ -55,15 +55,15 @@ out vec4 colour_out;
 // convert Screen Space position (u, v, depth) to View Space position
 vec3 screen2view(vec3 screenPos) {
 	vec4 viewPos = uMatInvProj * vec4(screenPos * 2 - vec3(1.0), 1.0);
-	viewPos /= viewPos.w;
+	viewPos = viewPos / viewPos.w;
 
     return viewPos.xyz; 
 }
 
 // convert Screen Space position (u, v, depth) to World Space position
 vec3 screen2world(vec3 screenPos) {
-	vec4 viewPos = uMatInvProj * vec4(screenPos * 2 - vec3(1.0), 1.0);
-	viewPos /= viewPos.w;
+	vec4 clipPos = uMatInvProj * vec4(screenPos * 2 - vec3(1.0), 1.0);
+	viewPos = viewPos / viewPos.w;
     vec4 worldPos = uMatInvView * viewPos;
 
     return worldPos.xyz; 
