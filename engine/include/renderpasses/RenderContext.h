@@ -40,8 +40,8 @@ struct PostProcessData {
 };
 
 struct SSAOData {
-    GLuint texAO;  
-    GLuint texBlurAO;
+    GLuint mapAO;  
+    GLuint mapBlurAO;
 
     // --- Quality & Kernel ---
     int sampleCount = 64;          // Number of hemisphere samples (e.g., 32 or 64)

@@ -34,6 +34,6 @@ private:
     GLuint FBO = 0;  // frame buffer object
 
     // framebuffer texture for blurring
-    GLuint texBuf = 0;  
+    GLuint texFBO = 0;  
     
 };

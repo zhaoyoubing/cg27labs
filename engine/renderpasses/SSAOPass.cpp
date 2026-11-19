@@ -19,17 +19,17 @@ bool SSAOPass::init(RenderContext & ctx) {
     glCreateFramebuffers(1, &FBO);
 
     // generate SSAO texture
-    glCreateTextures(GL_TEXTURE_2D, 1, & texSSAO);
+    glCreateTextures(GL_TEXTURE_2D, 1, & texFBO);
     // Allocate single-channel 8-bit uncompressed storage
-    glTextureStorage2D(texSSAO, 1, GL_R8, width_, height_);
+    glTextureStorage2D(texFBO, 1, GL_R8, width_, height_);
 
     // Set filtering to nearest or linear depending on whether you blur it
-    glTextureParameteri(texSSAO, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTextureParameteri(texSSAO, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTextureParameteri(texSSAO, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTextureParameteri(texSSAO, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTextureParameteri(texFBO, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTextureParameteri(texFBO, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTextureParameteri(texFBO, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTextureParameteri(texFBO, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, texSSAO, 0);
+    glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, texFBO, 0);
 
     // tell OpenGL which colour attachments we'll use (of this framebuffer) for rendering 
     unsigned int attachments[] = { GL_COLOR_ATTACHMENT0};
@@ -45,7 +45,7 @@ bool SSAOPass::init(RenderContext & ctx) {
 
     samplePoints_ = generateSamples(nSample);
 
-    ctx.ssao_.texAO = texSSAO;
+    ctx.ssao_.mapAO = texFBO;
     //ctx.ssao_.power = 1.0;
     //ctx.ssao_.bias = 0.025;
 
