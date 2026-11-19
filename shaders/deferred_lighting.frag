@@ -62,7 +62,7 @@ vec3 screen2view(vec3 screenPos) {
 
 // convert Screen Space position (u, v, depth) to World Space position
 vec3 screen2world(vec3 screenPos) {
-	vec4 clipPos = uMatInvProj * vec4(screenPos * 2 - vec3(1.0), 1.0);
+	vec4 viewPos = uMatInvProj * vec4(screenPos * 2 - vec3(1.0), 1.0);
 	viewPos = viewPos / viewPos.w;
     vec4 worldPos = uMatInvView * viewPos;
 
