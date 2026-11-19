@@ -14,7 +14,7 @@
 
 #include "device/GPULight.h"
 
-// GBuffer Pass for Deferred Rendering
+// AO map Pass for SSAO
 class SSAOPass : public RenderPass
 {
 public:
@@ -27,17 +27,17 @@ public:
 private:
 
     CameraComp camera_;
-    LightComp lightDefault_;
+    //LightComp lightDefault_;
     
     GLuint FBO = 0;  // frame buffer object
-    GLuint texSSAO = 0; // SSAO output texture
+    GLuint texFBO = 0; // AO map
 
-    GLuint gNormal = 0;
-    GLuint gAlbedo = 0;
-    GLuint gMat = 0;   // Metallic-Roughness
-    GLuint gDepth = 0;
+    //GLuint gNormal = 0;
+    //GLuint gAlbedo = 0;
+    //GLuint gMat = 0;   // Metallic-Roughness
+    //GLuint gDepth = 0;
 
-    // GBuffer dimensions
+    // framebuffer dimensions
     int width_ = 0;
     int height_ = 0;
 

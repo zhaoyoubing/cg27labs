@@ -42,7 +42,7 @@ void SSAODeferredLightPass::execute(RenderContext & ctx) {
     glBindTextureUnit(2, ctx.gbuf_.gMat);
     glBindTextureUnit(3, ctx.gbuf_.gDepth);
 
-    glBindTextureUnit(9, ctx.ssao_.texBlurAO);
+    glBindTextureUnit(9, ctx.ssao_.mapBlurAO);
 
     gpuPipe->setVec3("uEyePos", camera_.eye);
     gpuPipe->setMat4("uMatInvView", glm::inverse(camera_.getViewMatrix()));

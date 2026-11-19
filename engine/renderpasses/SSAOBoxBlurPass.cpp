@@ -23,16 +23,16 @@ bool SSAOBoxBlurPass::init(RenderContext & ctx) {
     glCreateFramebuffers(1, &FBO);
     
     // two textures for ping-pong Gaussian blurring
-    glCreateTextures(GL_TEXTURE_2D, 1, & texBuf);
-    glTextureStorage2D(texBuf, 1, GL_RGBA16F, width_, height_);
-    glTextureParameteri(texBuf, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTextureParameteri(texBuf, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glCreateTextures(GL_TEXTURE_2D, 1, & texFBO);
+    glTextureStorage2D(texFBO, 1, GL_RGBA16F, width_, height_);
+    glTextureParameteri(texFBO, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTextureParameteri(texFBO, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // Prevent texture bleeding across screen edges
-    glTextureParameteri(texBuf, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTextureParameteri(texBuf, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTextureParameteri(texFBO, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTextureParameteri(texFBO, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     // initial binding
-    glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, texBuf, 0);
+    glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, texFBO, 0);
 
     // tell OpenGL which colour attachments we'll use (of this framebuffer) for rendering 
     unsigned int attachments[] = { GL_COLOR_ATTACHMENT0};
@@ -46,12 +46,12 @@ bool SSAOBoxBlurPass::init(RenderContext & ctx) {
        return false;
     }
 
-    spdlog::debug("In Box Blur Pass init, framebuffer texture {}", texBuf);
+    spdlog::debug("In Box Blur Pass init, framebuffer texture {}", texFBO);
 
     // share blur texture ids
     // use previous rendering
     //texBufA = ctx.postp_.bloomBufferA;
-    ctx.ssao_.texBlurAO = texBuf;
+    ctx.ssao_.mapBlurAO = texFBO;
 
     bInited = true;
     return bInited;
@@ -76,7 +76,7 @@ void SSAOBoxBlurPass::execute(RenderContext & ctx) {
     //glBindTextureUnit(2, ctx.gbuf_.gMat);
     glBindTextureUnit(3, ctx.gbuf_.gDepth);
 
-    glBindTextureUnit(9, ctx.ssao_.texAO);
+    glBindTextureUnit(9, ctx.ssao_.mapAO);
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
