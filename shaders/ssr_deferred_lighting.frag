@@ -48,7 +48,7 @@ uniform int uLightCount = 1;
 
 uniform vec3 uEyePos;
 
-uniform mat4 uMatView;
+uniform mat4 uMatInvView;
 uniform mat4 uMatInvProj;
 
 out vec4 colour_out;
@@ -60,6 +60,15 @@ vec3 screen2view(vec3 screenPos) {
 	viewPos /= viewPos.w;
 
     return viewPos.xyz; 
+}
+
+// convert Screen Space position (u, v, depth) to World Space position
+vec3 screen2world(vec3 screenPos) {
+	vec4 viewPos = uMatInvProj * vec4(screenPos * 2 - vec3(1.0), 1.0);
+	viewPos /= viewPos.w;
+    vec4 worldPos = uMatInvView * viewPos;
+
+    return worldPos.xyz; 
 }
 
 
@@ -87,9 +96,9 @@ void main()
     // recover screen space frag postion
     float fragScreenDepth = texture(gDepth, uv).r;
     vec3 fragScreenPos = vec3(uv, fragScreenDepth);
-    vec3 fragPos = screen2view(fragScreenPos);
+    vec3 fragPos = screen2world(fragScreenPos);
     
-    vec3 normal = mat3(uMatView) * texture(gNormal, uv).rgb;
+    vec3 normal = texture(gNormal, uv).rgb;
     normal = normalize(normal);
     vec3 albedo = texture(gAlbedo, uv).rgb;
 
@@ -101,11 +110,11 @@ void main()
     // then calculate lighting as usual
     
     vec3 totalLight  = albedo * 0.05; // hard-coded ambient component
-    vec3 viewDir  = normalize( - fragPos); // eye at origin
+    vec3 viewDir  = normalize(uEyePos - fragPos); // eye at origin
     for(int i = 0; i < uLightCount; ++i)
     {
         // diffuse
-        vec3 lightDir = mat3(uMatView) * uLights[i].pos - fragPos;
+        vec3 lightDir = uLights[i].pos - fragPos;
         float distance = length(lightDir);
 
         lightDir = normalize(lightDir);

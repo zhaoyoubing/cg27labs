@@ -74,8 +74,8 @@ void SSRDeferredLightPass::execute(RenderContext & ctx) {
     glBindTextureUnit(2, ctx.gbuf_.gMat);
     glBindTextureUnit(3, ctx.gbuf_.gDepth);
 
-    //gpuPipe->setVec3("uEyePos", camera_.eye);
-    gpuPipe->setMat4("uMatView", camera_.getViewMatrix());
+    gpuPipe->setVec3("uEyePos", camera_.eye);
+    gpuPipe->setMat4("uInvMatView", glm::inverse(camera_.getViewMatrix()));
     gpuPipe->setMat4("uMatInvProj", ctx.gbuf_.matInvProj);
 
     setPointLights(ctx);
