@@ -44,6 +44,7 @@ bool isOutofScreen(vec3 screenPos){
 	       || screenPos.x < 0 || screenPos.y < 0 || screenPos.z < 0) ? true : false;
 }
 
+// IGN Noise
 float InterleavedGradientNoise(vec2 uv) {
     vec3 magic = vec3(0.06711056f, 0.00583715f, 52.9829189f);
     return fract(magic.z * fract(dot(uv, magic.xy)));
@@ -51,30 +52,39 @@ float InterleavedGradientNoise(vec2 uv) {
 
 void main()
 {
+    // 1. recover View Space Position from Screen Space
     float fragScreenDepth = texture(gDepth, uv).r;
     vec3 fragScreenPos = vec3(uv, fragScreenDepth);
     vec3 fragViewPos = screen2view(fragScreenPos);
 
+    // convert Normal to the View Space
     vec3 normal = mat3(uMatView) * texture(gNormal, uv).rgb;
     normal = normalize(normal);
 
-    // 1. Get random rotation angle (0.0 to 1.0) using fragment screen coordinates
+    // 2. Get random rotation angle (0.0 to 1.0) 
+    // using fragment screen coordinates with the IGN function
     float noiseVal = InterleavedGradientNoise(gl_FragCoord.xy);
     float rotationAngle = noiseVal * 6.2831853f; // Scale to 2 * PI
+    // random vector on XY plane
     vec3 randomVec = vec3(cos(rotationAngle), sin(rotationAngle), 0.0);
 
+    // calculate the random tangent direction
     vec3 tangent = normalize(randomVec - normal * dot(randomVec, normal));
     vec3 bitangent = cross(normal, tangent);
     mat3 TBN = mat3(tangent, bitangent, normal);
 
+    // AO indicator
     float occlusion = 0.0;
+    // Total valid sample numbers
     float totalSampleFloat = 0.0;
 
-    // comparison must be done in view space
+    // Check if the sample point is behind visiable surface (occluded)
 	for(int i = 0; i < uKernelSize; i ++)
 	{
 		vec3 sampleOffset = uSamplePoints[i];
+        // convert sample to the View Space
 		sampleOffset = TBN * sampleOffset;
+        // sample position in the View Space
 		vec3 sampleViewPos = fragViewPos + sampleOffset * uRadius;
 
         vec3 sampleScreenPos = view2screen(sampleViewPos);
