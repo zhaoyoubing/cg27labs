@@ -4,7 +4,7 @@ bool SSAOBoxBlurPass::init(RenderContext & ctx) {
     spdlog::debug("SSAOBoxBlurPass::init()");
 
     // 1. Fetch shader from manager
-    gpuPipe = ctx.shaderMgr_.get("boxblur");
+    gpuPipe = ctx.shaderMgr_.get("ssao_boxblur");
 
     if (! gpuPipe) return false;
 
@@ -61,8 +61,8 @@ void SSAOBoxBlurPass::execute(RenderContext & ctx) {
     if (!bInited) return;
 
 
-    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO); // offscreen rendering
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);   // onscreen rendering
 
     glViewport(0, 0, width_, height_);
 
@@ -71,12 +71,11 @@ void SSAOBoxBlurPass::execute(RenderContext & ctx) {
 
     gpuPipe->bind();
 
-    //glBindTextureUnit(0, ctx.gbuf_.gAlbedo);
-    //glBindTextureUnit(1, ctx.gbuf_.gNormal);
-    //glBindTextureUnit(2, ctx.gbuf_.gMat);
     glBindTextureUnit(3, ctx.gbuf_.gDepth);
 
     glBindTextureUnit(9, ctx.ssao_.mapAO);
+
+    gpuPipe->setInt("uRadius", 2);
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
