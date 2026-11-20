@@ -12,13 +12,18 @@ uniform sampler2D baseColourMap;
 
 
 void main()
-{    
+{   
+    // and the diffuse per-fragment color
+    gAlbedo = texture(baseColourMap, uv);
+    
+    // support transparent texture (plant billboard)
+    if (gAlbedo.a < 0.5)
+        discard; 
 
     // per-fragment normals into the gbuffer
     gNormal = normalize(fragNormal);
 
-    // and the diffuse per-fragment color
-    gAlbedo = texture(baseColourMap, uv);
+
 
     // debug show normal
     //gAlbedo = vec4((gNormal + 1.0) * 0.5, 1.0);
