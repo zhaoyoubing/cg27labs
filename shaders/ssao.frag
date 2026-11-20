@@ -2,6 +2,7 @@
 #version 420
 
 out float fragColor;
+
 //out vec4 out_color;  // for debugging
 
 in vec2 uv;
@@ -12,12 +13,12 @@ layout(binding = 2) uniform sampler2D gMaterial;
 layout(binding = 3) uniform sampler2D gDepth;
 
 
-uniform vec3 uSamplePoints[64];
+uniform vec3 uSamplePoints[64]; // sample vectors in the hemisphere
 
-uniform int uKernelSize = 64;
-uniform float uRadius = 0.5f;
-uniform float uBias = 0.025f;
-uniform float uPowerAO = 1.0f;
+uniform int uKernelSize = 64;  // number of sample vectors in the hemisphere
+uniform float uRadius = 0.5f;  // hemisphere radius in AO calculation
+uniform float uBias = 0.025f;  // depth difference when determine occlusion
+uniform float uPowerAO = 1.0f; // power coefficient on the occlusion ratio
 
 uniform mat4 uMatView;
 uniform mat4 uMatProj;
@@ -31,7 +32,7 @@ vec3 screen2view(vec3 screenPos) {
     return viewPos.xyz; 
 }
 
-// convert View Space position (u, v, depth) to Screen Space position
+// convert View Space position to Screen Space position (u, v, depth)
 vec3 view2screen(vec3 viewPos) {
 	vec4 clipPos = uMatProj * vec4(viewPos, 1.0);
 	vec3 ndcPos = clipPos.xyz / clipPos.w;
@@ -44,7 +45,10 @@ bool isOutofScreen(vec3 screenPos){
 	       || screenPos.x < 0 || screenPos.y < 0 || screenPos.z < 0) ? true : false;
 }
 
-// IGN Noise
+// IGN Noise [1, 0)
+// a fast, per-pixel pseudo-random noise function
+// to map 2D coordinates to floating-point values. 
+// Introduced by Jorge Jimenez at SIGGRAPH 2014,
 float InterleavedGradientNoise(vec2 uv) {
     vec3 magic = vec3(0.06711056f, 0.00583715f, 52.9829189f);
     return fract(magic.z * fract(dot(uv, magic.xy)));
