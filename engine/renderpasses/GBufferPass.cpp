@@ -131,7 +131,8 @@ void GBufferPass::execute(RenderContext & ctx) {
 
     glEnable(GL_DEPTH_TEST);
     //glDepthMask(GL_TRUE);
-    //glDisable(GL_BLEND);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK); 
 
@@ -140,6 +141,7 @@ void GBufferPass::execute(RenderContext & ctx) {
     drawSceneGraph(ctx, ctx.scene_->root_, glm::mat4(1.0), 
              camera_.getViewMatrix(), camera_.getProjMatrix());
 
+    glDisable(GL_BLEND);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
