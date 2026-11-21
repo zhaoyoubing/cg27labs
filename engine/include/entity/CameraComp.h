@@ -28,7 +28,8 @@ struct CameraComp {
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 
     // rotation orientation
-    float yaw = -90.0f;
+    // default camera front is (1, 0, 0) with 0 yaw pitch
+    float yaw = -90.0f;  // points to minus Z
     float pitch = 0.0f;
     float sensitivity = 0.1f;
 
@@ -61,6 +62,11 @@ struct CameraComp {
     }
 
     void updateMatrices() {
+        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+        front.y = sin(glm::radians(pitch));
+        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+        front = glm::normalize(front);
+
         matProj = glm::perspective(glm::radians(fov), viewport.getAspectRatio(), near, far);
         matView = glm::lookAt(eye, eye + front, up);
         isDirty = false; // Reset dirty flag after recalculation
