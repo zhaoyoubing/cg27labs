@@ -125,7 +125,6 @@ protected:
             .fov = 60.0f,
             .near = 0.1f,
             .far = maxSize * 5.0f,
-            //.front = glm::vec3(-1, 0.5, 0),
             .yaw = -180.0f, // default camera front is (1, 0, 0) with 0 yaw pitch
             .pitch = 25.0f,
             .viewport = Viewport(0, 0, mainWin_->getWidth(), mainWin_->getHeight())
