@@ -104,12 +104,6 @@ public:
             spdlog::trace("Camera Eye: x = {}, y = {}, z = {}, fov = {}", camera.eye.x, camera.eye.y, camera.eye.z, camera.fov);
             spdlog::trace("Camera front: x = {}, y = {}, z = {}", camera.front.x, camera.front.y, camera.front.z);
 
-            //camera.front.x = cos(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
-            //camera.front.y = sin(glm::radians(camera.pitch));
-            //camera.front.z = sin(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
-            //camera.front = glm::normalize(camera.front);
-
-            
             camera.isDirty = true; // Mark camera as dirty to recalculate matrices
             camera.updateFrontFromYawPitch();
 
