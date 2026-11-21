@@ -41,6 +41,10 @@ public:
                 camera.isDirty = true;
             }
 
+            // a temporary workaround
+            // calculate the front vector after camera init
+            camera.updateFrontFromYawPitch();
+
             // 2. Process Keyboard Movement
             float velocity = 5.0f * deltaTime;
             glm::vec3 right = glm::normalize(glm::cross(camera.front, camera.up));
@@ -105,7 +109,9 @@ public:
             //camera.front.z = sin(glm::radians(camera.yaw)) * cos(glm::radians(camera.pitch));
             //camera.front = glm::normalize(camera.front);
 
+            
             camera.isDirty = true; // Mark camera as dirty to recalculate matrices
+            camera.updateFrontFromYawPitch();
 
             break;
         }
