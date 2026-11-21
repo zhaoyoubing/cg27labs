@@ -136,15 +136,12 @@ protected:
         EntityID camId = scene_->ecsWorld_.createEntityID();
 
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
-            //.eye = glm::vec3(0.0f, 2.0f, 0.0f),
-            .eye = center, //  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, 
-            //.eye = center  + glm::vec3(0.0f, 0.0f, 2.5f) * maxSize, 
+            .eye = center + glm::vec3(2.0f, -5.0f, 0.0f), 
             .fov = 60.0f,
             .near = 0.1f,
             .far = maxSize * 5.0f,
-            .front = glm::vec3(0, 0, -1),
-            .yaw = -90.0f,
-            .pitch = 0.0f,
+            .yaw = -180.0f, // default camera front is (1, 0, 0) with 0 yaw pitch
+            .pitch = 5.0f,
             .viewport = Viewport(0, 0, mainWin_->getWidth(), mainWin_->getHeight())
         });
 
