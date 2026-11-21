@@ -8,21 +8,20 @@ bool SSAOBoxBlurPass::init(RenderContext & ctx) {
 
     if (! gpuPipe) return false;
 
-    // read camera data
+    // 2. fetch the camera from the scene
     camera_ = ctx.scene_->getMainCamera();
 
-    // to get viewport width and height
-    // currently viewport is in camera, to be changed in the future
+    // set framebuffer width and height
     width_ = camera_.viewport.w;
     height_ = camera_.viewport.h;
 
     spdlog::debug("Viewport width {}, height {}", width_, height_);
 
-    // configure framebuffer
+    // 3. generate framebuffer
     // ------------------------------
     glCreateFramebuffers(1, &FBO);
     
-    // two textures for ping-pong Gaussian blurring
+    // 4. create the framebuffer texture (blurred AO map)
     glCreateTextures(GL_TEXTURE_2D, 1, & texFBO);
     glTextureStorage2D(texFBO, 1, GL_RGBA16F, width_, height_);
     glTextureParameteri(texFBO, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -31,7 +30,7 @@ bool SSAOBoxBlurPass::init(RenderContext & ctx) {
     glTextureParameteri(texFBO, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTextureParameteri(texFBO, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    // initial binding
+    // 5. bind the render target
     glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, texFBO, 0);
 
     // tell OpenGL which colour attachments we'll use (of this framebuffer) for rendering 
@@ -40,7 +39,7 @@ bool SSAOBoxBlurPass::init(RenderContext & ctx) {
 
     assert (glIsFramebuffer(FBO) == GL_TRUE);
 
-    // finally check if framebuffer is complete
+    // 6. finally check if framebuffer is complete
     if ( glCheckNamedFramebufferStatus(FBO, GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         spdlog::error("Framebuffer not complete!");
        return false;
@@ -48,9 +47,7 @@ bool SSAOBoxBlurPass::init(RenderContext & ctx) {
 
     spdlog::debug("In Box Blur Pass init, framebuffer texture {}", texFBO);
 
-    // share blur texture ids
-    // use previous rendering
-    //texBufA = ctx.postp_.bloomBufferA;
+    // 7. share blurred AO map in the RenderContext
     ctx.ssao_.mapBlurAO = texFBO;
 
     bInited = true;
@@ -62,7 +59,7 @@ void SSAOBoxBlurPass::execute(RenderContext & ctx) {
 
 
     glBindFramebuffer(GL_FRAMEBUFFER, FBO); // offscreen rendering
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);   // onscreen rendering
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);   // onscreen rendering for debugging
 
     glViewport(0, 0, width_, height_);
 

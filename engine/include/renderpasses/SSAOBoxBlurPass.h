@@ -10,30 +10,26 @@
 #include <memory>
 
 #include "entity/CameraComp.h"
-#include "entity/LightComp.h"
 
-// GBuffer Pass for Deferred Rendering
+// SSAOBoxBlurPass Pass for AO map blurring
 class SSAOBoxBlurPass : public RenderPass
 {
 public:
     explicit SSAOBoxBlurPass() { }
-    
+
+    // init function callded once before the render loop
     bool init(RenderContext& context) override;
 
-    // Called once per frame.
+    // render function called once per frame.
     void execute(RenderContext& context) override;
 
 private:
     CameraComp camera_;
     std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 
-    // viewport dimensions
-    int width_ = 0;
+    int width_ = 0;  // framebuffer dimensions
     int height_ = 0;
 
-    GLuint FBO = 0;  // frame buffer object
-
-    // framebuffer texture for blurring
-    GLuint texFBO = 0;  
-    
+    GLuint FBO = 0;  // framebuffer object
+    GLuint texFBO = 0;  // framebuffer texture  
 };

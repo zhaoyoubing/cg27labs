@@ -20,9 +20,10 @@ class SSAODeferredLightPass : public RenderPass
 public:
     explicit SSAODeferredLightPass() { }
     
+    // init function callded once before the render loop
     bool init(RenderContext& context) override;
 
-    // Called once per frame.
+    // render function called once per frame.
     void execute(RenderContext& context) override;
 
     const int MAX_LIGHTS = 128;
@@ -30,7 +31,7 @@ public:
 private:
 
     CameraComp camera_;
-    LightComp lightDefault_;
+    //LightComp lightDefault_;
     
     GLuint gBuf = 0;
     
@@ -40,11 +41,11 @@ private:
     GLuint gMat = 0;   // Metallic-Roughness
     GLuint gDepth = 0;
 
-    // GBuffer dimensions
+    // viewport dimensions
     int width_ = 0;
     int height_ = 0;
 
-    // for uploading light data
+    // the shader
     std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 
     void setPointLights(RenderContext & ctx);
