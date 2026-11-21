@@ -14,7 +14,7 @@
 
 #include "device/GPULight.h"
 
-// GBuffer Pass for Deferred Rendering
+// SSAO Deferred Lighting Pass
 class SSAODeferredLightPass : public RenderPass
 {
 public:
@@ -32,7 +32,7 @@ private:
     CameraComp camera_;
     LightComp lightDefault_;
     
-    GLuint gBuf = 0;
+    //GLuint gBuf = 0;
     
     GLuint gPos = 0;
     GLuint gNormal = 0;
