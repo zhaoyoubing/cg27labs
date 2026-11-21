@@ -147,7 +147,7 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
             const auto& accessor = gltfModel.accessors[primitive.attributes.find("TEXCOORD_0")->second];
             const auto& bufferView = gltfModel.bufferViews[accessor.bufferView];
 
-            spdlog::debug(
+            spdlog::trace(
                 "UV count = {}, componentType = {}, type = {}, bufferView = {}, byteOffset = {}, normalized = {}, stride = {}",
                 accessor.count,
                 accessor.componentType,
@@ -167,7 +167,7 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
             );
 
             size_t stride = accessor.ByteStride(bufferView);
-            spdlog::debug("Texture buffer stride {}", stride);
+            spdlog::trace("Texture buffer stride {}", stride);
 
             if (stride == 0)
                 stride = sizeof(float) * 2;
@@ -198,7 +198,7 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
                     
                     const auto& bufferView = gltfModel.bufferViews[accessor.bufferView];
                     size_t stride = accessor.ByteStride(bufferView);
-                    spdlog::debug("Tangent buffer stride {}", stride);
+                    spdlog::trace("Tangent buffer stride {}", stride);
 
                     if (stride == 0)
                         stride = sizeof(float) * 4;
@@ -231,7 +231,7 @@ std::vector<std::shared_ptr<MaterialMesh> >  GltfMeshLoader::loadMesh(const tiny
 
             indices.resize(accessor.count);
 
-            spdlog::debug("index component type: {}", accessor.componentType);
+            spdlog::trace("index component type: {}", accessor.componentType);
 
             // glTF indices can be unsigned byte, unsigned short, or unsigned int
             if (accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT) {
