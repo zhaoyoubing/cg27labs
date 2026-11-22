@@ -14,7 +14,7 @@ layout (binding = 9) uniform sampler2D texSSR;
 uniform mat4 uMatView;
 uniform mat4 uMatInvProj;
 
-uniform float uMaxRayDistance = 100.0;
+//uniform float uMaxRayDistance = 100.0;
 
 out vec4 colour_out;
 
@@ -26,6 +26,7 @@ vec3 screen2view(vec3 screenPos) {
 
     return viewPos.xyz; 
 }
+
 
 float saturate(float x)
 {
@@ -48,38 +49,46 @@ vec3 ACESFilm(vec3 x) {
 }
 
 void main()
-{             
+{
+    // 1. obtain the scene colour and the reflection colour             
     vec3 sceneColour = texture(texScene, uv).rgb;      
     vec3 ssrColour = texture(texSSR, uv).rgb;
     
-    // recover screen space frag postion
+    
+    // 2. recover View Space frag position from Screen Space
     float fragScreenDepth = texture(gDepth, uv).r;
     vec3 fragScreenPos = vec3(uv, fragScreenDepth);
     vec3 fragPos = screen2view(fragScreenPos);
 
-    float rayLength = length(fragPos);
-
+    // float rayLength = length(fragPos);
+    
+    // 3. obtain the normal vector in the View Space
     vec3 normal = mat3(uMatView) * texture(gNormal, uv).rgb;
     normal = normalize(normal);
+
+    // 4. calculate viewing angle
     vec3 viewDir  = normalize(- fragPos);  // eyePos is zero
     float cosTheta = dot(viewDir, normal);
-    // fresnel
+
+    // 5. calculate fresnel
     float F = fresnelSchlick(cosTheta, 0.05);
 
-    float distFade = saturate(1.0 - (rayLength / uMaxRayDistance)); // Fades over distance
+    //float distFade = saturate(1.0 - (rayLength / uMaxRayDistance)); // Fades over distance
+    //distFade = 1.0;
 
-    // additive blending
-    vec3 blendColour = sceneColour + F * distFade * ssrColour; 
+    // 6. additive blending
+    // vec3 blendColour = sceneColour + F * distFade * ssrColour; 
+    vec3 blendColour = sceneColour + F * ssrColour; 
 
     //blendColour = F * distFade * ssrColour; 
     //blendColour = sceneColour;
     
     vec3 result = blendColour;
     
-    // HDR Tone Mapping
+    // 7. HDR Tone Mapping
     result = ACESFilm(result);
 
-    // Gamma correction     
+    // 8. Gamma correction     
     const float gamma = 2.2;  
     result = pow(result, vec3(1.0 / gamma));
     

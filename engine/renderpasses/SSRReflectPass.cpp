@@ -9,6 +9,7 @@ bool SSRReflectPass::init(RenderContext & ctx) {
 
     if (nullptr == gpuPipe) return false;
 
+    // fetch the camera and set the framebuffer size
     camera_ = ctx.scene_->getMainCamera();
     width_ = camera_.viewport.w;
     height_ = camera_.viewport.h;
