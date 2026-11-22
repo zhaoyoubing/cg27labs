@@ -28,14 +28,10 @@ void SSRBlendPass::execute(RenderContext & ctx) {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // 2. OpenGL setting
-    glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
-
     glViewport(0, 0, width_, height_);
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
-
-    //glClear(GL_COLOR_BUFFER_BIT);
 
     // 3. bind the shader
     gpuPipe->bind();
