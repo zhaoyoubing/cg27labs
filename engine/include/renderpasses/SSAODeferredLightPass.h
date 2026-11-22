@@ -20,9 +20,10 @@ class SSAODeferredLightPass : public RenderPass
 public:
     explicit SSAODeferredLightPass() { }
     
+    // called once before the rendering loop
     bool init(RenderContext& context) override;
 
-    // Called once per frame.
+    // Render function called once per frame.
     void execute(RenderContext& context) override;
 
     const int MAX_LIGHTS = 128;
@@ -31,8 +32,6 @@ private:
 
     CameraComp camera_;
     LightComp lightDefault_;
-    
-    //GLuint gBuf = 0;
     
     GLuint gPos = 0;
     GLuint gNormal = 0;
