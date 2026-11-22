@@ -127,9 +127,8 @@ void main()
     
     colour_out = vec4(totalLight, 1.0);
 
-    //colour_out = vec4(totalLight, 1.0);
+    // debugging code
     //colour_out = vec4(albedo, 1.0);
     //colour_out = vec4(normal * 0.5 + 0.5, 1.0);
-    //colour_out = vec4(1.0, 0.0, 0.0, 1.0);
     //colour_out = vec4(uv.x, uv.y, 0.0, 1.0);
 }
