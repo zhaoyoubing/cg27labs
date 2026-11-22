@@ -93,24 +93,23 @@ float blinnSpecular(vec3 lightDir, vec3 viewDir, vec3 diffuse, vec3 normal)
 // needs to adapt to PBR
 void main()
 {
-    // recover screen space frag postion
+    // recover screen space frag position
     float fragScreenDepth = texture(gDepth, uv).r;
     vec3 fragScreenPos = vec3(uv, fragScreenDepth);
     vec3 fragPos = screen2world(fragScreenPos);
     
+     // obtain albedo and normal for Phong/Blinn-Phong ...
     vec3 normal = texture(gNormal, uv).rgb;
     normal = normalize(normal);
     vec3 albedo = texture(gAlbedo, uv).rgb;
 
-
-    //float specular = texture(gAlbedo, uv).a;
     // hard-coded k_s for Phong/Blinn-Phong
     vec3 k_s = vec3(0.9, 0.7, 0.5);
     
-    // then calculate lighting as usual
-    
     vec3 totalLight  = albedo * 0.05; // hard-coded ambient component
     vec3 viewDir  = normalize(uEyePos - fragPos); // eye at origin
+    
+    // iterate over all lights 
     for(int i = 0; i < uLightCount; ++i)
     {
         // diffuse

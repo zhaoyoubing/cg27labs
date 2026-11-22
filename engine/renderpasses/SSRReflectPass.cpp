@@ -3,7 +3,7 @@
 
 bool SSRReflectPass::init(RenderContext & ctx) {
 
-    spdlog::debug("Deferred Lighting Pass init");
+    spdlog::debug("SSR Reflection Pass init");
 
     gpuPipe = ctx.shaderMgr_.get("ssr_reflect");
 
@@ -59,6 +59,7 @@ void SSRReflectPass::execute(RenderContext & ctx) {
     glBindFramebuffer(GL_FRAMEBUFFER, FBO); // offscreen
     //glBindFramebuffer(GL_FRAMEBUFFER, 0);   // onscreen
     
+    // OpenGL settings
     glViewport(0, 0, width_, height_);
 
     glDisable(GL_CULL_FACE);
@@ -67,26 +68,25 @@ void SSRReflectPass::execute(RenderContext & ctx) {
 
     gpuPipe->bind();
 
-    // set GBuffer textures to the shader
+    // set GBuffer textures in the shader
     glBindTextureUnit(0, ctx.gbuf_.gAlbedo);
     glBindTextureUnit(1, ctx.gbuf_.gNormal);
     glBindTextureUnit(2, ctx.gbuf_.gMat);
     glBindTextureUnit(3, ctx.gbuf_.gDepth);
 
-    //gpuPipe->setInt("uWidth", width_);
-    //gpuPipe->setInt("uHeight", height_);
-
+    // matrices need to reconstruct View Space positions
     gpuPipe->setMat4("uMatView", camera_.getViewMatrix());
     gpuPipe->setMat4("uMatProj", ctx.gbuf_.matProj);
     gpuPipe->setMat4("uMatInvProj", ctx.gbuf_.matInvProj);
 
+    // SSR specific parameters
     gpuPipe->setFloat("uMaxRayDistance", ctx.ssr_.maxRayDistance);
     gpuPipe->setFloat("uMaxSteps", ctx.ssr_.maxSteps);
     gpuPipe->setFloat("uStride", ctx.ssr_.stride);
     gpuPipe->setFloat("uThickness", ctx.ssr_.thickness);
     gpuPipe->setFloat("uRoughThres", ctx.ssr_.roughThres);
 
-
+     // draw the proxy triangle, no VAO needed
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
     gpuPipe->unbind();

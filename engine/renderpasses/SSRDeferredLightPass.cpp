@@ -26,20 +26,21 @@ bool SSRDeferredLightPass::init(RenderContext & ctx) {
     glTextureParameteri(texFBO, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTextureParameteri(texFBO, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
+    // bind the texture to the render target
     glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, texFBO, 0);
-
-    // tell OpenGL the colour attachments to render to
+    // tell OpenGL the colour attachments (render targets) to render to
     unsigned int attachments[] = { GL_COLOR_ATTACHMENT0};
     glNamedFramebufferDrawBuffers(FBO, 1, attachments);
 
     assert (glIsFramebuffer(FBO) == GL_TRUE);
 
-    // finally check if framebuffer is complete
+    // check if framebuffer is complete
     if ( glCheckNamedFramebufferStatus(FBO, GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         spdlog::error("Framebuffer not complete!");
         return false;
     }
 
+    // share the render output in the render context
     ctx.postp_.texScene = texFBO;
 
     bInited = true;
@@ -57,8 +58,8 @@ void SSRDeferredLightPass::execute(RenderContext & ctx) {
 
     //glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
     
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);  // onscreen
     glBindFramebuffer(GL_FRAMEBUFFER, FBO); // offscreen
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);  // onscreen for debugging
     
     glViewport(0, 0, camera_.viewport.w, camera_.viewport.h);
 
@@ -75,7 +76,7 @@ void SSRDeferredLightPass::execute(RenderContext & ctx) {
     glBindTextureUnit(3, ctx.gbuf_.gDepth);
 
     gpuPipe->setVec3("uEyePos", camera_.eye);
-    gpuPipe->setMat4("uInvMatView", glm::inverse(camera_.getViewMatrix()));
+    gpuPipe->setMat4("uMatInvView", glm::inverse(camera_.getViewMatrix()));
     gpuPipe->setMat4("uMatInvProj", ctx.gbuf_.matInvProj);
 
     setPointLights(ctx);
