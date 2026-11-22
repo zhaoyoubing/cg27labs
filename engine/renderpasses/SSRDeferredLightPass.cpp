@@ -55,8 +55,6 @@ void SSRDeferredLightPass::execute(RenderContext & ctx) {
 
     // read camera data
     camera_ = ctx.scene_->getMainCamera();
-
-    //glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
     
     glBindFramebuffer(GL_FRAMEBUFFER, FBO); // offscreen
     //glBindFramebuffer(GL_FRAMEBUFFER, 0);  // onscreen for debugging
@@ -80,8 +78,6 @@ void SSRDeferredLightPass::execute(RenderContext & ctx) {
     gpuPipe->setMat4("uMatInvProj", ctx.gbuf_.matInvProj);
 
     setPointLights(ctx);
-
-    //glClear(GL_COLOR_BUFFER_BIT);
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
