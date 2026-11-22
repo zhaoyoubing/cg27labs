@@ -111,7 +111,8 @@ void main(){
 			reflectColour = vec4(0,0,0.5,0.0);
 			return;
 		}
-		discard;
+		//discard;
+		return;
 	} 
 
 	// 1. recover View Space position from depth
