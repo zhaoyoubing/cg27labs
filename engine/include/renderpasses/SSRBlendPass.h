@@ -11,15 +11,16 @@
 
 #include "entity/CameraComp.h"
 
-// GBuffer Pass for Deferred Rendering
+// SSR Blend Pass
 class SSRBlendPass : public RenderPass
 {
 public:
     explicit SSRBlendPass() { }
     
+    // called once before the rendering loop
     bool init(RenderContext& context) override;
 
-    // Called once per frame.
+     // Render function called once per frame.
     void execute(RenderContext& context) override;
 
 private:
@@ -29,5 +30,4 @@ private:
     // viewport dimensions
     int width_ = 0;
     int height_ = 0;
-
 };

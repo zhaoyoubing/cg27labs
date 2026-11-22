@@ -160,7 +160,7 @@ protected:
             .c = 0.032f 
         });
 
-        initLights(maxSize * 1.0f, 20); // add 10 random lights around the scene
+        initLights(maxSize * 0.5f, 10); // add 10 random lights around the scene
         
         /*
         // ================ Skybox Setup ================
