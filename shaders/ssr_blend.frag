@@ -18,7 +18,6 @@ uniform mat4 uMatInvProj;
 
 out vec4 colour_out;
 
-
 // convert Screen Space position (u, v, depth) to View Space position
 vec3 screen2view(vec3 screenPos) {
 	vec4 viewPos = uMatInvProj * vec4(screenPos * 2 - vec3(1.0), 1.0);
@@ -26,7 +25,6 @@ vec3 screen2view(vec3 screenPos) {
 
     return viewPos.xyz; 
 }
-
 
 float saturate(float x)
 {
@@ -54,14 +52,11 @@ void main()
     vec3 sceneColour = texture(texScene, uv).rgb;      
     vec3 ssrColour = texture(texSSR, uv).rgb;
     
-    
     // 2. recover View Space frag position from Screen Space
     float fragScreenDepth = texture(gDepth, uv).r;
     vec3 fragScreenPos = vec3(uv, fragScreenDepth);
     vec3 fragPos = screen2view(fragScreenPos);
 
-    // float rayLength = length(fragPos);
-    
     // 3. obtain the normal vector in the View Space
     vec3 normal = mat3(uMatView) * texture(gNormal, uv).rgb;
     normal = normalize(normal);
@@ -72,16 +67,13 @@ void main()
 
     // 5. calculate fresnel
     float F = fresnelSchlick(cosTheta, 0.05);
-
+    
+    // float rayLength = length(fragPos);
     //float distFade = saturate(1.0 - (rayLength / uMaxRayDistance)); // Fades over distance
-    //distFade = 1.0;
 
     // 6. additive blending
     // vec3 blendColour = sceneColour + F * distFade * ssrColour; 
     vec3 blendColour = sceneColour + F * ssrColour; 
-
-    //blendColour = F * distFade * ssrColour; 
-    //blendColour = sceneColour;
     
     vec3 result = blendColour;
     
@@ -93,7 +85,4 @@ void main()
     result = pow(result, vec3(1.0 / gamma));
     
     colour_out = vec4(result, 1.0);
-    
-    // blur colour preview for debugging
-    //colour_out = vec4(blurColour, 1.0);
 }  
