@@ -32,7 +32,7 @@ private:
     CameraComp camera_;
     LightComp lightDefault_;
     
-    GLuint gBuf = 0;
+    //GLuint gBuf = 0;
     GLuint gPos = 0;
     GLuint gNormal = 0;
     GLuint gAlbedo = 0;
@@ -48,6 +48,6 @@ private:
     std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 
     //void setSSBOLights(const std::vector<GPULight> & lights);
-    void setPointLights(RenderContext & ctx);
+    //void setPointLights(RenderContext & ctx);
     
 };

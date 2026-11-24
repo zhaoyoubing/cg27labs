@@ -62,7 +62,10 @@ void ShadowDepthPass::execute(RenderContext & ctx) {
     }
 
     glm::mat4 matLightView = glm::lookAt(lightDefault_.pos, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)); 
-    glm::mat4 matLightProj = glm::perspective(glm::radians(40.0f), 1.0f, 1.0f, 10.0f);
+    // previous setting
+    // glm::mat4 matLightProj = glm::perspective(glm::radians(40.0f), 1.0f, 1.0f, 10.0f);
+    // setting for Spona
+    glm::mat4 matLightProj = glm::perspective(glm::radians(60.0f), 1.0f, 30.0f, 100.0f);
     //glm::mat4 matLightProj = glm::ortho(-2.0f,2.0f,-2.0f,2.0f, 0.0f, 20.0f);
     //glm::mat4 matLightSpace = matLightProj * matLightView;
     ctx.shadow_.matLightSpace = matLightProj * matLightView;
@@ -71,24 +74,16 @@ void ShadowDepthPass::execute(RenderContext & ctx) {
     glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 
     glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    //glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
     
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     // Pass-specific states for shadow rendering
     glEnable(GL_DEPTH_TEST);
     glCullFace(GL_FRONT); // Cull front faces for shadow bias adjustment
-
-    //depthShader->bind();
     
     // Use light space matrices
     drawSceneGraph(ctx, ctx.scene_->root_, glm::mat4(1.0), matLightView, matLightProj);
-
-    //depthShader->unbind();
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

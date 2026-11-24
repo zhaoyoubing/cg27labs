@@ -30,6 +30,10 @@
 #include "renderpasses/SSRReflectPass.h"
 #include "renderpasses/SSRBlendPass.h"
 
+#include "renderpasses/ShadowDepthPass.h"
+#include "renderpasses/StdDeferredLightPass.h"
+
+
 #include <algorithm>
 
 #include <string>
@@ -66,9 +70,12 @@ protected:
         // shaderMgr_.load("boxblur", "shaders/fullscreen.vert", "shaders/boxblur.frag");
         // shaderMgr_.load("ssao_deferred_lighting", "shaders/fullscreen.vert", "shaders/ssao_deferred_lighting.frag");
         
-        shaderMgr_.load("ssr_deferred_lighting", "shaders/fullscreen.vert", "shaders/ssr_deferred_lighting.frag");
-        shaderMgr_.load("ssr_reflect", "shaders/fullscreen.vert", "shaders/ssr_reflect.frag");
-        shaderMgr_.load("ssr_blend", "shaders/fullscreen.vert", "shaders/ssr_blend.frag");
+        //shaderMgr_.load("ssr_deferred_lighting", "shaders/fullscreen.vert", "shaders/ssr_deferred_lighting.frag");
+        //shaderMgr_.load("ssr_reflect", "shaders/fullscreen.vert", "shaders/ssr_reflect.frag");
+        //shaderMgr_.load("ssr_blend", "shaders/fullscreen.vert", "shaders/ssr_blend.frag");
+
+        shaderMgr_.load("shadowdepth", "shaders/shadowdepth.vert", "shaders/shadowdepth.frag");
+        shaderMgr_.load("standard_deferred_lighting", "shaders/fullscreen.vert", "shaders/std_deferred_lighting.frag");
 
 
         // ================ Model Setup ================
@@ -124,43 +131,44 @@ protected:
           
 
         bbox = scene_->getBBox();
-        spdlog::debug("Bounding Box min: {} {} {}, max: {} {} {}", bbox.min.x, bbox.min.y, bbox.min.z, 
+        spdlog::info("Bounding Box min: {} {} {}, max: {} {} {}", bbox.min.x, bbox.min.y, bbox.min.z, 
                                                                     bbox.max.x, bbox.max.y, bbox.max.z);
         dim = bbox.getDimension();
         center = bbox.getCenter();
-        spdlog::debug("Scene centre: {} {} {}", center.x, center.y, center.z);
+        
         float maxSize = std::max(dim.x, std::max(dim.y, dim.z) );
+        spdlog::info("Scene centre: {} {} {}, maxSize {}", center.x, center.y, center.z, maxSize);
         
         // ================ Create camera entity ================
         // 4. Create the camera entity id
         EntityID camId = scene_->ecsWorld_.createEntityID();
 
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
-            .eye = center + glm::vec3(2.0f, -5.0f, 0.0f), 
+            //.eye = center + glm::vec3(2.0f, -5.0f, 0.0f), 
+            .eye = glm::vec3(-12.5, 9.5, -3.5),
             .fov = 60.0f,
             .near = 0.1f,
             .far = maxSize * 5.0f,
-            .yaw = -180.0f, // default camera front is (1, 0, 0) with 0 yaw pitch
-            .pitch = 5.0f,
+            .yaw = 0.0f, // default camera front is (1, 0, 0) with 0 yaw pitch
+            .pitch = 0.0f,
             .viewport = Viewport(0, 0, mainWin_->getWidth(), mainWin_->getHeight())
         });
 
         // ================ Light Setup ================
-        // 5. Create a directional light
-        
+        // 5. Create a Point light for testing volumetric fog
         EntityID lightId = scene_->ecsWorld_.createEntityID();
-        scene_->ecsWorld_.addComp<LightComp>(lightId, LightComp{
+        scene_->ecsWorld_.addComp<LightComp>(lightId, LightComp {
             .type = POINT,
-            .pos = bbox.max * 3.0f,
-            .dir = glm::vec3(0.0f, -1.0f, 0.0f),
-            .colour = glm::vec3(1.0f, 1.0f, 1.0f),
+            .pos = glm::vec3(maxSize * 0.3, maxSize , maxSize * 0.3) * 1.5f,
+            .dir = glm::vec3(0.0f, -1.0f, 0.5f),
+            .colour = glm::vec3(1.0f, 1.0f, 0.0f),
             .intensity = 1.0f,
             .a = 1.0f,
             .b = 0.09f,
             .c = 0.032f 
         });
 
-        initLights(maxSize * 1.0f, 20); // add 10 random lights around the scene
+        //initLights(maxSize * 1.0f, 20); // add 10 random lights around the scene
         
         /*
         // ================ Skybox Setup ================
@@ -182,10 +190,9 @@ protected:
         //renderPipe_.addPass(std::make_unique<CubeMapReflectionPass>());
         //renderPipe_.addPass(std::make_unique<SkyBoxPass>());
         
+        renderPipe_.addPass(std::make_unique<ShadowDepthPass>());
         renderPipe_.addPass(std::make_unique<GBufferPass>());
-        renderPipe_.addPass(std::make_unique<SSRDeferredLightPass>());
-        renderPipe_.addPass(std::make_unique<SSRReflectPass>());
-        renderPipe_.addPass(std::make_unique<SSRBlendPass>());
+        renderPipe_.addPass(std::make_unique<StdDeferredLightPass>());
 
         // renderPipe_.addPass(std::make_unique<SSAOPass>());
         // renderPipe_.addPass(std::make_unique<SSAOBoxBlurPass>());

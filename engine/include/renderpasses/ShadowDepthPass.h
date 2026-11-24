@@ -23,8 +23,8 @@ public:
     // Called once per frame.
     void execute(RenderContext& context) override;
 
-    const int SHADOW_WIDTH = 1024;
-    const int SHADOW_HEIGHT = 1024;
+    const int SHADOW_WIDTH = 4096;
+    const int SHADOW_HEIGHT = 4096;
 
     GLuint shadowFBO;  // the framebuffer 
     

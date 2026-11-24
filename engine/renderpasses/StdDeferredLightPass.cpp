@@ -5,22 +5,18 @@ bool StdDeferredLightPass::init(RenderContext & ctx) {
 
     spdlog::debug("Deferred Lighting Pass init");
 
-    gpuPipe = ctx.shaderMgr_.get("deferred_lighting");
+    gpuPipe = ctx.shaderMgr_.get("standard_deferred_lighting");
 
     if (nullptr == gpuPipe) return false;
 
-/*    
-    glCreateBuffers(1, &lightSSBO);
-
-    // for light data, we will use a shader storage buffer object (SSBO) to store an array of lights
-
-    glNamedBufferData(
-        lightSSBO,
-        MAX_LIGHTS * sizeof(GPULight),
-        nullptr,
-        GL_DYNAMIC_DRAW
-    );
-*/
+    // temporarily set the directional light for testing volumetric fog
+    auto viewLight = ctx.scene_->ecsWorld_.view<LightComp>();
+    for (auto entity : viewLight)
+    {
+        auto & light = ctx.scene_->ecsWorld_.getComp<LightComp>(entity);
+        lightDefault_ = light;
+        break;
+    }
 
     bInited = true;
     return bInited;
@@ -41,10 +37,9 @@ void StdDeferredLightPass::execute(RenderContext & ctx) {
     
     glViewport(0, 0, camera_.viewport.w, camera_.viewport.h);
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
-    //glDepthMask(GL_FALSE);
     glDisable(GL_BLEND);
 
     gpuPipe->bind();
@@ -55,11 +50,24 @@ void StdDeferredLightPass::execute(RenderContext & ctx) {
     glBindTextureUnit(2, ctx.gbuf_.gMat);
     glBindTextureUnit(3, ctx.gbuf_.gDepth);
 
+    // shadow map
+    glBindTextureUnit(5, ctx.shadow_.depthMap);
+
     gpuPipe->setVec3("uEyePos", camera_.eye);
     gpuPipe->setMat4("uMatInvView", glm::inverse(camera_.getViewMatrix()));
     gpuPipe->setMat4("uMatInvProj", ctx.gbuf_.matInvProj);
+    gpuPipe->setMat4("uMatLightSpace", ctx.shadow_.matLightSpace);
 
-    setPointLights(ctx);
+
+    // set the directional light
+    gpuPipe->setVec3("uLights[0].pos", lightDefault_.pos);
+    gpuPipe->setVec3("uLights[0].dir", lightDefault_.dir);
+    gpuPipe->setVec3("uLights[0].colour", lightDefault_.colour);
+    gpuPipe->setFloat("uLights[0].intensity", lightDefault_.intensity);
+    gpuPipe->setFloat("uLights[0].a", lightDefault_.a);
+    gpuPipe->setFloat("uLights[0].b", lightDefault_.b);
+    gpuPipe->setFloat("uLights[0].c", lightDefault_.c);
+ 
 
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -69,6 +77,7 @@ void StdDeferredLightPass::execute(RenderContext & ctx) {
 
 }
 
+/*
 void StdDeferredLightPass::setPointLights(RenderContext & ctx)
 {
     std::vector<LightComp> & lights = ctx.scene_->lightList;
@@ -116,7 +125,7 @@ void DeferredLightPass::setSSBOLights(const std::vector<GPULight> & lights)
     gpuPipe->setInt("uLightCount", count);
 }
 
-/*
+
 void DeferredLightPass::drawQuad(RenderContext& context) {
     if (quadVAO == 0)
     {
