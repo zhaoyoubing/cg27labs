@@ -31,13 +31,6 @@ public:
 private:
 
     CameraComp camera_;
-    LightComp lightDefault_;
-    
-    GLuint gPos = 0;
-    GLuint gNormal = 0;
-    GLuint gAlbedo = 0;
-    GLuint gMat = 0;   // Metallic-Roughness
-    GLuint gDepth = 0;
 
     // GBuffer dimensions
     int width_ = 0;
