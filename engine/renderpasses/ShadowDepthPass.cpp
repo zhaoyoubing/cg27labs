@@ -65,9 +65,8 @@ void ShadowDepthPass::execute(RenderContext & ctx) {
     // previous setting
     // glm::mat4 matLightProj = glm::perspective(glm::radians(40.0f), 1.0f, 1.0f, 10.0f);
     // setting for Spona
-    glm::mat4 matLightProj = glm::perspective(glm::radians(60.0f), 1.0f, 30.0f, 100.0f);
-    //glm::mat4 matLightProj = glm::ortho(-2.0f,2.0f,-2.0f,2.0f, 0.0f, 20.0f);
-    //glm::mat4 matLightSpace = matLightProj * matLightView;
+    //glm::mat4 matLightProj = glm::perspective(glm::radians(60.0f), 1.0f, 25.0f, 100.0f);
+    glm::mat4 matLightProj = glm::ortho(-20.0f,20.0f,-20.0f,20.0f, 0.0f, 100.0f);
     ctx.shadow_.matLightSpace = matLightProj * matLightView;
 
 

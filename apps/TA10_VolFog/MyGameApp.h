@@ -158,9 +158,10 @@ protected:
         // 5. Create a Point light for testing volumetric fog
         EntityID lightId = scene_->ecsWorld_.createEntityID();
         scene_->ecsWorld_.addComp<LightComp>(lightId, LightComp {
-            .type = POINT,
-            .pos = glm::vec3(maxSize * 0.3, maxSize , maxSize * 0.3) * 1.5f,
-            .dir = glm::vec3(0.0f, -1.0f, 0.5f),
+            .type = DIRECTIONAL,
+            //.pos = glm::vec3(maxSize * 0.3, maxSize , maxSize * 0.3) * 1.5f,
+            .pos = glm::vec3(maxSize * 0.5, maxSize , maxSize * 0.5) * 1.5f,
+            .dir = glm::vec3(-0.3, -1.0f, 0.3f),
             .colour = glm::vec3(1.0f, 1.0f, 0.0f),
             .intensity = 1.0f,
             .a = 1.0f,
