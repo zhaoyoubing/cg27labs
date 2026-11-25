@@ -74,6 +74,7 @@ struct SSRData {
 struct VolumetricFogData {
     GLuint mapVolFog;
     int numSteps = 64;
+    float blendIntensity = 1.0f;
 };
 
 struct RenderContext

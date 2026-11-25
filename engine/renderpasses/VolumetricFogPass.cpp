@@ -67,8 +67,8 @@ void VolumetricFogPass::execute(RenderContext & ctx) {
     width_ = camera_.viewport.w;
     height_ = camera_.viewport.h;
 
-    //glBindFramebuffer(GL_FRAMEBUFFER, FBO); // offscreen
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);   // onscreen
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO); // offscreen
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);   // onscreen
     
     // OpenGL settings
     glViewport(0, 0, width_, height_);

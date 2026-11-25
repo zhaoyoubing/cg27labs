@@ -29,11 +29,6 @@ private:
     CameraComp camera_;
     LightComp lightDefault_;
     
-    GLuint gAlbedo = 0;
-    GLuint gNormal = 0;
-    GLuint gMat = 0;   // Metallic-Roughness
-    GLuint gDepth = 0;
-
     // framebuffer dimensions
     int width_ = 0;
     int height_ = 0;

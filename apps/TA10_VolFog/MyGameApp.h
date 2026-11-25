@@ -33,7 +33,7 @@
 #include "renderpasses/ShadowDepthPass.h"
 #include "renderpasses/StdDeferredLightPass.h"
 #include "renderpasses/VolumetricFogPass.h"
-
+#include "renderpasses/VolFogBlendPass.h"
 
 #include <algorithm>
 
@@ -78,6 +78,7 @@ protected:
         shaderMgr_.load("shadowdepth", "shaders/shadowdepth.vert", "shaders/shadowdepth.frag");
         shaderMgr_.load("standard_deferred_lighting", "shaders/fullscreen.vert", "shaders/std_deferred_lighting.frag");
         shaderMgr_.load("volumetric_fog", "shaders/fullscreen.vert", "shaders/volumetric_fog.frag");
+        shaderMgr_.load("volfog_blend", "shaders/fullscreen.vert", "shaders/volfog_blend.frag");
 
 
         // ================ Model Setup ================
@@ -144,10 +145,9 @@ protected:
         // ================ Create camera entity ================
         // 4. Create the camera entity id
         EntityID camId = scene_->ecsWorld_.createEntityID();
-
         scene_->ecsWorld_.addComp<CameraComp>(camId, CameraComp{
             //.eye = center + glm::vec3(2.0f, -5.0f, 0.0f), 
-            .eye = glm::vec3(-12.5, 9.5, -3.5),
+            .eye = glm::vec3(-12.25, 9.6, -3.3),
             .fov = 60.0f,
             .near = 0.1f,
             .far = maxSize * 5.0f,
@@ -197,6 +197,7 @@ protected:
         renderPipe_.addPass(std::make_unique<GBufferPass>());
         renderPipe_.addPass(std::make_unique<StdDeferredLightPass>());
         renderPipe_.addPass(std::make_unique<VolumetricFogPass>());
+        renderPipe_.addPass(std::make_unique<VolFogBlendPass>());
 
         // renderPipe_.addPass(std::make_unique<SSAOPass>());
         // renderPipe_.addPass(std::make_unique<SSAOBoxBlurPass>());

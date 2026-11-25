@@ -101,8 +101,8 @@ public:
             if (camera.pitch > 89.0f)  camera.pitch = 89.0f;
             if (camera.pitch < -89.0f) camera.pitch = -89.0f;
 
-            spdlog::trace("Camera Eye: x = {}, y = {}, z = {}, fov = {}", camera.eye.x, camera.eye.y, camera.eye.z, camera.fov);
-            spdlog::trace("Camera front: x = {}, y = {}, z = {}", camera.front.x, camera.front.y, camera.front.z);
+            spdlog::debug("Camera Eye: x = {}, y = {}, z = {}, fov = {}", camera.eye.x, camera.eye.y, camera.eye.z, camera.fov);
+            spdlog::debug("Camera front: x = {}, y = {}, z = {}", camera.front.x, camera.front.y, camera.front.z);
 
             camera.isDirty = true; // Mark camera as dirty to recalculate matrices
             camera.updateFrontFromYawPitch();

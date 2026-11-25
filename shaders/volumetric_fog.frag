@@ -185,8 +185,8 @@ vec4 rayMarch(vec3 rayPos, vec3 dir) {
 		raySamplePos += stepVec;
 	}
 
-	vec3 scene = texture(texScene, uv).rgb;
-	return vec4(accColour.xyz + scene, 1.0);
+	//vec3 scene = texture(texScene, uv).rgb;
+	return vec4(accColour.xyz, 1.0);
 }
 
 void main(){
