@@ -32,6 +32,7 @@
 
 #include "renderpasses/ShadowDepthPass.h"
 #include "renderpasses/StdDeferredLightPass.h"
+#include "renderpasses/VolumetricFogPass.h"
 
 
 #include <algorithm>
@@ -76,6 +77,7 @@ protected:
 
         shaderMgr_.load("shadowdepth", "shaders/shadowdepth.vert", "shaders/shadowdepth.frag");
         shaderMgr_.load("standard_deferred_lighting", "shaders/fullscreen.vert", "shaders/std_deferred_lighting.frag");
+        shaderMgr_.load("volumetric_fog", "shaders/fullscreen.vert", "shaders/volumetric_fog.frag");
 
 
         // ================ Model Setup ================
@@ -163,7 +165,7 @@ protected:
             .pos = glm::vec3(maxSize * 0.5, maxSize , maxSize * 0.5) * 1.5f,
             .dir = glm::vec3(-0.3, -1.0f, 0.3f),
             .colour = glm::vec3(1.0f, 1.0f, 0.0f),
-            .intensity = 1.0f,
+            .intensity = 2.0f,
             .a = 1.0f,
             .b = 0.09f,
             .c = 0.032f 
@@ -194,6 +196,7 @@ protected:
         renderPipe_.addPass(std::make_unique<ShadowDepthPass>());
         renderPipe_.addPass(std::make_unique<GBufferPass>());
         renderPipe_.addPass(std::make_unique<StdDeferredLightPass>());
+        renderPipe_.addPass(std::make_unique<VolumetricFogPass>());
 
         // renderPipe_.addPass(std::make_unique<SSAOPass>());
         // renderPipe_.addPass(std::make_unique<SSAOBoxBlurPass>());

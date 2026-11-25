@@ -5,6 +5,7 @@ layout(binding = 1) uniform sampler2D gNormal;
 layout(binding = 2) uniform sampler2D gMaterial;
 layout(binding = 3) uniform sampler2D gDepth;
 
+// to use sampler2Dshadow in the future
 layout(binding = 5) uniform sampler2D shadowMap;
 
 in vec2 uv;
@@ -114,9 +115,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
     // get depth of current fragment from light's perspective
     float currentDepth = projCoords.z;
     
-    // larger depth means far from the light source
-    //float shadow = currentDepth > closeDepth  ? 1.0 : 0.0;
-    
+    // larger depth means far from the light source 
     // You must use bias with deferred shading to avoid shaodow acne
     float bias = 0.005;
     float shadow = currentDepth - bias > closeDepth  ? 1.0 : 0.0;

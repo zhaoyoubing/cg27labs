@@ -32,8 +32,6 @@ private:
     CameraComp camera_;
     LightComp lightDefault_;
     
-    //GLuint gBuf = 0;
-    GLuint gPos = 0;
     GLuint gNormal = 0;
     GLuint gAlbedo = 0;
     GLuint gMat = 0;   // Metallic-Roughness
@@ -43,11 +41,14 @@ private:
     int width_ = 0;
     int height_ = 0;
 
+    GLuint FBO = 0;
+    // output framebuffer texture
+    GLuint texFBO = 0;
+
     // for uploading light data
     // GLuint lightSSBO = 0;
     std::shared_ptr<GPUPipeline> gpuPipe = nullptr;
 
     //void setSSBOLights(const std::vector<GPULight> & lights);
     //void setPointLights(RenderContext & ctx);
-    
 };

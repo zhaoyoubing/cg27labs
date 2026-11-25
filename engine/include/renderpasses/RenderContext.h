@@ -26,6 +26,7 @@ struct GBufferData {
     glm::mat4 matInvProj{1.0f};
 };
 
+
 // postprocessing and bloom
 struct PostProcessData {
     // 1. Resources (Transient RT pool)
@@ -70,6 +71,11 @@ struct SSRData {
     //uint32_t flags = 0; // e.g., enable/disable jitter
 };
 
+struct VolumetricFogData {
+    GLuint mapVolFog;
+    int numSteps = 64;
+};
+
 struct RenderContext
 {
     std::shared_ptr<Scene> scene_; // Scene graph root
@@ -84,5 +90,5 @@ struct RenderContext
     PostProcessData postp_;
     SSAOData ssao_;
     SSRData ssr_;
-
+    VolumetricFogData volFog_;
 };

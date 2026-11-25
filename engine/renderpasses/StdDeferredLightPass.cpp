@@ -18,6 +18,40 @@ bool StdDeferredLightPass::init(RenderContext & ctx) {
         break;
     }
 
+        camera_ = ctx.scene_->getMainCamera();
+    width_ = camera_.viewport.w;
+    height_ = camera_.viewport.h;
+
+    glCreateFramebuffers(1, &FBO);
+
+    // generate scene texture
+    glCreateTextures(GL_TEXTURE_2D, 1, & texFBO);
+    // Allocate single-channel 8-bit uncompressed storage
+    glTextureStorage2D(texFBO, 1, GL_RGB16F, width_, height_);
+
+    // Set filtering to nearest or linear depending on whether you blur it
+    glTextureParameteri(texFBO, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTextureParameteri(texFBO, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTextureParameteri(texFBO, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTextureParameteri(texFBO, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    // bind the texture to the render target
+    glNamedFramebufferTexture(FBO, GL_COLOR_ATTACHMENT0, texFBO, 0);
+    // tell OpenGL the colour attachments (render targets) to render to
+    unsigned int attachments[] = { GL_COLOR_ATTACHMENT0};
+    glNamedFramebufferDrawBuffers(FBO, 1, attachments);
+
+    assert (glIsFramebuffer(FBO) == GL_TRUE);
+
+    // check if framebuffer is complete
+    if ( glCheckNamedFramebufferStatus(FBO, GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        spdlog::error("Framebuffer not complete!");
+        return false;
+    }
+
+    // share the render output in the render context
+    ctx.postp_.texScene = texFBO;
+
     bInited = true;
     return bInited;
 }
@@ -28,12 +62,14 @@ void StdDeferredLightPass::execute(RenderContext & ctx) {
 
     spdlog::trace("Deferred Lighting: albedo {}", ctx.gbuf_.gAlbedo);
 
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO); // offscreen
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);  // onscreen for debugging
+
     // read camera data
     camera_ = ctx.scene_->getMainCamera();
 
     glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
-    
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
     
     glViewport(0, 0, camera_.viewport.w, camera_.viewport.h);
 
