@@ -31,12 +31,6 @@ public:
 private:
 
     CameraComp camera_;
-    
-    // input GBuffers
-    GLuint gAlbedo = 0;
-    GLuint gNormal = 0;
-    GLuint gMat = 0;   // Metallic-Roughness
-    GLuint gDepth = 0;
 
     // framebuffer dimensions
     int width_ = 0;
