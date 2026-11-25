@@ -45,7 +45,7 @@ bool isOutofScreen(vec3 screenPos){
 	       || screenPos.x < 0 || screenPos.y < 0 || screenPos.z < 0) ? true : false;
 }
 
-// IGN Noise [1, 0)
+// IGN Noise [0, 1)
 // a fast, per-pixel pseudo-random noise function
 // to map 2D coordinates to floating-point values. 
 // Introduced by Jorge Jimenez at SIGGRAPH 2014,
