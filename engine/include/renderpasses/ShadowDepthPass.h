@@ -12,28 +12,26 @@
 #include "entity/CameraComp.h"
 #include "entity/LightComp.h"
 
-// Forward rendering using Scene Graph
+// Shadow depth rendering using Scene Graph
 class ShadowDepthPass : public RenderPass
 {
 public:
     explicit ShadowDepthPass() { }
 
-
     bool init(RenderContext& context) override;
-    // Called once per frame.
     void execute(RenderContext& context) override;
 
-    const int SHADOW_WIDTH = 2048;
-    const int SHADOW_HEIGHT = 2048;
+    const int SHADOW_WIDTH = 1024;
+    const int SHADOW_HEIGHT = 1024;
 
     GLuint shadowFBO;  // the framebuffer 
-    
     GLuint depthMap;   // the depth map
-    glm::mat4 matLightSpace {1.0f};
 
-    GLuint getShadowMap() { 
-        return depthMap; 
-    }
+    //glm::mat4 matLightSpace {1.0f};
+
+    //GLuint getShadowMap() { 
+    //    return depthMap; 
+    //}
 
 private:
 
@@ -48,5 +46,4 @@ private:
                         const glm::mat4& viewMatrix = glm::mat4(1.0), const glm::mat4& projMatrix = glm::mat4(1.0));
     
     
-    //Framebuffer framebuffer_;
 };

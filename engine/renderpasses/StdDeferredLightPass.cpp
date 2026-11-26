@@ -18,7 +18,7 @@ bool StdDeferredLightPass::init(RenderContext & ctx) {
         break;
     }
 
-        camera_ = ctx.scene_->getMainCamera();
+    camera_ = ctx.scene_->getMainCamera();
     width_ = camera_.viewport.w;
     height_ = camera_.viewport.h;
 
@@ -96,6 +96,7 @@ void StdDeferredLightPass::execute(RenderContext & ctx) {
 
 
     // set the directional light
+    gpuPipe->setInt("uLights[0].type", lightDefault_.type);
     gpuPipe->setVec3("uLights[0].pos", lightDefault_.pos);
     gpuPipe->setVec3("uLights[0].dir", lightDefault_.dir);
     gpuPipe->setVec3("uLights[0].colour", lightDefault_.colour);

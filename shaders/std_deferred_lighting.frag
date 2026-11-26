@@ -45,7 +45,7 @@ struct Light {
     float c; // quadratic
 };
 
-// max number of lights : 128
+// max number of lights : 64
 #define MAX_LIGHTS 64
 uniform Light uLights[MAX_LIGHTS];
 
@@ -54,10 +54,10 @@ uniform int uLightCount = 1;
 // shadow mapping
 // = lightProj * lightView
 uniform mat4 uMatLightSpace;
-
 uniform vec3 uEyePos;
 uniform mat4 uMatInvView;
 uniform mat4 uMatInvProj;
+
 
 out vec4 colour_out;
 

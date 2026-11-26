@@ -68,7 +68,7 @@ void VolumetricFogPass::execute(RenderContext & ctx) {
     height_ = camera_.viewport.h;
 
     glBindFramebuffer(GL_FRAMEBUFFER, FBO); // offscreen
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);   // onscreen
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);   // onscreen for debugging
     
     // OpenGL settings
     glViewport(0, 0, width_, height_);
@@ -86,8 +86,8 @@ void VolumetricFogPass::execute(RenderContext & ctx) {
     glBindTextureUnit(3, ctx.gbuf_.gDepth);
 
     // shadow map
-    glBindTextureUnit(5, ctx.shadow_.depthMap);
-    glBindTextureUnit(6, ctx.postp_.texScene);
+    glBindTextureUnit(5, ctx.shadow_.depthMap); // for shadow testing
+    glBindTextureUnit(8, ctx.postp_.texScene); // for debugging 
 
     // matrices need to reconstruct View Space positions
     gpuPipe->setVec3("uEyePos", camera_.eye);

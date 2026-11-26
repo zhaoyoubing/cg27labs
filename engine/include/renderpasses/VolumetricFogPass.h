@@ -12,7 +12,7 @@
 #include "entity/CameraComp.h"
 #include "entity/LightComp.h"
 
-// Screen space reflection pass
+// Volumetric Fog pass by ray marching
 class VolumetricFogPass : public RenderPass
 {
 public:

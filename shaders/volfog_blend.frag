@@ -28,7 +28,6 @@ void main()
     vec3 fogColour = texture(mapVolFog, uv).rgb;
 
     // 2. additive blending
-    // vec3 blendColour = sceneColour + F * distFade * ssrColour; 
     vec3 blendColour = sceneColour + uVolFogIntensity * fogColour; 
     
     vec3 result = blendColour;
@@ -37,8 +36,7 @@ void main()
     result = ACESFilm(result);
 
     // 4. Gamma correction     
-    const float gamma = 2.2;  
-    result = pow(result, vec3(1.0 / gamma));
+    result = pow(result, vec3(1.0 / 2.2));  // gamma = 2.2
     
     colour_out = vec4(result, 1.0);
 }  

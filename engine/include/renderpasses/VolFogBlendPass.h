@@ -11,7 +11,7 @@
 
 #include "entity/CameraComp.h"
 
-// SSR Blend Pass
+// Volumetric Fog Blend Pass
 class VolFogBlendPass : public RenderPass
 {
 public:

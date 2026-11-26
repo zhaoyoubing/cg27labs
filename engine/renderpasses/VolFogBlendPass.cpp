@@ -36,17 +36,15 @@ void VolFogBlendPass::execute(RenderContext & ctx) {
     // 3. bind the shader
     gpuPipe->bind();
 
+    // 4. set uniforms
+    gpuPipe->setFloat("uVolFogIntensty", ctx.volFog_.blendIntensity);
+    //gpuPipe->setFloat("uVolFogIntensty", 2.0f);
 
-    // 3. set uniforms
-    //gpuPipe->setFloat("uVolFogIntensty", ctx.volFog_.blendIntensity);
-    gpuPipe->setFloat("uVolFogIntensty", 2.0f);
-
-
-    // 4. set the lighting texure and the reflection texxture
+    // 5. set the lighting texure and the reflection texxture
     glBindTextureUnit(8, ctx.postp_.texScene);
     glBindTextureUnit(9, ctx.volFog_.mapVolFog);
 
-    // 5. draw the fullscreen proxy triangle
+    // 6. draw the fullscreen proxy triangle
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
     gpuPipe->unbind();

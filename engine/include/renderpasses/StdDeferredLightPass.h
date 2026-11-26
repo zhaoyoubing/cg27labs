@@ -14,7 +14,7 @@
 
 #include "device/GPULight.h"
 
-// GBuffer Pass for Deferred Rendering
+// Deferred Light Pass with Shadow Mapping
 class StdDeferredLightPass : public RenderPass
 {
 public:
@@ -25,20 +25,19 @@ public:
     // Called once per frame.
     void execute(RenderContext& context) override;
 
-    const int MAX_LIGHTS = 128;
+    const int MAX_LIGHTS = 128; // not used at the moment
 
 private:
 
     CameraComp camera_;
     LightComp lightDefault_;
 
-    // GBuffer dimensions
+    // framebuffer dimensions
     int width_ = 0;
     int height_ = 0;
 
     GLuint FBO = 0;
-    // output framebuffer texture
-    GLuint texFBO = 0;
+    GLuint texFBO = 0; // output framebuffer texture
 
     // for uploading light data
     // GLuint lightSSBO = 0;

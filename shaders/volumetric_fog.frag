@@ -9,7 +9,7 @@ layout (binding = 2) uniform sampler2D gMat; // Metallic-Roughness
 layout (binding = 3) uniform sampler2D gDepth;
 
 layout (binding = 5) uniform sampler2D shadowMap;
-layout (binding = 6) uniform sampler2D texScene;
+layout (binding = 8) uniform sampler2D texScene; // for debugging
 
 // matrices for convertion between View Space and Screen Space
 uniform vec3 uEyePos;
@@ -81,7 +81,7 @@ vec3 world2LightScreen(vec3 worldPos) {
 	return posLightScreen;
 }
 
-float shadow(vec4 fragPosLightSpace)
+float shadowCalculation(vec4 fragPosLightSpace)
 {
     // perform perspective divide 
     // result: normalised device coordinates (NDC)
@@ -130,6 +130,7 @@ vec4 rayMarch(vec3 rayPos, vec3 dir) {
 	
 	vec4 accColour = vec4(0.0); // black
 
+    // the current visible scene depth on the sample uv  
 	float sceneDepth = texture(gDepth, uv).r;
 
 	float transmittance = 1.0;
@@ -138,6 +139,7 @@ vec4 rayMarch(vec3 rayPos, vec3 dir) {
 	dir = normalize(dir);
 
     // Offset initial step phase by jitter * (step Size) instead of jumping wildly
+	// this can be skipped for beginners
     float jitter = InterleavedGradientNoise(uv);
     float t = (0.5 + jitter);
 
@@ -150,7 +152,7 @@ vec4 rayMarch(vec3 rayPos, vec3 dir) {
 		float stepTransmittance = exp(-sigmaT * stepSize);
 		float stepIntegral = (1.0 - stepTransmittance) / sigmaT;
 
-        // 2.2 project sample points on the ray to screen space
+        // 2.1 project sample points on the ray to screen space
 		vec3 raySampleScreenPos = world2screen(raySamplePos);
 		if(rayIsOutofScreen(raySampleScreenPos)) {
 			// the starting segments
@@ -158,30 +160,31 @@ vec4 rayMarch(vec3 rayPos, vec3 dir) {
 			continue;
 		}
 
-		// 2.3 check the current visible scene depth on the sample uv  
-        // 2.4 check if the sample still visible by the eye
+		
+        // 2.2 check if the sample still visible by the eye
 		if (raySampleScreenPos.z > sceneDepth) {
 			break;
 		}
 
 		// now visible both by the eye and the light source
-		// check if under shadow
+		// 2.3 check if under shadow
 		vec4 fragPosLightSpace = uMatLightSpace * vec4(raySamplePos, 1.0);
-		float shadowVal = shadow(fragPosLightSpace);
+		float shadowVal = shadowCalculation(fragPosLightSpace);
 
 		if (shadowVal < 1.0) {
-			// not in shadow
+			// 2.4 not in shadow, calculate light scattering
 			float cosTheta = dot(dir, -lightDir);
 		    accColour.xyz += calcScattering(cosTheta) * uLight.colour * uLight.intensity 
 			                * transmittance * stepIntegral;
 			//accColour.xyz += uLight.colour; // for debugging
 		}
 
+        // 2.5 reduce transmittance as we are another step away from the viewpoint
 		transmittance *= stepTransmittance;
 		if (transmittance < 0.01)
 			break;
 		
-		// 2.1 generate new sample points on the ray
+		// 2.6 generate new sample points on the ray
 		raySamplePos += stepVec;
 	}
 
